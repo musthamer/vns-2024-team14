@@ -1,12 +1,25 @@
 #!/bin/bash
-name=apache1
-port=8081
-docker container create \
-  --name "$name" \
-  --net mynet \
-  --publish "$port":80 \
-  --init \
-  image-apache1
 
-docker container cp context/myinit.sh "$name":/usr/bin
-docker container start "$name"
+
+docker container create \
+    --name apache1 \
+    --net mynet \
+    --publish 8081:80 \
+    --init \
+    image-apache
+
+docker container cp ../context/myinit.sh apache1:/usr/bin
+docker container start apache1
+
+docker container create \
+    --name apache2 \
+    --net mynet \
+    --publish 8082:80 \
+    --init \
+    image-apache
+
+docker container cp ../context/myinit.sh apache2:/usr/bin
+docker container start apache2
+
+
+
