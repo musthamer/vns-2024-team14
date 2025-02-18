@@ -19,6 +19,7 @@ echo trap handler set >> $log
 mysql -u root -e "
 CREATE DATABASE IF NOT EXISTS todo_app;
 CREATE USER IF NOT EXISTS 'dbuser'@'%' IDENTIFIED BY 'vnsteam14';
+create user dbuser@'%' identified by '12345';
 GRANT ALL PRIVILEGES ON todo_app.* TO 'dbuser'@'%';
 FLUSH PRIVILEGES;
 
