@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get -y install apache2 apache2-utils curl vim mariadb-client redis-tools
+RUN apt-get -y install apache2 apache2-utils libapache2-mod-fcgid curl vim mariadb-client redis-tools
 
 COPY cgi-bin/ /usr/lib/cgi-bin/
 COPY html/ /var/www/html/
