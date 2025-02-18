@@ -16,10 +16,12 @@ echo trap handler set >> $log
 /etc/init.d/mariadb start
 
 #initialize database
-mysql -u root -e "
+sudo -u mysql mariadb -e "drop database if exists dbdemo;
+drop user if exists dbuser@'localhost';
+drop user if exists dbuser@'%';
+
 CREATE DATABASE IF NOT EXISTS todo_app;
-CREATE USER IF NOT EXISTS 'dbuser'@'%' IDENTIFIED BY 'vnsteam14';
-create user dbuser@'%' identified by '12345';
+CREATE USER IF NOT EXISTS 'dbuser'@'%' IDENTIFIED BY '12345';
 GRANT ALL PRIVILEGES ON todo_app.* TO 'dbuser'@'%';
 FLUSH PRIVILEGES;
 
@@ -39,6 +41,13 @@ CREATE TABLE IF NOT EXISTS sessions (
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   expires_at DATETIME NOT NULL,
   FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS todos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_email VARCHAR(255) NOT NULL,
+  task TEXT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE
 );
 "
 
