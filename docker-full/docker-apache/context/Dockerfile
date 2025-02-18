@@ -4,7 +4,8 @@ RUN apt-get -y install apache2 libapache2-mod-cgi curl vim mariadb-client redis-
 
 COPY cgi-bin/ /usr/lib/cgi-bin/
 COPY html/ /var/www/html/
-RUN chmod +x /usr/lib/cgi-bin/*.sh
+RUN chmod +x /usr/lib/cgi-bin/vns/todo/*
+RUN chmod +x /usr/lib/cgi-bin/vns/login/*
 RUN a2enmod cgi
 
 CMD ["apache2ctl", "-D", "FOREGROUND"]
