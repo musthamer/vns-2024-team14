@@ -8,7 +8,7 @@ docker container create \
     --init \
     image-apache
 
-docker container cp ../context/myinit.sh apache1:/usr/bin
+docker container cp context/myinit.sh apache1:/usr/bin
 docker container start apache1
 
 docker container create \
@@ -18,7 +18,7 @@ docker container create \
     --init \
     image-apache
 
-docker container cp ../context/myinit.sh apache2:/usr/bin
+docker container cp context/myinit.sh apache2:/usr/bin
 docker container start apache2
 
 
