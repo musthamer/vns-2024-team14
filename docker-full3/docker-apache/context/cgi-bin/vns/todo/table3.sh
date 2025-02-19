@@ -18,7 +18,8 @@ fi
 
 # E-Mail des angemeldeten Benutzers anhand der Session aus Redis ermitteln
 email=$(redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" GET "session:$session_id")
-
+echo "Debug: Session-ID: $session_id" >&2
+echo "Debug: E-Mail aus Redis: $email" >&2
 # Falls keine gültige Session gefunden wurde, umleiten
 if [ -z "$email" ]; then
   echo "Content-type: text/html"
