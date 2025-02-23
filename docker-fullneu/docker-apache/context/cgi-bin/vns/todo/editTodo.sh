@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-
+REDIS_HOST="redis"
+REDIS_PORT="6379"
+REDIS_PASSWORD="foobared"
 # Lese die QUERY_STRING-Umgebungsvariable
 read -r QUERY_STRING
 
@@ -25,6 +27,9 @@ mariadb --defaults-file=my.cnf -e "UPDATE todos SET task='$TASK', details='$DETA
 
 # Überprüfe, ob das Update erfolgreich war
 if [ $? -eq 0 ]; then
+  # Redis-Cache invalidieren
+  redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" del "todos_cache" >/dev/null
+  
   echo "Content-type: text/html"
   echo "Status: 303 See Other"
   echo "Location: table3.sh"

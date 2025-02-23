@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-
+REDIS_HOST="redis"
+REDIS_PORT="6379"
+REDIS_PASSWORD="foobared"
 # POST-Daten lesen
 read -r POST_DATA
 
@@ -24,6 +26,9 @@ mariadb --defaults-file=my.cnf -e "INSERT INTO todos (task, details) VALUES ('$T
 
 # Überprüfen, ob das Einfügen erfolgreich war
 if [ $? -eq 0 ]; then
+  # Redis-Cache invalidieren
+  redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" del "todos_cache" >/dev/null
+  
   echo "Content-type: text/html"
   echo "Status: 303 See Other"
   echo "Location: table3.sh"

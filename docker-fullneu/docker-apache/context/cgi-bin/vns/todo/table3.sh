@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-
+REDIS_HOST="redis"
+REDIS_PORT="6379"
+REDIS_PASSWORD="foobared"
 echo "Content-type: text/html"
 echo ""
 echo "<!DOCTYPE html>
@@ -8,6 +10,7 @@ echo "<!DOCTYPE html>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <title>ToDo Liste</title>
+
   <style>"
 cat styles.css
 echo "  </style>
@@ -53,8 +56,17 @@ echo "  </style>
       </thead>
       <tbody>"
 
-# Daten aus der todos-Tabelle abrufen
-todos=$(mariadb --defaults-file=my.cnf -e "SELECT id, task, details, created_at FROM todos;" -B)
+# Redis-Caching Implementierung
+REDIS_KEY="todos_cache"
+todos=$(redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" get "$REDIS_KEY")
+
+if [ -z "$todos" ]; then
+  # Daten aus MariaDB holen wenn kein Cache existiert
+  todos=$(mariadb --defaults-file=my.cnf -e "SELECT id, task, details, created_at FROM todos;" -B)
+  
+  # In Redis speichern mit 5 Minuten TTL (300 Sekunden)
+  redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" setex "$REDIS_KEY" 300 "$todos" >/dev/null
+fi
 
 # Ausgabe der Aufgaben als HTML-Tabelle
 echo "$todos" | while read -r line; do
@@ -79,8 +91,8 @@ done
 
 echo "      </tbody>
     </table>
-  </div>
-  <script>
+  </div> 
+ <script>
     function toggleTodo(row) {
       var todoRows = document.querySelectorAll('.todo-row');
       var allRows = document.querySelectorAll('tr');
@@ -143,7 +155,8 @@ echo "      </tbody>
             window.location.reload();
           }
         };
-        xhr.send('id=' + id + '&task=' + encodeURIComponent(newTask) + '&details=' + encodeURIComponent(newDetails));
+        xhr.send('id=' + id + '&task=' + encodeURIComponent(newTask) + '&details=' +
+encodeURIComponent(newDetails));
       }
     }
 
@@ -163,6 +176,6 @@ echo "      </tbody>
         xhr.send('id=' + id);
       }
     }
-  </script>
+ </script>
 </body>
 </html>"
