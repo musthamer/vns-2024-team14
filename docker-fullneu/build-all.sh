@@ -3,11 +3,7 @@ docker system prune -f -a
 general/delete-all-containers.sh
 general/prune-all.sh
 general/create-mynet-network.sh
-<<<<<<< HEAD
-for i in mariadb apache redis; do
-=======
-for i in mariadb apache haproxy; do
->>>>>>> 0bc7b35 ({})
+for i in mariadb apache redis haproxy; do
         cd docker-$i
         bin/build.sh
         bin/start.sh
