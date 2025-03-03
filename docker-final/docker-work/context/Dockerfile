@@ -29,7 +29,7 @@ RUN chown user:user /home/user/run-playwright-demo.sh
 # install k6
 COPY install-k6.sh /usr/bin
 RUN /usr/bin/install-k6.sh
-
+COPY lasttest/ /home/user/
 
 CMD ["/usr/bin/myinit.sh"]
 

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-docker run -d --name apache1-haproxy --network mynet httpd:2.4
-docker run -d --name apache2-haproxy --network mynet httpd:2.4
-
 name=haproxy
 port=8000
 echo running "$name" "$port"

@@ -96,7 +96,7 @@ if [ -z "$todos" ]; then
   todos=$(mariadb --defaults-file=my.cnf -e "SELECT id, task, details, created_at FROM todos;" -B)
 
   # In Redis speichern mit 5 Minuten TTL (300 Sekunden)
-  redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" setex "$REDIS_KEY" 300 "$todos" >/dev/null
+  redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" setex "$REDIS_KEY" 600 "$todos" >/dev/null
 fi
 
 # Ausgabe der Aufgaben als HTML-Tabelle
