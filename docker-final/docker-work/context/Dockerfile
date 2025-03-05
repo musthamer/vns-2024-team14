@@ -11,7 +11,9 @@ RUN apt-get -y install imagemagick
 RUN apt-get -y install redis-tools
 RUN apt-get -y install wrk
 RUN apt-get -y install tcpdump
-
+RUN apt-get -y install tshark
+RUN apt-get -y install mariadb-client
+RUN apt-get -y install sysbench
 COPY myinit.sh /usr/bin/
 RUN useradd -m -s /bin/bash user
 RUN usermod -aG sudo user

@@ -658,4 +658,82 @@ Bewertung der Ergebnisse
 ⚠️ Kleinere Antwortzeit-Schwankungen (maximal 159 ms) könnten optimiert werden.
 
 
+# tcpdump-alles 
+
+
+root@fc07b52580d1:/home/user# ./tcpdump-alles.sh
+Starte Netzwerkanalyse mit tcpdump...
+TCPDump läuft mit PID 15844 - Erfassung für 60 Sekunden...
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+Teste HAProxy HTTP-Zugriffe...
+Führe MariaDB-Lasttest mit sysbench durch...
+Teste Redis-Performance mit redis-benchmark...
+Setze und lese todos_cache in Redis...
+Warte 60 Sekunden für vollständige Datenerfassung...
+Beende TCPDump...
+719945 packets captured
+719945 packets received by filter
+0 packets dropped by kernel
+Netzwerkanalyse abgeschlossen. Logs gespeichert in tcpdump_logs
+Analysiere Test-Ergebnisse aus tcpdump_logs ...
+reading from file tcpdump_logs/network.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+reading from file tcpdump_logs/network.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+reading from file tcpdump_logs/network.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+reading from file tcpdump_logs/network.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+
+📌 Anzahl der HTTP-Anfragen (Port 80):
+319041
+
+📌 Anzahl der MariaDB-Anfragen (Port 3306):
+68
+
+📌 Anzahl der Redis-Operationen (Port 6379):
+400836
+
+📌 HTTP-Statuscode Verteilung:
+reading from file tcpdump_logs/network.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+ 106287 HTTP/1.1 200
+      1 HTTP/1.1 400
+
+📌 Fehleranalyse in den Logs:
+8
+   Fehler gefunden: 8
+0
+   Timeouts: 0
+Analyse abgeschlossen 
+
+
+
+ericht zur Netzwerkanalyse mit TCPDump
+Wir haben einen 60-sekündigen Netzwerk-Test durchgeführt, um die HTTP-, MariaDB- und Redis-Operationen zu analysieren. Dabei wurden insgesamt 719.945 Pakete erfasst.
+
+1️⃣ Testergebnisse im Überblick
+📌 Gesamtzahl der erfassten Netzwerkpakete: 719.945
+
+🔹 Anfragen pro Dienst:
+
+HTTP-Anfragen (Port 80): 319.041
+MariaDB-Datenbankanfragen (Port 3306): 68
+Redis-Operationen (Port 6379): 400.836
+🔹 HTTP-Statuscode-Verteilung:
+
+200 OK: 106.287 (erfolgreiche Anfragen)
+400 Bad Request: 1 (möglicher fehlerhafter Request)
+🔹 Fehleranalyse:
+
+Gefundene Fehler: 8
+Timeouts: 0 (keine Verbindungsprobleme festgestellt)
+2️⃣ Bewertung der Ergebnisse
+✅ Sehr hohe Anzahl an HTTP-Anfragen → 319.041 Requests in 60 Sekunden, was auf eine intensive Nutzung des Webservers hindeutet.
+✅ Redis wird stark genutzt → Mit 400.836 Operationen ist Redis das meistgenutzte System, was auf ein funktionierendes Caching hinweist.
+⚠️ Wenig MariaDB-Last → Nur 68 Anfragen zur Datenbank, was bedeutet, dass die meisten Daten aus dem Cache statt aus der Datenbank gelesen werden.
+✅ Kaum Fehler (nur 8 insgesamt) → Das System ist stabil, keine kritischen Fehler.
+⚠️ Ein einzelner 400-Fehler → Dies könnte ein fehlerhafter API-Request oder eine ungültige Anfrage sein, sollte aber beobachtet werden. 
+
+
+
+
+
+
+
 
