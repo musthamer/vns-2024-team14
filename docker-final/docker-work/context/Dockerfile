@@ -10,6 +10,7 @@ RUN apt-get -y install net-tools iputils-ping
 RUN apt-get -y install imagemagick
 RUN apt-get -y install redis-tools
 RUN apt-get -y install wrk
+RUN apt-get -y install tcpdump
 
 COPY myinit.sh /usr/bin/
 RUN useradd -m -s /bin/bash user
