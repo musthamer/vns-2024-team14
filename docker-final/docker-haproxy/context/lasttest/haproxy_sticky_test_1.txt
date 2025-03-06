@@ -1,30 +1,30 @@
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0  87294      0 --:--:-- --:--:-- --:--:-- 89777
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   394k      0 --:--:-- --:--:-- --:--:--  526k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   828k      0 --:--:-- --:--:-- --:--:-- 1578k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   274k      0 --:--:-- --:--:-- --:--:--  315k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   218k      0 --:--:-- --:--:-- --:--:--  225k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   783k      0 --:--:-- --:--:-- --:--:-- 1578k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   533k      0 --:--:-- --:--:-- --:--:--  789k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   936k      0 --:--:-- --:--:-- --:--:-- 1578k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   624k      0 --:--:-- --:--:-- --:--:--  789k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0  1074k      0 --:--:-- --:--:-- --:--:-- 1578k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   543k      0 --:--:-- --:--:-- --:--:--  789k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   968k      0 --:--:-- --:--:-- --:--:-- 1578k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   650k      0 --:--:-- --:--:-- --:--:--  789k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   434k      0 --:--:-- --:--:-- --:--:--  526k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   323k      0 --:--:-- --:--:-- --:--:--  394k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   749k      0 --:--:-- --:--:-- --:--:-- 1578k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   677k      0 --:--:-- --:--:-- --:--:--  789k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   548k      0 --:--:-- --:--:-- --:--:--  789k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0   616k      0 --:--:-- --:--:-- --:--:--  789k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1616  100  1616    0     0  1077k      0 --:--:-- --:--:-- --:--:-- 1578k
