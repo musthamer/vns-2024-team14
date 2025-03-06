@@ -51,10 +51,12 @@ echo "Netzwerkanalyse abgeschlossen. Logs gespeichert in $LOG_DIR"
 echo "Analysiere Test-Ergebnisse aus $LOG_DIR ..."
 
 # Anzahl der Anfragen pro Dienst zählen
-HTTP_COUNT=$(tcpdump -r $LOG_DIR/network.pcap -nn port 80 | wc -l)
+HTTP_COUNT=$(tcpdump -r $LOG_DIR/network.pcap -nn port 80 | grep -E "GET|POST|HTTP/1.1"| wc -l)
 MARIADB_COUNT=$(tcpdump -r $LOG_DIR/network.pcap -nn port 3306 | wc -l)
 REDIS_COUNT=$(tcpdump -r $LOG_DIR/network.pcap -nn port 6379 | wc -l)
 WEBSOCKET_COUNT=$(tcpdump -r $LOG_DIR/network.pcap -nn port 5000 | wc -l)
+
+
 
 echo -e "\n📌 Anzahl der HTTP-Anfragen (Port 80):"
 echo $HTTP_COUNT

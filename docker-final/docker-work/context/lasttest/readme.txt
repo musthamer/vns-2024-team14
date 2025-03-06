@@ -731,7 +731,10 @@ Timeouts: 0 (keine Verbindungsprobleme festgestellt)
 ⚠️ Ein einzelner 400-Fehler → Dies könnte ein fehlerhafter API-Request oder eine ungültige Anfrage sein, sollte aber beobachtet werden. 
 
 
+#tcpdump-alles 
 
+
+Dieses Skript führt eine Netzwerkanalyse mit tcpdump durch. Der Nutzer kann selbst festlegen, wie lange die Analyse läuft. Nach der Erfassung werden HTTP-, MariaDB- und Redis-Anfragen gezählt. Außerdem zeigt das Skript die HTTP-Statuscodes und sucht nach Fehlern oder Timeouts in den Logs. Am Ende gibt es eine kurze Zusammenfassung der Netzwerkaktivitäten. Alles wird in einem Ordner gespeichert, damit die Daten später weiter analysiert werden können.
 
 
 
