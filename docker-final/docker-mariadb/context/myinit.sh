@@ -39,8 +39,4 @@ CREATE TABLE users (
 );
 INSERT INTO users (name, password) VALUES ('admin', 'admin');
 "
-
-while true; do
-  echo "$(date +%FT%T) ping" >> $log
-  read -t 10 < /dev/null
-done
+tail -f /dev/null
