@@ -1,0 +1,14 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{\PYGZbs{}begin}\PYG{n+nb}{\PYGZob{}}code\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}Beschreibung\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}label\PYG{n+nb}{\PYGZcb{}}
+	\PYG{k}{\PYGZbs{}begin}\PYG{n+nb}{\PYGZob{}}minted\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}bash\PYG{n+nb}{\PYGZcb{}}
+		\PYGZsh{}!/bin/bash
+
+		number=\PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{l+m}{1}\PYG{n+nb}{\PYGZdq{}}
+\PYG{n+nb}{		if test }\PYG{l+s}{\PYGZdl{}}number \PYGZhy{}eq 0; then
+			echo \PYGZdq{}true\PYGZdq{}
+		else
+			echo \PYGZdq{}false\PYGZdq{}
+		fi
+	\PYG{k}{\PYGZbs{}end}\PYG{n+nb}{\PYGZob{}}minted\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}end}\PYG{n+nb}{\PYGZob{}}code\PYG{n+nb}{\PYGZcb{}}
+\end{MintedVerbatim}

@@ -1,0 +1,5 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{\PYGZbs{}subfile}\PYG{n+nb}{\PYGZob{}}src/einleitung.tex\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}subfile}\PYG{n+nb}{\PYGZob{}}src/struktur.tex\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}subfile}\PYG{n+nb}{\PYGZob{}}src/zurhauptdatei.tex\PYG{n+nb}{\PYGZcb{}}
+\end{MintedVerbatim}
