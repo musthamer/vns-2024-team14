@@ -1,0 +1,12 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{\PYGZbs{}begin}\PYG{n+nb}{\PYGZob{}}center\PYG{n+nb}{\PYGZcb{}}
+	\PYG{k}{\PYGZbs{}begin}\PYG{n+nb}{\PYGZob{}}talltblr\PYG{n+nb}{\PYGZcb{}}[caption=\PYG{n+nb}{\PYGZob{}}Tabelle mit drei Spalten\PYG{n+nb}{\PYGZcb{}}, label=\PYG{n+nb}{\PYGZob{}}beispielzwei\PYG{n+nb}{\PYGZcb{}}]\PYG{n+nb}{\PYGZob{}}width=0.9\PYG{k}{\PYGZbs{}textwidth}, colspec=\PYG{n+nb}{\PYGZob{}}X[l,m] X[c,m] X[l,m]\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZcb{}}\PYG{k}{\PYGZbs{}toprule}
+		\PYG{k}{\PYGZbs{}textbf}\PYG{n+nb}{\PYGZob{}}Spalte 1\PYG{n+nb}{\PYGZcb{}} \PYG{n+nb}{\PYGZam{}} \PYG{k}{\PYGZbs{}textbf}\PYG{n+nb}{\PYGZob{}}Spalte 2\PYG{n+nb}{\PYGZcb{}} \PYG{n+nb}{\PYGZam{}} \PYG{k}{\PYGZbs{}SetCell}\PYG{n+na}{[c=1]}\PYG{n+nb}{\PYGZob{}}c\PYG{n+nb}{\PYGZcb{}} \PYG{k}{\PYGZbs{}textbf}\PYG{n+nb}{\PYGZob{}}Spalte 3\PYG{n+nb}{\PYGZcb{}}                                                            \PYG{k}{\PYGZbs{}\PYGZbs{}} \PYG{k}{\PYGZbs{}midrule}
+		a                 \PYG{n+nb}{\PYGZam{}} 1                 \PYG{n+nb}{\PYGZam{}} Ein ausreichend langer Text, damit es zu einem Zeilenumbruch kommt.                           \PYG{k}{\PYGZbs{}\PYGZbs{}} \PYG{k}{\PYGZbs{}cmidrule}\PYG{n+nb}{\PYGZob{}}1\PYGZhy{}3\PYG{n+nb}{\PYGZcb{}}
+		b                 \PYG{n+nb}{\PYGZam{}} 2                 \PYG{n+nb}{\PYGZam{}} Ein kürzerer Text.                                                                            \PYG{k}{\PYGZbs{}\PYGZbs{}} \PYG{k}{\PYGZbs{}cmidrule}\PYG{n+nb}{\PYGZob{}}1\PYGZhy{}3\PYG{n+nb}{\PYGZcb{}}
+		c                 \PYG{n+nb}{\PYGZam{}} 3                 \PYG{n+nb}{\PYGZam{}} Wieder etwas längerer Text in dieser Spalte, auch hier kann es zu einem Zeilenumbruch kommen. \PYG{k}{\PYGZbs{}\PYGZbs{}} \PYG{k}{\PYGZbs{}cmidrule}\PYG{n+nb}{\PYGZob{}}1\PYGZhy{}3\PYG{n+nb}{\PYGZcb{}}
+		d                 \PYG{n+nb}{\PYGZam{}} 4                 \PYG{n+nb}{\PYGZam{}} Ein Text.                                                                                     \PYG{k}{\PYGZbs{}\PYGZbs{}} \PYG{k}{\PYGZbs{}cmidrule}\PYG{n+nb}{\PYGZob{}}1\PYGZhy{}3\PYG{n+nb}{\PYGZcb{}}
+		e                 \PYG{n+nb}{\PYGZam{}} 5                 \PYG{n+nb}{\PYGZam{}} Noch etwas zusätzlicher Text.                                                                 \PYG{k}{\PYGZbs{}\PYGZbs{}} \PYG{k}{\PYGZbs{}bottomrule}
+	\PYG{k}{\PYGZbs{}end}\PYG{n+nb}{\PYGZob{}}talltblr\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}end}\PYG{n+nb}{\PYGZob{}}center\PYG{n+nb}{\PYGZcb{}}	
+\end{MintedVerbatim}
