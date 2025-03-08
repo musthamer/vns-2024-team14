@@ -1,0 +1,1 @@
+./tcpdump-alles.sh: line 36: redis-cli: command not found

@@ -1,22 +1,35 @@
-redis-bashmarktest:
-Im Rahmen unseres Projekts haben wir eine Lastprüfung für die Redis-Datenbank durchgeführt, um ihre Performance zu messen. Dabei wurden 200.000 Anfragen für SET- und GET-Operationen jeweils unter Last mit 50 parallelen Clients getestet.
+Redis Benchmark – Unser Erfahrungsbericht
+Wir haben einen Leistungstest für Redis durchgeführt, um herauszufinden, wie gut unser Redis-Server mit vielen gleichzeitigen Anfragen umgehen kann. Dafür haben wir das Redis-Benchmark-Tool benutzt, das speziell für solche Lasttests entwickelt wurde.
 
-Ergebnisse im Detail
-SET-Befehl: 200.000 Anfragen wurden in 3,26 Sekunden abgearbeitet. Das entspricht einer Durchsatzrate von 61.274 Anfragen pro Sekunde.
-GET-Befehl: Hier dauerte es 3,71 Sekunden für dieselbe Anzahl an Anfragen, mit einer Durchsatzrate von 53.879 Anfragen pro Sekunde.
-Latenzanalyse
-Die Latenz wurde in Millisekunden gemessen. Hier sind einige wichtige Werte:
+Was haben wir getestet?
+Der Test bestand aus zwei Teilen:
 
-Durchschnittliche Latenz bei SET: 0,485 ms, bei GET: 0,500 ms
-99.9%-Quantil (also die 0,1% langsamsten Anfragen):
-SET: 2,159 ms
-GET: 2,863 ms
-Maximale Latenz: 2,975 ms (SET) bzw. 5,327 ms (GET)
-Das bedeutet, dass selbst unter hoher Last der Großteil der Anfragen in weniger als 1 Millisekunde verarbeitet wurde. Nur ein kleiner Teil hat eine etwas höhere Verzögerung erreicht.
+SET-Operationen (Daten in Redis speichern)
+GET-Operationen (Daten aus Redis abrufen)
+Wir haben 100.000 Anfragen mit 50 parallelen Clients durchgeführt, um eine möglichst hohe Last zu erzeugen.
 
-Bewertung der Ergebnisse
-Die Tests zeigen, dass Redis unter Last eine sehr hohe Performance liefert. Die Geschwindigkeit ist auch mit vielen parallelen Anfragen stabil, und die Latenz bleibt in einem sehr niedrigen Bereich. Ein kleiner Unterschied zwischen SET und GET ist erkennbar – SET ist schneller, was logisch ist, da beim Abrufen eventuell mehr Daten aus dem Speicher geholt werden müssen.
+Die Ergebnisse
+SET-Operationen (Schreiben in Redis)
+100.000 Anfragen in nur 1,18 Sekunden abgeschlossen
+Durchschnittlicher Durchsatz: 84.388 Anfragen pro Sekunde 🚀
+Durchschnittliche Latenz: 0,320 Millisekunden
+95%-Perzentil-Latenz: 0,471 Millisekunden (95% aller Anfragen waren schneller als das)
+Maximale Latenz: 3,399 Millisekunden
+➡️ Das bedeutet: Redis kann Daten extrem schnell speichern, mit einer durchschnittlichen Verzögerung von unter einer halben Millisekunde!
 
-Fazit
-Redis hat sich als extrem schnelle und effiziente In-Memory-Datenbank bewiesen. Die Testergebnisse bestätigen, dass selbst unter hoher Last mit vielen parallelen Zugriffen die Performance sehr stabil und schnell bleibt. Für Anwendungen, die viele schnelle Schreib- und Lesevorgänge benötigen, ist Redis also eine sehr gute Wahl.
+GET-Operationen (Daten aus Redis abrufen)
+100.000 Anfragen in 1,45 Sekunden abgeschlossen
+Durchschnittlicher Durchsatz: 69.204 Anfragen pro Sekunde
+Durchschnittliche Latenz: 0,377 Millisekunden
+95%-Perzentil-Latenz: 0,599 Millisekunden
+Maximale Latenz: 11,087 Millisekunden
+➡️ Das bedeutet: Auch beim Lesen bleibt Redis unglaublich schnell, aber mit etwas höheren Latenzen als beim Schreiben.
 
+Was bedeutet das für uns?
+Diese Ergebnisse zeigen, dass Redis eine extrem leistungsfähige In-Memory-Datenbank ist, die sehr viele Anfragen in kürzester Zeit verarbeiten kann. Selbst mit 50 gleichzeitigen Clients bleiben die Antwortzeiten sehr niedrig.
+
+Wir haben allerdings festgestellt, dass die Latenz im GET-Test etwas höher ist als im SET-Test. Das könnte verschiedene Ursachen haben:
+
+Cache-Hits vs. Cache-Misses: Falls einige Anfragen nicht direkt im Speicher gefunden werden, dauert es etwas länger.
+Netzwerkverzögerungen: Auch wenn Redis selbst schnell ist, können kleine Verzögerungen im Netzwerk auftreten.
+Systembelastung: Falls andere Prozesse parallel liefen, könnte das zu kleinen Verzögerungen geführt haben.

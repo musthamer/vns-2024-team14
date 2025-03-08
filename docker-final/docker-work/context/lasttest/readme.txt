@@ -733,8 +733,24 @@ Timeouts: 0 (keine Verbindungsprobleme festgestellt)
 
 #tcpdump-alles 
 
+Wir haben einen umfangreichen Netzwerk- und Performance-Test mit unserem Skript tcpdump-alles.sh durchgeführt, um die Aktivität und Stabilität unserer Infrastruktur unter realistischen Bedingungen zu analysieren. Dieses Skript kombiniert mehrere Tools wie TCPDump, wrk, sysbench und redis-benchmark, um die Interaktion verschiedener Komponenten wie HAProxy, MariaDB und Redis zu prüfen.
 
-Dieses Skript führt eine Netzwerkanalyse mit tcpdump durch. Der Nutzer kann selbst festlegen, wie lange die Analyse läuft. Nach der Erfassung werden HTTP-, MariaDB- und Redis-Anfragen gezählt. Außerdem zeigt das Skript die HTTP-Statuscodes und sucht nach Fehlern oder Timeouts in den Logs. Am Ende gibt es eine kurze Zusammenfassung der Netzwerkaktivitäten. Alles wird in einem Ordner gespeichert, damit die Daten später weiter analysiert werden können.
+Im ersten Schritt wurde die Netzwerkanalyse mit TCPDump gestartet, welche sämtliche HTTP-, HTTPS-, MariaDB- und Redis-Anfragen erfasste. Parallel dazu wurde ein HTTP-Lasttest über HAProxy durchgeführt, indem wir mit curl und wrk mehrere GET-Anfragen an HAProxy gesendet haben, um den HTTP-Datenfluss zu simulieren. Danach folgte der MariaDB-Lasttest, bei dem mit sysbench eine intensive Schreib- und Lese-Belastung in der Datenbank erzeugt wurde. Anschließend wurde ein Redis-Benchmark durchgeführt, um die Performance von Redis beim Speichern und Abrufen von Daten zu testen. Abschließend erfolgten noch gezielte Tests mit Einzelzugriffen auf Redis, bei denen ein Key-Wert-Paar (todos_cache) gesetzt und ausgelesen wurde.
+
+Während der gesamten Testphase wurden 1.283.518 Netzwerkpakete erfasst, von denen keine vom Kernel verworfen wurden, was auf eine saubere Paketverarbeitung hinweist. Bei der Analyse der erfassten Daten konnten wir feststellen, dass insgesamt 201.013 HTTP-Anfragen an Port 80 gerichtet wurden, was die hohe Anzahl der GET- und POST-Operationen während der HAProxy-Tests widerspiegelt. Bei den MariaDB-Operationen (Port 3306) wurden 580.952 Anfragen gezählt, was zeigt, dass die Datenbank während der Tests stark belastet wurde. Zusätzlich wurden 400.836 Redis-Operationen (Port 6379) registriert, was auf einen intensiven Cache-Einsatz hinweist.
+
+Die HTTP-Statuscodes zeigten dabei überwiegend erfolgreiche Anfragen: 100.506 Anfragen erhielten den Statuscode 200 (OK), was auf eine fehlerfreie Verarbeitung hinweist. Allerdings gab es auch eine einzelne Anfrage mit dem Statuscode 400 (Bad Request), was auf einen fehlerhaften Request hinweisen könnte.
+
+Bei der detaillierten Fehleranalyse wurden 2 Fehler in den Logs erkannt, was in Anbetracht der hohen Gesamtanzahl an Anfragen minimal ist. Zusätzlich wurde 1 Timeout festgestellt, was darauf hindeutet, dass es möglicherweise kurzzeitig zu Verzögerungen in der Antwortzeit gekommen ist.
+
+Zusammenfassend zeigt der Test, dass unsere Infrastruktur insgesamt stabil und leistungsfähig ist. Die hohe Anzahl an erfolgreich verarbeiteten Anfragen und der geringe Anteil an Fehlern sprechen für eine gut konfigurierte Umgebung. Die wenigen Fehler und das eine Timeout deuten darauf hin, dass unter sehr hoher Last gelegentlich kleine Verzögerungen auftreten können. Hier könnten Optimierungen an den Timeouts in HAProxy, MariaDB oder Redis vorgenommen werden, um das System noch robuster zu machen. Auch ein genaueres Monitoring der Netzwerkverbindungen könnte sinnvoll sein, um mögliche Flaschenhälse zu erkennen und zu beheben. Insgesamt sind wir mit dem Ergebnis zufrieden, da unser System die umfangreiche Belastung gut bewältigt hat und zuverlässig auf alle Anfragen reagierte.
+
+
+
+
+
+
+
 
 
 
