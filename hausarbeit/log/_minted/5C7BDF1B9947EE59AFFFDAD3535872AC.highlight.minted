@@ -1,0 +1,15 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{\PYGZbs{}usepackage}\PYG{n+na}{[outputdir=log, newfloat]}\PYG{n+nb}{\PYGZob{}}minted\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}setminted}\PYG{n+nb}{\PYGZob{}}
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1.2,
+  bgcolor=LightGray,
+  fontsize=\PYG{k}{\PYGZbs{}footnotesize},
+  linenos,
+  breaklines=true,
+  breakanywhere=true,
+  autogobble,
+  tabsize=2
+\PYG{n+nb}{\PYGZcb{}}
+\end{MintedVerbatim}

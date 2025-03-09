@@ -1,0 +1,39 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c}{\PYGZpc{} true für Bachelorarbeit / false für Hausarbeit}
+\PYG{k}{\PYGZbs{}newbool}\PYG{n+nb}{\PYGZob{}}bachelorarbeit\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}setbool}\PYG{n+nb}{\PYGZob{}}bachelorarbeit\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}true\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Setze Fachbereich}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}department}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}Fachbereich II \PYG{k}{\PYGZbs{}\PYGZbs{}} Management und Informationssysteme\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Setze Studiengang}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}studyprogram}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}Wirtschaftsinformatik B.Sc.\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Setze Modulname (bachelorarbeit muss false sein)}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}modulname}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}Modulname\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Setze Dozent:in (bachelorarbeit muss false sein)}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}auditor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}textbf}\PYG{n+nb}{\PYGZob{}}Dozent:in:\PYG{n+nb}{\PYGZcb{}} \PYG{k}{\PYGZbs{}\PYGZgt{}} Prof. Dr. Maxi Muster\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Setze Gutachter:innen (bachelorarbeit muss true sein)}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}firstauditor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}textbf}\PYG{n+nb}{\PYGZob{}}Erstgutachter:\PYG{n+nb}{\PYGZcb{}} \PYG{k}{\PYGZbs{}\PYGZgt{}} Prof. Dr. Maxi Mustermann\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}secondauditor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}textbf}\PYG{n+nb}{\PYGZob{}}Zweitgutachterin:\PYG{n+nb}{\PYGZcb{}} \PYG{k}{\PYGZbs{}\PYGZgt{}} Prof. Dr. Maxi Musterfrau\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Setze Titel und Untertitel der Abreit}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}thetitle}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}Eine unnötig komplizierte und sehr sehr sehr lange Abhandlung\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}thesubtitle}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}Untersuchung einer Sache von wirklichem Wert\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Setze Autor:in und MatNr.}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}theauthor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}Maxi Mustermensch\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}matriculationnumber}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}00000\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Abstand zwischen Name und MatNr. (siehe Deckblatt)}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}myspace}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}1.0cm\PYG{n+nb}{\PYGZcb{}}
+
+\PYG{c}{\PYGZpc{} Muss in src/basic\PYGZus{}structure/deckblatt.tex einkommentiert werden!}
+
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}secondauthor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}\PYGZgt{}} Maxi Mustermensch \PYG{k}{\PYGZbs{}\PYGZgt{}} MatNr. 00000\PYG{k}{\PYGZbs{}\PYGZbs{}}\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}thirdauthor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}\PYGZgt{}} Maxi Mustermensch \PYG{k}{\PYGZbs{}\PYGZgt{}} MatNr. 00000\PYG{k}{\PYGZbs{}\PYGZbs{}}\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}fourthauthor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}\PYGZgt{}} Maxi Mustermensch \PYG{k}{\PYGZbs{}\PYGZgt{}} MatNr. 00000\PYG{k}{\PYGZbs{}\PYGZbs{}}\PYG{n+nb}{\PYGZcb{}}
+\PYG{k}{\PYGZbs{}newcommand}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}fifthauthor}\PYG{n+nb}{\PYGZcb{}}\PYG{n+nb}{\PYGZob{}}\PYG{k}{\PYGZbs{}\PYGZgt{}} Maxi Mustermensch \PYG{k}{\PYGZbs{}\PYGZgt{}} MatNr. 00000\PYG{k}{\PYGZbs{}\PYGZbs{}}\PYG{n+nb}{\PYGZcb{}}
+\end{MintedVerbatim}
