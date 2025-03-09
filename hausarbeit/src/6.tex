@@ -96,17 +96,22 @@ Die MariaDB-Datenbank dient als zentrale Speicherlösung für die ToDo-Listen-Da
 \subsubsection{Datenbank-Erstellung und Benutzerverwaltung}
 Beim Aufbauen der Umgebung wird zunächst sichergestellt, dass die Datenbank \texttt{todo\_app} existiert. Falls sie nicht vorhanden ist, wird sie mit folgendem Befehl erstellt:
 
-\begin{verbatim}
-CREATE DATABASE IF NOT EXISTS todo_app;
-\end{verbatim}
+\begin{code}
+  {Erstellen der Datenbank}{todo\_app}
+        \begin{minted}{latex}
+CREATE DATABASE IF NOT EXISTS todo\_app;
+\end{minted}
+\end{code}
 
 Damit extern auf die Datenbank zugegriffen werden kann, wurde ein Datenbankbenutzer mit entsprechenden Berechtigungen angelegt:
 
-\begin{verbatim}
-CREATE USER IF NOT EXISTS 'dbuser'@'%' IDENTIFIED BY '12345';
-GRANT ALL PRIVILEGES ON todo_app.* TO 'dbuser'@'%';
+\begin{code}{Erstellen des Users}{dbuser}
+        \begin{minted}{latex}
+CREATE USER IF NOT EXISTS 'dbuser'@'\%' IDENTIFIED BY '12345';
+GRANT ALL PRIVILEGES ON todo\_app.* TO 'dbuser'@'\%';
 FLUSH PRIVILEGES;
-\end{verbatim}
+\end{minted}
+\end{code}
 
 Hierbei wird der Benutzer \texttt{dbuser} mit dem Passwort \texttt{12345} erstellt, der von überall (\texttt{\%} steht für jede IP-Adresse) auf die Datenbank zugreifen kann. Durch \texttt{GRANT ALL PRIVILEGES} erhält dieser Benutzer vollständige Rechte auf die Datenbank \texttt{todo\_app}, wodurch er neue Tabellen anlegen, Daten einfügen oder bestehende Einträge bearbeiten kann.
 
