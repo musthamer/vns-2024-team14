@@ -5,6 +5,7 @@ docker container create \
 	--name "$name" \
 	--net mynet \
 	--init \
+	--cpus=2 \
 	image-$name
 docker container cp context/myinit.sh "$name":/usr/bin
 docker container start "$name"

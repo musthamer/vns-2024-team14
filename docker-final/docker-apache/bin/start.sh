@@ -1,25 +1,17 @@
 #!/bin/bash
 
+# Schleife zur Erstellung der Container
+for i in {1..3}; do
+    port=$((8080 + i))
+    docker container create \
+        --name apache$i \
+        --net mynet \
+        --publish $port:80 \
+        --init \
+        --cpus=1 \
+        image-apache
 
-docker container create \
-    --name apache1 \
-    --net mynet \
-    --publish 8081:80 \
-    --init \
-    image-apache
+    docker container cp context/myinit.sh apache$i:/usr/bin
+    docker container start apache$i
 
-docker container cp context/myinit.sh apache1:/usr/bin
-docker container start apache1
-
-docker container create \
-    --name apache2 \
-    --net mynet \
-    --publish 8082:80 \
-    --init \
-    image-apache
-
-docker container cp context/myinit.sh apache2:/usr/bin
-docker container start apache2
-
-
-
+done

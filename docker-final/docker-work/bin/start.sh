@@ -7,6 +7,7 @@ docker container create \
 	--publish 8022:22 \
 	--ip 172.27.0.100 \
 	--init \
+	 --cpus=1 \
 	image-$name
 docker container cp context/myinit.sh $name:/usr/bin
 docker container start $name

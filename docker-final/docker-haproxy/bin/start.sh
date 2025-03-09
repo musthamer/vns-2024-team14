@@ -7,6 +7,7 @@ docker container create \
 	--name "$name" \
 	--network mynet \
 	--init \
+	 --cpus=1 \
 	-p $port:80 \
 	image-haproxy
 docker container cp context/myinit.sh $name:/usr/bin
