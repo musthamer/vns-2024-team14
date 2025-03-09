@@ -1,260 +1,31 @@
 \section{Technologische Grundlagen}\label{zurhauptdatei}
 
-Die \texttt{hauptdatei.tex} gliedert sich grob in vier Abschnitte: die
-Definition der Pakete, des Deckblattes und Zitierstils sowie die eigentliche
-Einbindung des Inhaltes. Alle Bereiche wollen wir uns im Folgenden einmal
-anschauen.
-
 \subsection{Docker: Grundlagen und Anwendung}\label{präambel}
+Docker ist eine Open-Source-Plattform, die zur Containerisierung von Anwendungen dient. Anstatt Software direkt auf einem Betriebssystem zu installieren, verpackt Docker Anwendungen in Container, die alles enthalten, was für ihre Ausführung benötigt wird. Dies macht die Bereitstellung und den Betrieb von Software deutlich einfacher und effizienter. Docker basiert auf mehreren zentralen Komponenten, darunter Docker-Images, die als Baupläne für Container dienen und die gesamte Software-Umgebung definieren, sowie Docker-Container, die laufende Instanzen dieser Images sind und die Anwendung tatsächlich ausführen. Zusätzlich ermöglichen Docker-Netzwerke die Kommunikation zwischen verschiedenen Containern, was die Interaktion zwischen Diensten erleichtert, ohne dass diese direkt auf dem Host-System installiert sein müssen.
 
-Fast alle Funktionen und Features sind in \LaTeX~in sogenannten
-\texttt{packages} enthalten, welche ähnlich wie in Java importiert bzw.
-eingebunden werden müssen. In der Präambel werden all diese Pakete definiert.
-Zusätzlich wird in der Präambel die allgemeine Dokumentenklasse festgelegt. Also
-ob wir gerade einen Brief, ein Buch oder einen Artikel schreiben. Die Präambel
-beginnt dabei mit der \texttt{\textbackslash documentclass} und endet mit Beginn
-des eigentlichen Dokumentes, also \texttt{\textbackslash begin\{document\}}. Die
-sog. \texttt{documentclass} sieht für dieses Dokument folgendermaßen aus:
+Einer der größten Vorteile von Docker ist seine Portabilität. Docker-Container können auf jedem System ausgeführt werden, das Docker unterstützt, sei es lokal, in der Cloud oder in einer Testumgebung. Dadurch wird die Anwendungsbereitstellung über verschiedene Umgebungen hinweg vereinfacht. Ein weiterer Vorteil ist die Ressourceneffizienz. Im Gegensatz zu virtuellen Maschinen, die ein vollständiges Betriebssystem für jede Anwendung benötigen, teilen sich Docker-Container das Host-Betriebssystem, was sie deutlich ressourcenschonender macht. Darüber hinaus bietet Docker eine hervorragende Skalierbarkeit, da Anwendungen leicht auf mehrere Container verteilt werden können, um Lasten zu verteilen und die Leistung zu optimieren. Ein weiterer Pluspunkt ist das schnelle Deployment, da Container in Sekunden gestartet und gestoppt werden können, was die Bereitstellungszeiten erheblich verkürzt.
 
-\begin{code}{Die documentclass}{documentclass}
-	\begin{minted}{latex}
-		\documentclass[a4paper,12pt,parskip=half,headsepline,DIV=12,numbers=noenddot]{scrartcl}
-	\end{minted}
-\end{code}
+In unserem Projekt haben wir Docker genutzt, um verschiedene Dienste voneinander zu trennen und die Anwendung flexibel zu skalieren. Wir haben beispielsweise den Webserver, bestehend aus Apache und CGI, in einem eigenen Container betrieben, um ihn von anderen Diensten zu isolieren. Die Datenbank, MariaDB, wurde in einem separaten Container ausgeführt, um die Datenverwaltung von der Anwendungslogik zu trennen. Zusätzlich haben wir Redis als Caching-Dienst in einem weiteren Container eingesetzt, um die Leistung unserer Anwendung zu verbessern. Durch diese Aufteilung konnten wir die Anwendung effizient skalieren und Lasttests durchführen, ohne uns um Abhängigkeiten oder Konflikte zwischen den Diensten sorgen zu müssen. Docker hat die Entwicklung und das Deployment unserer Anwendung erheblich vereinfacht und beschleunigt.
 
-Wie wir sehen, wird in der \texttt{documentclass} z. B. das Format (A4) und die
-Schriftgröße (12pt.) definiert. Ebenso legen wir mit \texttt{scrartcl} fest,
-dass wir einen Artikel schreiben. Es handelt sich dabei um eine sog. KOMA-Script
-Klasse. Diese Klassen sind in der \LaTeX~Welt im Prinzip Standard und ein Blick
-in die
-\href{https://ftp.agdsn.de/pub/mirrors/latex/dante/macros/latex/contrib/koma-script/doc/scrguide-de.pdf}{Dokumentation}
-lohnt sich allemal. Ebenso werden nicht, wie aus Word bekannt, Seitenränder
-festgelegt, sondern Anhand des sog. Satzspiegels eine optimale Verteilung von
-Text zu Seitengröße ermittelt. Hierfür dient die Angabe \texttt{DIV=12}, auch
-hier empfehlt sich die Dokumentation der KOMA-Script Klassen.\\ Zu Beginn sollte
-die \texttt{documentclass} unverändert bleiben, kann jedoch mit einiger Erfahrung an die 
-eigenen Bedürfnisse angepasst werden. Auf die
-\texttt{documentclass} folgt das Einbinden von Packages durch den Befehl
-\texttt{\textbackslash usepackage}. Für die Darstellung der Verzeichnisstruktur
-in Abbildung~\ref{dirtree} wird bspw. das Package \texttt{dirtree} genutzt.
-Einige Packages sind in der \texttt{hauptdatei.tex} mit kurzen Kommentaren
-versehen. Auch zu den Packages finden sich
-\href{https://www.ctan.org}{Dokumentation}, welche immer wieder zurate
-gezogen werden können und sollten. Neben der Einbindung der Packages können 
-diese auch direkt definiert werden. So wird z. B. das Package \texttt{minted} 
-für die Darstellung von Quellcode (siehe z. B. Listing~\ref{documentclass}) 
-genutzt und das Layout direkt in der Präambel festgelegt:
+\section{Das ISO/OSI-Modell}\label{zitierstil}
 
-\begin{code}{Package Definition}{packagedefinition}
-	\begin{minted}{latex}
-	\usepackage[outputdir=log, newfloat]{minted}
-	\setminted{
-	  frame=lines,
-	  framesep=2mm,
-	  baselinestretch=1.2,
-	  bgcolor=LightGray,
-	  fontsize=\footnotesize,
-	  linenos,
-	  breaklines=true,
-	  breakanywhere=true,
-	  autogobble,
-	  tabsize=2
-	}
-	\end{minted}
-\end{code}
-
-Ich werde an dieser Stelle nicht auf einzelne Packages und Einstellungen
-eingehen, empfehle für einen genauen Einblick aber ausdrücklich die einzelnen
-Dokumentationen. Auch hier gilt, dass die üblicherweise gebrauchten Packages 
-eingebunden und definiert sind und nur in Sonderfällen zusätzliche Packages
-gebraucht werden.
-
-\subsubsection{Der Zitierstil}\label{zitierstil}
-
-Auch der Zitierstil wird innerhalb der Präambel definiert. Wir werden uns in
-einem späteren Kapitel ausführlicher mit Literaturverwaltung und Zitaten in
-\LaTeX~beschäftigen. Aktuell soll uns das Festlegen eines Zitierstiles
-ausreichen.\\ In der \texttt{hauptdatei.tex} sind bereits zwei Zitierstile
-definiert, es muss nur einer ausgewählt werden. Die Stile \texttt{ieee} und
-\texttt{apa} sind dabei in der Informatik gängig, entscheidet entsprechend eurem
-eigenen Geschmack und natürlich nach Vorgabe eurer Lehrenden.
-
-\begin{code}{Auswahl der Zitierstile}{codezitierstil}
-	\begin{minted}{latex}
-	% Zitierung nach IEEE
-
-	\usepackage[
-	backend=biber,
-	style=ieee,
-	autocite=inline,
-	]{biblatex}
-	\addbibresource{bibtex/hauptdatei.bib}
-
-	% Zitierung nach APA
-
-	%\usepackage[
-	%backend=biber,
-	%style=apa,
-	%autocite=inline,
-	%]{biblatex}
-	%\addbibresource{bibtex/hauptdatei.bib}
-	\end{minted}
-\end{code}
-
-Um den Stil zu verändern, könnt ihr den jeweils anderen Stil mit einem
-\texttt{\%} ein- bzw. auskommentieren. Aktuell ist der Stil \texttt{ieee}
-ausgewählt. Welche Unterschiede zwischen den Stilen bestehen, kann in den
-jeweiligen Guidelines nachgeschaut werden.
-
-\subsubsection{Das Deckblatt}\label{dasdeckblatt}
-
-Das Deckblatt ist unter \texttt{./src/basic\_structure/deckblatt.tex} definiert.
-In vielen Fällen können die nötigen Parameter jedoch direkt in der Präambel
-festgelegt werden.
-
-\begin{code}{Definition des Deckblatts}{definitiondeckblatt}
-	\begin{minted}{latex}
-% true für Bachelorarbeit / false für Hausarbeit
-\newbool{bachelorarbeit}
-\setbool{bachelorarbeit}{true}
-
-% Setze Fachbereich
-\newcommand{\department}{Fachbereich II \\ Management und Informationssysteme}
-
-% Setze Studiengang
-\newcommand{\studyprogram}{Wirtschaftsinformatik B.Sc.}
-
-% Setze Modulname (bachelorarbeit muss false sein)
-\newcommand{\modulname}{Modulname}
-
-% Setze Dozent:in (bachelorarbeit muss false sein)
-\newcommand{\auditor}{\textbf{Dozent:in:} \> Prof. Dr. Maxi Muster}
-
-% Setze Gutachter:innen (bachelorarbeit muss true sein)
-\newcommand{\firstauditor}{\textbf{Erstgutachter:} \> Prof. Dr. Maxi Mustermann}
-\newcommand{\secondauditor}{\textbf{Zweitgutachterin:} \> Prof. Dr. Maxi Musterfrau}
-
-% Setze Titel und Untertitel der Abreit 
-\newcommand{\thetitle}{Eine unnötig komplizierte und sehr sehr sehr lange Abhandlung}
-\newcommand{\thesubtitle}{Untersuchung einer Sache von wirklichem Wert}
-
-% Setze Autor:in und MatNr.
-\newcommand{\theauthor}{Maxi Mustermensch}
-\newcommand{\matriculationnumber}{00000}
-
-% Abstand zwischen Name und MatNr. (siehe Deckblatt)
-\newcommand{\myspace}{1.0cm}
-
-% Muss in src/basic_structure/deckblatt.tex einkommentiert werden! 
-
-\newcommand{\secondauthor}{\> Maxi Mustermensch \> MatNr. 00000\\}
-\newcommand{\thirdauthor}{\> Maxi Mustermensch \> MatNr. 00000\\}
-\newcommand{\fourthauthor}{\> Maxi Mustermensch \> MatNr. 00000\\}
-\newcommand{\fifthauthor}{\> Maxi Mustermensch \> MatNr. 00000\\}
-	\end{minted}
-\end{code}
-
-Viele der Angaben sollten selbsterklärend sein und können sonst durch simples
-ausprobieren weiter erforscht werden. Beachtet jedoch, dass die Sonderzeichen
-\texttt{\textbackslash \textbackslash} und \texttt{\textbackslash>} erhalten
-bleiben müssen, diese sind wichtig für das Layout. Ebenso sollte Zeile 30 bzw.
-die Angabe des \texttt{\textbackslash myspace} bei mehreren Autor:innen beachtet
-werden. Der Wert steht für den Abstand zwischen Name und MatNr. und muss sich
-damit entsprechend am längsten Namen orientieren. Sollte eure Abgabe mehr als
-eine Autor:in haben, können die Werte für weitere Autor:innen direkt in der
-Präambel gesetzt werden, müssen jedoch zusätzlich in der \texttt{deckbatt.tex}
-einkommentiert werden.
-
-%\begin{code}{Angabe zusätzlicher Autor:innen in deckblatt.tex}{authorsdeckblatt}
-%	\begin{minted}{latex}
-%		%\secondauthor
-%		%\thirdauthor
-%		%\fourthauthor
-%		%\fifthauthor
-%	\end{minted}
-%\end{code}
-\newpage
-Aus den in dem Listing~\ref{definitiondeckblatt}
-gewählten Einstellungen ergibt sich folgendes Deckblatt:
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.75\textwidth]{src/abbildungen/deckblatt.png}
-	\caption{Deckblatt}
-	\label{picturedeckblatt}
+Das ISO/OSI-Modell ist ein zentrales Referenzmodell für die Netzwerkkommunikation, das aus sieben Schichten besteht und beschreibt, wie Daten zwischen verschiedenen Systemen übertragen werden. In unserem To-Do-List-Projekt, das auf Docker-Containern basiert, spielt dieses Modell eine wesentliche Rolle, da die gesamte Kommunikation zwischen den verschiedenen Komponenten wie Webserver (Apache), Datenbank (MariaDB), Caching-System (Redis) und Load-Balancer (HAProxy) über ein internes Netzwerk organisiert wird. Jede dieser Komponenten ist für eine bestimmte Funktion verantwortlich, und die Kommunikation zwischen ihnen erfolgt über verschiedene Schichten des ISO/OSI-Modells, die eine klare Trennung und effiziente Verwaltung der Netzwerkprozesse ermöglichen.
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=0.65\textwidth]{src/abbildungen/osi.png}
+        \caption{BibTeX Einträge exportieren}
 \end{figure}
 \FloatBarrier
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=0.65\textwidth]{src/abbildungen/tcp.png}
+        \caption{BibTeX Einträge exportieren}
+\end{figure}
+\FloatBarrier
+Die erste Schicht, der Physical Layer, bezieht sich auf die physische Übertragung von Daten. In unserem Projekt läuft die gesamte Infrastruktur auf einem Host-System, das entweder über ein kabelgebundenes Netzwerk (Ethernet) oder eine (WLAN) mit dem Internet verbunden ist. Innerhalb der Docker-Umgebung existiert jedoch keine physische Verbindung, sondern eine virtuelle Netzwerkarchitektur, die auf der Netzwerkinfrastruktur des Host-Systems aufbaut. Dadurch können die Container miteinander kommunizieren, ohne dass eine direkte physische Verbindung zwischen ihnen besteht. Die zweite Schicht, der Data Link Layer, sorgt für die fehlerfreie Übertragung der Datenpakete innerhalb eines lokalen Netzwerks. In unserem Projekt ermöglicht Docker dies durch virtuelle Netzwerkbrücken wie docker0, die eine sichere interne Kommunikation zwischen den Containern gewährleisten. Jede dieser Netzwerkbrücken verwaltet virtuelle MAC-Adressen und steuert den Datenfluss, um Kollisionen zu vermeiden. Das bedeutet, dass innerhalb unseres Systems eine isolierte und sichere Verbindung zwischen Webserver, Datenbank und Redis besteht, ohne dass externe Störungen auftreten. Die dritte Schicht, der Network Layer, ist für die Adressierung und das Routing von Datenpaketen verantwortlich. In unserem Projekt hat jeder Docker-Container eine eigene IP-Adresse, die zur Kommunikation mit anderen Containern genutzt wird. Der HAProxy-Load-Balancer verteilt die eingehenden Anfragen an verschiedene Backend-Dienste anhand dieser IP-Adressen. Die gesamte Kommunikation zwischen Webserver, Datenbank und Caching-System erfolgt innerhalb eines privaten Docker-Netzwerks, das eine sichere und isolierte Umgebung für den Datenaustausch bietet. Die vierte Schicht, der Transport Layer, stellt eine zuverlässige Ende-zu-Ende-Kommunikation sicher und entscheidet, ob eine Verbindung verbindungsorientiert (z. B. TCP) oder verbindungslos (z. B. UDP) aufgebaut wird. In unserem Projekt nutzen wir ausschließlich TCP (Transmission Control Protocol), da unser System eine stabile und fehlerfreie Datenübertragung benötigt. Der Apache-Webserver empfängt HTTP-Anfragen über TCP und leitet diese an die Datenbank oder das Caching-System weiter. Gleichzeitig verwendet MariaDB TCP für die Übertragung von SQL-Abfragen, um eine zuverlässige Kommunikation zwischen der Anwendung und der Datenbank sicherzustellen. Redis setzt ebenfalls auf TCP, um schnelle und stabile Anfragen zwischen dem Caching-System und der Anwendung zu ermöglichen. Besonders wichtig in dieser Schicht ist der Three-Way-Handshake (SYN, SYN-ACK, ACK), der für jede neue TCP-Verbindung zwischen Client und Server durchgeführt wird. Dieser Mechanismus sorgt dafür, dass die Datenübertragung zuverlässig ist und keine Pakete verloren gehen.
 
-Das Deckblatt ist manuell gesetzt und sollte nicht ohne entsprechendes Know-how
-angepasst werden. Natürlich könnt ihr immer etwas rumprobieren und euch zur Not
-das Projekt neu herunterladen.
+Die fünfte Schicht, der Session Layer, ist für die Verwaltung und Aufrechterhaltung von Sitzungen zwischen Client und Server verantwortlich. In unserem Projekt spielt Redis eine zentrale Rolle in der Sitzungsverwaltung, da es Login-Informationen temporär speichert und es dem Nutzer ermöglicht, auch nach mehreren Anfragen weiterhin authentifiziert zu bleiben, ohne sich erneut anmelden zu müssen.
 
-\subsection{ISO/OSI-Modell im Kontext}\label{derinhalt}
+Die sechste Schicht, der Presentation Layer sorgt dafür, dass Daten umgewandelt, komprimiert und verschlüsselt werden. In unserem Projekt werden die Daten direkt vom Server an den Client geschickt, ohne sie zuerst in JSON umzuwandeln. Außerdem sorgt HTTPS dafür, dass die Daten beim Senden sicher bleiben und nicht von Dritten abgefangen werden können.
 
-Wie bereits erwähnt, endet mit \texttt{\textbackslash begin\{document\}} die
-Präambel, damit beginnt unser eigentlicher Inhalt. Der Befehl
-\texttt{\textbackslash begin\{document\}} öffnet dabei eine Umgebung oder
-\texttt{environment}, welche durch \texttt{\textbackslash end\{document\}}
-geschlossen wird. Dies ähnelt etwas dem \texttt{if} und \texttt{fi} aus der
-Bash und bildet einen Block.
-
-Zu Beginn werden die Kopf- und Fußzeile des Dokuments beschrieben:
-
-\begin{code}{Kopf- und Fußzeile}{headerfooter}
-	\begin{minted}{latex}
-	% Definition Header Sections sollen in der Kopfzeile stehen; Kopfzeile mit Unterstrich
-	\automark[subsection]{section}
-	\KOMAoptions{headsepline=true}
-	%\ihead{Kopfzeile innen}
-	%\chead{Kopfzeile außen}
-	\ohead{\headmark}
-
-	% Definition footer \pagemark steht für Seitennummer
-	%\ifoot{Fußzeile innen}
-	%\cfoot{Fußzeile Mitte}
-	\ofoot{\pagemark}
-	\end{minted}
-\end{code}
-
-Daraus ergibt sich, wie in diesem Dokument zu sehen, eine Kopfzeile, welche die
-Überschrift (\texttt{section}) oder den Unterabschnitt (\texttt{subsection})
-enthält und durch eine Linie abgegrenzt wird. Dabei wird immer nur die
-\texttt{section} bzw. \texttt{subsection} aufgeführt, welche als Erstes auf der
-Seite beginnt. Es existieren hier einige mögliche Definitionen, welche 
-in der Dokumentation des Packages \texttt{scrlayer-scrpage} nachgelesen werden 
-können. Die Fußzeile wird schlicht mit der aktuellen Seitennummer definiert.\\
-Auf die Definition der Kopf- und Fußzeile folgt das Einbinden von
-Trennvorschlägen. \LaTeX~verfügt grundsätzlich über eine sehr gute automatische
-Silbentrennung, falls diese aber mal versagt, können eigene Trennvorschläge
-eingebunden werden. Beispiele hierzu sind in der \texttt{trennung.tex}
-hinterlegt.\\ Auf weitere kleinere Einstellungen und optionale Layoutvarianten,
-welche ausreichend kommentiert sind, folgt die Einbindung des Deckblattes, mit
-dem wir uns ja schon beschäftigt haben.\\ Die nun folgenden \texttt{inputs}
-sorgen dafür, dass euer geschriebener Text auch in das Dokument eingebunden und
-angezeigt wird. So sorgen die folgenden Inputs dafür, dass der bisherige Text,
-den ihr in diesem Dokument lesen konntet, eingebunden wird.
-
-\vspace*{-1.0cm}
-\begin{code}{input statements}{inputstatements}
-	\begin{minted}{latex}
-	\input{src/einleitung.tex}
-	\input{src/struktur.tex}
-	\input{src/zurhauptdatei.tex}
-	\end{minted}
-\end{code}
-
-Auf die \texttt{inputs} folgen die jeweiligen Verzeichnisse, auch hier sollten 
-die Einstellung nicht ohne entsprechende Kenntnisse geändert werden. Grundsätzlich
-werden die Verzeichnisse automatisch erstellt, lediglich für den Fall, dass ein
-Verzeichnis leer bleiben würde, da das Dokument z. B. keine Tabellen enthält,
-muss der entsprechende Teil der \texttt{hauptdatei.tex} auskommentiert werden.
-Dabei kann es passieren, dass sich die Kopfzeile nicht mehr korrekt verhält, da
-diese teilweise für die Verzeichnisse manuell angepasst werden muss.\\ Das
-Abkürzungsverzeichnis stellt eine Besonderheit dar, dieses muss manuell befüllt
-werden, dazu gibt es Beispiele in der \texttt{abkuerzungen.tex}.\\ Auf die
-Verzeichnisse folgt das Deckblatt für den Anhang und der Anhang selbst. Dort
-muss lediglich beachtet werden, dass für Überschriften auf höchster Ebene nur
-\texttt{subsections} verwendet werden dürfen, da der Anhang selbst die
-\texttt{section} darstellt.\\ Oftmals sieht man in \LaTeX, dass die Präambel in
-eine eigene Datei ausgelagert wird. Dies dient jedoch nur der Übersichtlichkeit
-und der etwas klareren Trennung, ich verzichte darauf in dieser Vorlage.
+Die siebte Schicht, die Application Layer , ist das Bindeglied zwischen dem Nutzer und der Anwendung. In unserem To-Do-List-Projekt nutzt man eine Webseite mit HTML, CSS und JavaScript, um auf die Anwendung zuzugreifen. Der Apache-Webserver nimmt Anfragen entgegen, verarbeitet sie und sendet Antworten zurück. Zudem helfen REST-APIs, damit die Benutzeroberfläche und die Datenbank miteinander kommunizieren können.
