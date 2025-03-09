@@ -159,7 +159,12 @@ Insgesamt zeigt der Test, dass unsere ToDo-Listen-Funktion stabil und zuverläss
 
 \subsection{Diagramm – Gnuplot: CPU- und RAM-Nutzungsanalyse}
 Im Rahmen unseres Performance-Monitoring-Tests haben wir ein Skript (monitor.sh) verwendet, das kontinuierlich CPU- und RAM-Nutzungsdaten von mehreren Docker-Containern (Apache1, Apache2, Work, HAProxy, Redis und MariaDB) erfasst hat. Die Daten wurden in Intervallen von 1 Sekunde über einen längeren Zeitraum gesammelt und in einer CSV-Datei gespeichert, um sie anschließend zu analysieren und zu visualisieren. 
-
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=0.65\textwidth]{src/abbildungen/gnu.png}
+        \caption{Gnuplot}
+\end{figure}
+\FloatBarrier
 Testaufbau 
 
 Das Skript monitor.sh nutzte den Befehl docker stats, um kontinuierlich Daten zu sammeln. Die erfassten Daten umfassten die CPU-Auslastung (\%) und den RAM-Verbrauch (MiB) für die Container Apache1, Apache2, Work, HAProxy, Redis und MariaDB. Die Daten wurden in Intervallen von 1 Sekunde erfasst, um detaillierte Schwankungen und Lastspitzen zu erkennen. Die gesammelten Daten wurden in einer CSV-Datei gespeichert und anschließend mithilfe von Gnuplot visualisiert. Das Diagramm zeigt die CPU-Auslastung der verschiedenen Docker-Container zwischen 19:00 Uhr und 21:00 Uhr und gibt uns einen guten Überblick darüber, wie das System unter Belastung reagiert hat. 
