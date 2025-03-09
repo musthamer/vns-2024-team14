@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.2.14)  9 MAR 2025 02:58
+This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.2.14)  9 MAR 2025 03:03
  system commands enabled.
 **hauptdatei.tex
 (./hauptdatei.tex
@@ -2109,10 +2109,10 @@ Package microtype Info: Loading generic protrusion settings for font family
 \pydata@fh@_72CDA6978600F97B9A22D1FB2EBB1A01.data.minted=\write8
 
 \openout8 = _72CDA6978600F97B9A22D1FB2EBB1A01.data.minted
-runsystem(latexminted config  --timestamp 20250309025840 72CDA6978600F97B9A22D1F
+runsystem(latexminted config  --timestamp 20250309030303 72CDA6978600F97B9A22D1F
 B2EBB1A01)...executed.
  (./log/_72CDA6978600F97B9A22D1FB2EBB1A01.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20250309025840 72CDA6978600F97B9A
+runsystem(latexminted cleanconfig  --timestamp 20250309030303 72CDA6978600F97B9A
 22D1FB2EBB1A01)...executed.
 
 (./log/_minted/default.style.minted)
@@ -2211,14 +2211,14 @@ you left one out. Proceed, with fingers crossed.
 [31]
 
 [32]
-<src/abbildungen/gnu.png, id=275, 1204.5pt x 602.25pt>
-File: src/abbildungen/gnu.png Graphic file (type png)
-<use src/abbildungen/gnu.png>
-Package luatex.def Info: src/abbildungen/gnu.png  used on input line 164.
+<src/abbildungen/gnu.png.jpg, id=275, 1204.5pt x 602.25pt>
+File: src/abbildungen/gnu.png.jpg Graphic file (type jpg)
+<use src/abbildungen/gnu.png.jpg>
+Package luatex.def Info: src/abbildungen/gnu.png.jpg  used on input line 164.
 (luatex.def)             Requested size: 291.28238pt x 145.6365pt.
 
 
-[33<./src/abbildungen/gnu.png>]
+[33<./src/abbildungen/gnu.png.jpg>]
 
 [34]) (./src/8.tex)
 

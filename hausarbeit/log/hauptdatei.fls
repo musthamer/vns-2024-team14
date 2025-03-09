@@ -412,8 +412,8 @@ INPUT ./log/_minted/CC460A34B7C9CBF8726287E37B2D037B.highlight.minted
 INPUT ./log/_minted/A336F5E22D48BD2688122B083BB8E3EC.highlight.minted
 INPUT ./log/_minted/447EACFCEB2A0EB7A9C8EE42A047514E.highlight.minted
 INPUT ./src/7.tex
-INPUT ./src/abbildungen/gnu.png
-INPUT ./src/abbildungen/gnu.png
+INPUT ./src/abbildungen/gnu.png.jpg
+INPUT ./src/abbildungen/gnu.png.jpg
 INPUT ./src/8.tex
 INPUT ./log/hauptdatei.lof
 OUTPUT log/hauptdatei.lof

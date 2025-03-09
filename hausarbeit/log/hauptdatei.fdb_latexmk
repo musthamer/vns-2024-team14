@@ -1,11 +1,11 @@
 # Fdb version 4
-["biber log/hauptdatei"] 1741481384.2824 "log/hauptdatei.bcf" "log/hauptdatei.bbl" "log/hauptdatei" 1741485532.5015 0
-  "log/hauptdatei.bcf" 1741485531.80524 107748 a98e0953c05c20ffef477718a4970c3f "lualatex"
+["biber log/hauptdatei"] 1741481384.2824 "log/hauptdatei.bcf" "log/hauptdatei.bbl" "log/hauptdatei" 1741485797.0673 0
+  "log/hauptdatei.bcf" 1741485796.41256 107748 a98e0953c05c20ffef477718a4970c3f "lualatex"
   (generated)
   "log/hauptdatei.bbl"
   "log/hauptdatei.blg"
   (rewritten before read)
-["lualatex"] 1741485520.23197 "hauptdatei.tex" "log/hauptdatei.pdf" "hauptdatei" 1741485532.50188 2
+["lualatex"] 1741485783.61513 "hauptdatei.tex" "log/hauptdatei.pdf" "hauptdatei" 1741485797.06768 2
   "/home/celakkoeprue/.texlive2024/texmf-var/luatex-cache/generic/fonts/otl/lmmono10-italic.luc" 1741450639.47008 82945 e5dfa9e461b36553ab587dd4b1892a76 ""
   "/home/celakkoeprue/.texlive2024/texmf-var/luatex-cache/generic/fonts/otl/lmmono10-regular.luc" 1741450623.26212 81819 d6a16f977b9306e96e64212936c88691 ""
   "/home/celakkoeprue/.texlive2024/texmf-var/luatex-cache/generic/fonts/otl/lmmono12-regular.luc" 1741450621.81813 81754 868275137fa04a4072047bb72af70323 ""
@@ -383,23 +383,23 @@
   "log/_minted/F7C4BFB46F7E65DFCEE19D6ACC9DA713.highlight.minted" 1741485499.76133 513 46ac163ccea5254f62eef08492526262 ""
   "log/_minted/FB767EA89F68C3CB10A679A1CC26B94C.highlight.minted" 1741479360.3934 1536 41a25f89b8cd21a77a80ab5dfcbf9089 ""
   "log/_minted/default.style.minted" 1741479360.3934 6426 e1fb43a91491f41b33310478eee48cdb ""
-  "log/hauptdatei.aux" 1741485531.77324 32780 4c6905698ba144c936ec4fbab9e0e0c4 "lualatex"
+  "log/hauptdatei.aux" 1741485796.38056 32780 4c6905698ba144c936ec4fbab9e0e0c4 "lualatex"
   "log/hauptdatei.bbl" 1741485454.12945 466 76d65a242ec496c9b4361af646ff12cb "biber log/hauptdatei"
   "log/hauptdatei.ind" 1741479360.3974 0 d41d8cd98f00b204e9800998ecf8427e "makeindex log/hauptdatei.idx"
-  "log/hauptdatei.lof" 1741485531.80524 572 910a3e8cc02963dbd2e3792639473e64 "lualatex"
-  "log/hauptdatei.lol" 1741485531.80524 2294 ecc9285ecb0430261039a368c1820a0c "lualatex"
-  "log/hauptdatei.lot" 1741485531.80524 95 266fb778c506bbca413fec0c0a8f3005 "lualatex"
-  "log/hauptdatei.run.xml" 1741485531.80524 2516 f7fce52a6bfadfc1706d58ce374f4818 "lualatex"
-  "log/hauptdatei.toc" 1741485531.80524 4161 a1e16b5240f45f0d68c353856e4597e2 "lualatex"
+  "log/hauptdatei.lof" 1741485796.41256 572 910a3e8cc02963dbd2e3792639473e64 "lualatex"
+  "log/hauptdatei.lol" 1741485796.41256 2294 ecc9285ecb0430261039a368c1820a0c "lualatex"
+  "log/hauptdatei.lot" 1741485796.41256 95 266fb778c506bbca413fec0c0a8f3005 "lualatex"
+  "log/hauptdatei.run.xml" 1741485796.41256 2516 f7fce52a6bfadfc1706d58ce374f4818 "lualatex"
+  "log/hauptdatei.toc" 1741485796.41256 4161 a1e16b5240f45f0d68c353856e4597e2 "lualatex"
   "src/1.tex" 1741477371.43868 3716 0d29cc79d933d2a2dbedc584c1f226c4 ""
   "src/3.tex" 1741482266.14572 3519 7961006818dbb863156d99bb08bb760f ""
   "src/4.tex" 1741481554.86357 7866 ff8318b60c1140c2ae9a330b4d8c3200 ""
   "src/5.tex" 1741482458.36522 2512 d47922864149bc3904ea6f286c8404f0 ""
   "src/6.tex" 1741485454.09745 23727 055169a9b942844688dad8439bf2888f ""
-  "src/7.tex" 1741485454.13345 37001 13de72b69212a58d2de2c6f6ac0fdd80 ""
+  "src/7.tex" 1741485728.53273 37005 47143594f1f88f5be375cd5607a06180 ""
   "src/8.tex" 1741477371.44268 29 cf34c2208e101b68287debc51ba6f883 ""
   "src/abbildungen/beamer_frame.png" 1741476753.49633 336797 ac003a554882a93729249948e1a3bc7d ""
-  "src/abbildungen/gnu.png" 1741483797.50175 223955 55bab37f234a1f12656e730afc11076c ""
+  "src/abbildungen/gnu.png.jpg" 1741483797.50175 223955 55bab37f234a1f12656e730afc11076c ""
   "src/abbildungen/logoneu.png" 1741476753.49633 8864 a15a581a167183e572d34db89c5f2321 ""
   "src/abbildungen/osi.png" 1741481160.66062 100460 fae4d882de65917603ab5acc815c1064 ""
   "src/abbildungen/tcp.png" 1741481161.05262 204081 2eb523df70e2092cf8b916145c1699ea ""
@@ -421,8 +421,8 @@
   "log/hauptdatei.run.xml"
   "log/hauptdatei.toc"
   (rewritten before read)
-["makeindex log/hauptdatei.idx"] 1741479094.18821 "log/hauptdatei.idx" "log/hauptdatei.ind" "log/hauptdatei" 1741485532.50131 0
-  "log/hauptdatei.idx" 1741485524.63326 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
+["makeindex log/hauptdatei.idx"] 1741479094.18821 "log/hauptdatei.idx" "log/hauptdatei.ind" "log/hauptdatei" 1741485797.06715 0
+  "log/hauptdatei.idx" 1741485788.90458 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
   (generated)
   "log/hauptdatei.ilg"
   "log/hauptdatei.ind"
