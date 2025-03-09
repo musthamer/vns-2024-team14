@@ -1,0 +1,3 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+SESSION\PYG{n+nb}{\PYGZus{}}ID=(echo\PYGZdq{}(echo\PYGZdq{}HTTP\PYG{n+nb}{\PYGZus{}}COOKIE\PYGZdq{} | grep \PYGZhy{}o \PYGZsq{}session\PYG{n+nb}{\PYGZus{}}id=[\PYG{n+nb}{\PYGZca{}};]*\PYGZsq{} | cut \PYGZhy{}d\PYGZsq{}=\PYGZsq{} \PYGZhy{}f2)
+\end{MintedVerbatim}

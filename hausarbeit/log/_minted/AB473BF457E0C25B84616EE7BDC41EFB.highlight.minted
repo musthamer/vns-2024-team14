@@ -1,7 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{k}{\PYGZbs{}begin}\PYG{n+nb}{\PYGZob{}}figure\PYG{n+nb}{\PYGZcb{}}[!ht]
-	\PYG{k}{\PYGZbs{}includegraphics}\PYG{n+na}{[width=0.8\PYGZbs{}textwidth]}\PYG{n+nb}{\PYGZob{}}abbildungen/Logo.png\PYG{n+nb}{\PYGZcb{}}
-	\PYG{k}{\PYGZbs{}caption}\PYG{n+na}{[Beschreibung]}\PYG{n+nb}{\PYGZob{}}Beschreibung\PYG{n+nb}{\PYGZcb{}}
-	\PYG{k}{\PYGZbs{}label}\PYG{n+nb}{\PYGZob{}}Beschreibung\PYG{n+nb}{\PYGZcb{}}
-\PYG{k}{\PYGZbs{}end}\PYG{n+nb}{\PYGZob{}}figure\PYG{n+nb}{\PYGZcb{}}
-\end{MintedVerbatim}

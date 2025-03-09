@@ -1,3 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-Überschriften können in HTML mittels \PYG{k}{\PYGZbs{}mintinline}\PYG{n+nb}{\PYGZob{}}html\PYG{n+nb}{\PYGZcb{}}|\PYGZlt{}h1\PYGZgt{}Überschrift\PYGZlt{}/h1\PYGZgt{}| dargestellt werden.
-\end{MintedVerbatim}
