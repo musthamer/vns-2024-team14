@@ -26,6 +26,35 @@ Da es keine vorgefertigte Vorlage für einen Apache-Container gab, mussten wir i
 
 In der start.sh mussten wir lediglich den Namen und den Port anpassen. Da wir zwei identische Apache-Container erstellen wollten, haben wir das Skript so modifiziert, dass es zwei Container erzeugt, anstatt nur einer. Wir haben die Container apache1 und apache2 genannt und ihnen die Ports 8081 und 8082 auf dem Host-System zugewiesen.
 
+\begin{code}{start.sh}{start}
+        \begin{minted}{latex}
+#!/bin/bash
+
+
+docker container create \
+    --name apache1 \
+    --net mynet \
+    --publish 8081:80 \
+    --init \
+    image-apache
+
+docker container cp context/myinit.sh apache1:/usr/bin
+docker container start apache1
+
+docker container create \
+    --name apache2 \
+    --net mynet \
+    --publish 8082:80 \
+    --init \
+    image-apache
+
+docker container cp context/myinit.sh apache2:/usr/bin
+docker container start apache2
+
+  \end{minted}
+\end{code}
+
+
 Die Angabe :80 hinter dem Port (z. B. --publish 8081:80) bedeutet, dass der Apache-Server im Container auf dem internen Port 80 läuft. Dies ist der Standard-Port für HTTP-Verkehr. Docker leitet den Verkehr vom externen Port 8081 (oder 8082) auf dem Host-System an den internen Port 80 im Container weiter. Diese Konfiguration war insbesondere für die Integration mit HAProxy wichtig, da HAProxy die beiden Apache-Container über ihren internen Port 80 ansprechen und unter einem gemeinsamen externen Port (in unserem Fall 8000) zusammenführen kann. Um sicherzustellen, dass beide Apache-Container identisch sind und HAProxy die Last korrekt verteilt, führten wir Tests durch. Einen Test konnten wir direkt zu Anfang machen in dem wir einen der Container manuell abgeschaltet haben:
 
  Während die Anwendung unter localhost:8000 lief, stoppten wir einen der Apache-Container. HAProxy leitete die Anfragen automatisch an den verbleibenden Container weiter, sodass die Anwendung weiterhin verfügbar blieb.
@@ -37,6 +66,22 @@ Durch diese Konfiguration konnten wir sicherstellen, dass die Last gleichmäßig
 In der Dockerfile haben wir ebenfalls Anpassungen vorgenommen, um die gewünschten Funktionen der Anwendung umzusetzen. Dazu gehörte unter anderem die Installation von apache-spezifischen Programmen wie apache2, libapache2-mod-fcgid und apache2-utils, die für den Betrieb unserer CGI-Skripte und die Webanwendung notwendig sind. Als Basis-Image nutzten wir deshalb ubuntu, um maximale Flexibilität bei der Installation der benötigten Pakete zu haben
 
 Darüber hinaus mussten wir auch Abhängigkeiten (Dependencies) berücksichtigen, die durch die anderen Docker-Container (z. B. MariaDB und Redis) erforderlich sind. Ein Beispiel hierfür ist die Installation von uuid-runtime, das für die Generierung von eindeutigen IDs (UUIDs) benötigt wird, die in unserer Anwendung für die Session-Verwaltung oder andere Funktionen genutzt werden könnten.
+\begin{code}{Dockerfile}{docker}
+        \begin{minted}{latex}
+FROM ubuntu
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install apache2 apache2-utils libapache2-mod-fcgid curl vim mariadb-client redis-tools
+RUN apt-get -y install uuid-runtime
+COPY cgi-bin/ /usr/lib/cgi-bin/
+COPY html/ /var/www/html/
+COPY myinit.sh /usr/bin/myinit.sh
+RUN chmod +x /usr/bin/myinit.sh
+RUN chmod +x /usr/lib/cgi-bin/vns/todo/*
+RUN a2enmod cgi
+
+CMD ["/usr/bin/myinit.sh"]  
+ \end{minted}
+\end{code}
 
 Nachdem alle notwendigen Pakete installiert waren, haben wir die Skripte und Dateien der Webanwendung in das Docker-Image kopiert. Dazu gehören:
 
@@ -48,6 +93,37 @@ Abschließend wurde die myinit.sh in das Image integriert und als Hauptprozess d
 
 
 Die myinit.sh ist ein wichtiger Bestandteil unseres Docker-Setups und dient als Init-Skript für den Apache-Webserver. Dieses Skript verwaltet den Start und Stopp des Servers und protokolliert wichtige Ereignisse.
+
+\begin{code}{myinit.sh}{initialisierung}
+        \begin{minted}{latex}
+#!/bin/bash
+log=/docker.log
+echo starte >> $log
+
+trap onexit SIGTERM
+
+function onexit {
+  #shutdown ...
+  echo shutting down >> $log
+
+  read pid < /run/apache2/apache2.pid
+  apachectl stop
+  while test "$pid" != "" && ps -p $pid >/dev/null; do
+    echo wait for shutdown of pid $pid >> $log
+    sleep 0.01
+  done
+
+  exit
+}
+# start services
+apachectl start
+
+while true; do
+        echo "$(date +%FT%T) ping" >> $log
+  read -t 1 </dev/fd/1
+done
+  \end{minted}
+\end{code}
 
 Das Skript beginnt mit der Initialisierung einer Log-Datei (/docker.log), in der alle relevanten Ereignisse festgehalten werden. Sobald der Container gestartet wird, schreibt das Skript den Eintrag „starte“ in die Log-Datei, um den Beginn des Prozesses zu dokumentieren.
 
