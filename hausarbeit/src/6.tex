@@ -238,7 +238,7 @@ Falls die Session gültig ist und der Benutzer erfolgreich aus Redis abgerufen w
 
 Durch dieses Verfahren wird sichergestellt, dass nur angemeldete Nutzer Zugriff auf die Anwendung haben. Gleichzeitig bleibt die Sitzung speicherschonend, da Redis die Sessions im Arbeitsspeicher hält und automatisch verwaltet. Sollte der Nutzer inaktiv sein, wird die Session nach Ablauf der definierten Zeit automatisch aus Redis entfernt.
 
-\section{Logout-Prozess}
+\subsubsection{Logout-Prozess}
 
 In dem Skript \texttt{logout.sh} wird zunächst die Session-ID des Benutzers aus dem HTTP-Cookie extrahiert. Dies wird durch den Zugriff auf den Header des HTTP-Requests erreicht, in dem das Cookie gespeichert ist:
 
