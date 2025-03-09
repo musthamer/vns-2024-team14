@@ -13,13 +13,14 @@ Durch diesen Technologiestack wurde eine effiziente, skalierbare und robuste ToD
 \subsection{Die Verezeichnisstruktur}\label{Projektidee}
 Unser Docker Verzeichnis hat sich durch die ganzen Komponenten und den dazugehörigen Inhalten ziemlich vergrößert. Im Hauptverzeichnis befindet sich das Skript build-all.sh, das den Build-Prozess aller Docker-Container steuert. Darüber hinaus gibt es mehrere Unterverzeichnisse, die jeweils spezifische Komponenten des Systems enthalten. 
 
-Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den Apache-Webserver, einschließlich der CGI-Skripte für die Todo-Anwendung. Diese Skripte ermöglichen das Hinzufügen, Bearbeiten und Löschen von Aufgaben sowie das Anmelden und Abmelden von Benutzern. Im Verzeichnis docker-haproxy finden sich die Konfigurationsdateien für den HAProxy-Load-Balancer sowie Testskripte und Ergebnisse von Lasttests, die die Leistungsfähigkeit des Systems überprüfen.Für die Datenbankverwaltung ist das Verzeichnis docker-mariadb zuständig, das die Docker-Konfiguration für MariaDB sowie Skripte für Stresstests enthält. Ähnlich strukturiert ist das Verzeichnis docker-redis, das die Konfiguration für den Redis-Server und Benchmark-Tests bereitstellt. Das Verzeichnis docker-work dient als zentrale Anlaufstelle für allgemeine Skripte zur Verwaltung der Docker-Umgebung. Es enthält außerdem Testskripte für Last- und Performance-Tests, die mit Tools wie k6 und playwright durchgeführt werden. Schließlich bietet das Verzeichnis general Skripte für die Netzwerkverwaltung, wie das Erstellen und Löschen von Docker-Netzwerken sowie die Bereinigung der gesamten Docker-Umgebung.
+Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den Apache-Webserver, einschließlich der CGI-Skripte für die Todo-Anwendung. Diese Skripte ermöglichen das Hinzufügen, Bearbeiten und Löschen von Aufgaben sowie das Anmelden und Abmelden von Benutzern. Im Verzeichnis docker-haproxy finden sich die Konfigurationsdateien für den HAProxy-Load-Balancer sowie Testskripte und Ergebnisse von Lasttests, die die Leistungsfähigkeit des Systems überprüfen. Für die Datenbankverwaltung ist das Verzeichnis docker-mariadb zuständig, das die Docker-Konfiguration für MariaDB sowie Skripte für Stresstests enthält. Ähnlich strukturiert ist das Verzeichnis docker-redis, das die Konfiguration für den Redis-Server und Benchmark-Tests bereitstellt. Das Verzeichnis docker-work dient als zentrale Anlaufstelle für allgemeine Skripte zur Verwaltung der Docker-Umgebung. Es enthält außerdem Testskripte für Last- und Performance-Tests, die mit Tools wie k6 durchgeführt werden. Schließlich bietet das Verzeichnis general Skripte für die Netzwerkverwaltung, wie das Erstellen und Löschen von Docker-Netzwerken sowie die Bereinigung der gesamten Docker-Umgebung. Des Weiteren haben wir Quality-of-Life Skripte erstellt, wie start-all.sh oder stop-ausgewaehlte-container.sh, die uns bei beim arbeiten mit den Containern geholfen haben, ohne dass wir zeitliche einbuße hinnehmen mussten.
 
 
 \FloatBarrier
 \begin{figure}[!ht]
     \dirtree{%
         .1 /.
+        .2 baue-ausgewaehlte-container.sh.
         .2 build-all.sh.
         .2 docker-apache/.
         .3 bin/.
@@ -52,15 +53,23 @@ Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den 
         .4 Dockerfile.
         .4 haproxy.cfg.
         .4 lasttest/.
-        .5 haproxy_loadtest.txt.
-        .5 haproxy_load_wrk.sh.
-        .5 haproxy_sesion_curl.sh.
-        .5 haproxy_session_test.txt.
-        .5 haproxy_sticky_test_1.txt.
-        .5 haproxy_sticky_test_2.txt.
-        .5 haproxy_sticky_test_apache1.txt.
-        .5 readme.txt.
+        .5 haproxy\_loadtest.txt.
+        .5 haproxy\_load\_wrk.sh.
+        .5 haproxy\_sesion\_curl.sh.
+        .5 haproxy\_session\_test.txt.
+        .5 haproxy\_sticky\_test\_1.txt.
+        .5 haproxy\_sticky\_test\_2.txt.
+        .5 haproxy\_sticky\_test\_apache1.txt.
         .4 myinit.sh.
+    }
+    \caption[Verzeichnisstruktur (Teil 1)]{Verzeichnisstruktur (Teil 1)}
+    \label{dirtree-part1}
+\end{figure}
+
+\FloatBarrier
+\begin{figure}[!ht]
+    \dirtree{%
+        .1 /.
         .2 docker-mariadb/.
         .3 bin/.
         .4 build.sh.
@@ -70,9 +79,9 @@ Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den 
         .3 context/.
         .4 Dockerfile.
         .4 lasttest/.
-        .5 mariadb_stresstest_read.txt.
-        .5 mariadb_stresstest_write.txt.
-        .5 mariadb_sysbench.sh.
+        .5 mariadb\_stresstest\_read.txt.
+        .5 mariadb\_stresstest\_write.txt.
+        .5 mariadb\_sysbench.sh.
         .5 Readme.txt.
         .4 myinit.sh.
         .2 docker-redis/.
@@ -83,11 +92,19 @@ Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den 
         .3 context/.
         .4 Dockerfile.
         .4 lasttest/.
-        .5 README.txt.
-        .5 redis_benchmark_results.txt.
-        .5 redis_benchmark.sh.
+        .5 redis\_benchmark\_results.txt.
+        .5 redis\_benchmark.sh.
         .4 myinit.sh.
         .4 redis.conf.
+    }
+    \caption[Verzeichnisstruktur (Teil 2)]{Verzeichnisstruktur (Teil 2)}
+    \label{dirtree-part2}
+\end{figure}
+
+\FloatBarrier
+\begin{figure}[!ht]
+    \dirtree{%
+        .1 /.
         .2 docker-work/.
         .3 bin/.
         .4 build.sh.
@@ -95,26 +112,23 @@ Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den 
         .4 start.sh.
         .4 stop.sh.
         .3 context/.
-        .4 050_sudo_general.
+        .4 050\_sudo\_general.
         .4 Dockerfile.
         .4 install-k6.sh.
         .4 lasttest/.
-        .5 ab_test.sh.
-        .5 k6-addtodo.sh.
-        .5 k6_allgemein.sh.
-        .5 k6-login.sh.
-        .5 playwright_test.sh.
-        .5 readme.txt.
-        .5 tcpdump-alles.sh.
-        .5 tcpdump-anylse.sh.
-        .5 tcpdump_logs/.
-        .6 haproxy_http_test.txt.
-        .6 haproxy_loadtest.txt.
-        .6 mariadb_sysbench.txt.
+        .5 k6\_addtodo.sh.
+        .5 k6\_allgemein.sh.
+        .5 k6\_login.sh.
+        .5 tcpdump\_alles.sh.
+        .5 tcpdump\_anylse.sh.
+        .5 tcpdump\_logs/.
+        .6 haproxy\_http\_test.txt.
+        .6 haproxy\_loadtest.txt.
+        .6 mariadb\_sysbench.txt.
         .6 network.pcap.
-        .6 redis_benchmark.txt.
-        .6 redis_get.txt.
-        .6 redis_set.txt.
+        .6 redis\_benchmark.txt.
+        .6 redis\_get.txt.
+        .6 redis\_set.txt.
         .4 myinit.sh.
         .4 run-playwright-demo.sh.
         .2 general/.
@@ -123,9 +137,13 @@ Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den 
         .3 destroy-mynet-network.sh.
         .3 info.sh.
         .3 prune-all.sh.
+        .2 start-all.sh.
+        .2 starte-ausgewaehlte-container.sh.
+        .2 stop-all-containers.sh.
+        .2 stop-ausgewaehlte-container.sh.
     }
-    \caption[Verzeichnisstruktur]{Verzeichnisstruktur}
-    \label{dirtree}
+    \caption[Verzeichnisstruktur (Teil 3)]{Verzeichnisstruktur (Teil 3)}
+    \label{dirtree-part3}
 \end{figure}
 \FloatBarrier
 
