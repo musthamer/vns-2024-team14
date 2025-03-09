@@ -99,7 +99,7 @@ Beim Aufbauen der Umgebung wird zunächst sichergestellt, dass die Datenbank \te
 \begin{code}
   {Erstellen der Datenbank}{todo\_app}
         \begin{minted}{latex}
-CREATE DATABASE IF NOT EXISTS todo\_app;
+CREATE DATABASE IF NOT EXISTS todo_app;
 \end{minted}
 \end{code}
 
@@ -107,8 +107,8 @@ Damit extern auf die Datenbank zugegriffen werden kann, wurde ein Datenbankbenut
 
 \begin{code}{Erstellen des Users}{dbuser}
         \begin{minted}{latex}
-CREATE USER IF NOT EXISTS 'dbuser'@'\%' IDENTIFIED BY '12345';
-GRANT ALL PRIVILEGES ON todo\_app.* TO 'dbuser'@'\%';
+CREATE USER IF NOT EXISTS 'dbuser'@'%' IDENTIFIED BY '12345';
+GRANT ALL PRIVILEGES ON todoa_pp.* TO 'dbuser'@'%';
 FLUSH PRIVILEGES;
 \end{minted}
 \end{code}
@@ -119,14 +119,16 @@ Hierbei wird der Benutzer \texttt{dbuser} mit dem Passwort \texttt{12345} erstel
 
 Innerhalb der \texttt{todo\_app}-Datenbank existiert die zentrale Tabelle \texttt{todos}, in der die Aufgaben gespeichert werden.
 
-\begin{verbatim}
+\begin{code}{Erstellen der Tabelle todos}{todos}
+        \begin{minted}{latex}
 CREATE TABLE IF NOT EXISTS todos (
 id INT AUTO_INCREMENT PRIMARY KEY,
 task VARCHAR(255) NOT NULL,
 details TEXT NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-\end{verbatim}
+ \end{minted}
+\end{code}
 
     \texttt{id INT AUTO\_INCREMENT PRIMARY KEY}: Jede Aufgabe erhält eine eindeutige ID, die automatisch hochgezählt wird.
 
@@ -141,12 +143,14 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 \subsubsection{Benutzerverwaltung und Authentifizierung}
 Zusätzlich zur \texttt{todos}-Tabelle gibt es die Tabelle \texttt{users}, in der die Benutzerinformationen für das Login hinterlegt sind. Die Tabelle wird mit folgendem SQL-Befehl erstellt:
 
-\begin{verbatim}
+\begin{code}{Erstellen der Tabelle users}{users}
+        \begin{minted}{latex}
 CREATE TABLE users (
 name VARCHAR(50) PRIMARY KEY,
 password VARCHAR(50) NOT NULL
 );
-\end{verbatim}
+  \end{minted}
+\end{code}
 
     \texttt{name VARCHAR(50) PRIMARY KEY}: Der Benutzername dient als eindeutige ID.
 
@@ -154,64 +158,77 @@ password VARCHAR(50) NOT NULL
 
 Beim Start der Datenbank wird ein Standardbenutzer mit dem Namen \texttt{admin} und dem Passwort \texttt{admin} angelegt, um den Zugriff auf die Webanwendung zu ermöglichen:
 
-\begin{verbatim}
+\begin{code}{Festlegen der Login-Daten}{login}
+        \begin{minted}{latex}
 INSERT INTO users (name, password) VALUES ('admin', 'admin');
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Dieser Benutzer kann sich in der Webanwendung anmelden und Aufgaben verwalten.
 
 \subsection{Redis}
-Die Redis-Integration in der ToDo-Listen-Anwendung wird zur Verwaltung von Nutzersitzungen eingesetzt. Anstatt Sessions in MariaDB zu speichern, wurde Redis als schnelle und effiziente In-Memory-Datenbank verwendet, um Login-Sitzungen zu verwalten. Dies verbessert die Performance und Skalierbarkeit der Anwendung erheblich, da Redis Zugriffe wesentlich schneller verarbeitet als jedes Mal die Datensätze aus der Datenbank abzurufen um zu überprüfen ob die aktuelle Sitzung noch läuft. 
+Die Redis-Integration in der ToDo-Listen-Anwendung wird zur Verwaltung von Nutzersitzungen eingesetzt. Anstatt Sessions in MariaDB zu speichern, wurde Redis als schnelle und effiziente In-Memory-Datenbank verwendet, um Login-Sitzungen zu verwalten. Dies verbessert die Performance und Skalierbarkeit der Anwendung erheblich, da Redis Zugriffe wesentlich schneller verarbeitet als jedes Mal die Datensätze aus der Datenbank abzurufen um zu überprüfen ob die aktuelle Sitzung noch läuft. Beim Login eines Nutzers wird zunächst überprüft, ob die eingegebenen Zugangsdaten in der MariaDB-Datenbank vorhanden sind. Falls der Benutzername und das Passwort korrekt sind, wird eine eindeutige Session-ID generiert, die anschließend mit einer definierten Ablaufzeit in Redis gespeichert wird. Zur Verwaltung von Benutzersitzungen wird Redis verwendet. Dabei wird eine eindeutige Session-ID generiert und in Redis gespeichert. Der folgende Befehl zeigt, wie die Session mit einer TTL (Time-To-Live) von 3600 Sekunden gespeichert wird:
 
-Beim Login eines Nutzers wird zunächst überprüft, ob die eingegebenen Zugangsdaten in der MariaDB-Datenbank vorhanden sind. Falls der Benutzername und das Passwort korrekt sind, wird eine eindeutige Session-ID generiert, die anschließend mit einer definierten Ablaufzeit in Redis gespeichert wird. 
+\begin{code}{Session erstellen}{uuidgen}
+        \begin{minted}{latex}
+SESSION_ID=(uuidgen)redisresult=(uuidgen)redisresult=(redis-cli -h "REDISHOST"−p"REDISHOST"−p"REDIS_PORT" -a "REDISPASSWORD" SETEX"session:REDISPASSWORD" SETEX"session:SESSION_ID" 3600 "$USERNAME")
+  \end{minted}
+\end{code}
 
-Zur Verwaltung von Benutzersitzungen wird Redis verwendet. Dabei wird eine eindeutige Session-ID generiert und in Redis gespeichert. Der folgende Befehl zeigt, wie die Session mit einer TTL (Time-To-Live) von 3600 Sekunden gespeichert wird:
-
-\begin{verbatim}
-SESSION_ID=(uuidgen)redisresult=(uuidgen)redisr​esult=(redis-cli -h "REDISHOST"−p"REDISH​OST"−p"REDIS_PORT" -a "REDISPASSWORD" SETEX"session:REDISP​ASSWORD" SETEX"session:SESSION_ID" 3600 "$USERNAME")
-\end{verbatim}
 
 Durch die Verwendung von \texttt{SETEX} wird sichergestellt, dass die Session nach Ablauf der definierten Zeit automatisch gelöscht wird. Dies verhindert, dass Speicherplatz durch inaktive Sitzungen verbraucht wird.
 
 Nach erfolgreichem Speichern der Session in Redis wird ein HTTP-Cookie gesetzt, das die Session-ID enthält. Dieses Cookie wird an den Client übermittelt, sodass der Nutzer für weitere Anfragen authentifiziert bleibt:
 
-\begin{verbatim}
+\begin{code}{Erfolgreiche Anmeldung}{cookie}
+        \begin{minted}{latex}
 echo "Set-Cookie: session_id=$SESSION_ID; Path=/; HttpOnly; SameSite=Lax"
 echo "Status: 303 See Other"
 echo "Location: /cgi-bin/vns/todo/table3.sh"
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Das Attribut \texttt{HttpOnly} stellt sicher, dass das Cookie nur von der Serveranwendung genutzt werden kann und nicht von JavaScript im Browser ausgelesen wird. Dies minimiert Sicherheitsrisiken wie Cross-Site Scripting (XSS). Das Attribut \texttt{SameSite=Lax} verhindert, dass das Cookie ungewollt bei externen Anfragen gesendet wird.
 
 Falls Redis das Speichern der Session nicht erfolgreich abschließt, wird eine Fehlermeldung ausgegeben:
 
-\begin{verbatim}
+\begin{code}{Fehlermeldung}{fehler}
+        \begin{minted}{latex}
 echo "Content-type: text/html"
 echo ""
 echo "<html><body><h1>Fehler beim Speichern der Session in Redis</h1></body></html>"
 exit 1
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Dies kann durch Verbindungsprobleme mit Redis oder fehlerhafte Konfigurationen verursacht werden. In einem solchen Fall kann der Nutzer die Anmeldung erneut versuchen.
 
 Wird ein fehlerhaftes Passwort oder ein nicht vorhandener Benutzername eingegeben, schlägt der Login-Vorgang fehl, und der Nutzer erhält eine Meldung mit einem Link zur erneuten Anmeldung:
 
-\begin{verbatim}
+\begin{code}{Login-Fehler}{Login}
+        \begin{minted}{latex}
 echo "<html>
-<head><title>Login Failed</title></head> <body> <h1>Login fehlgeschlagen</h1> <a href='/index.html'>Erneut versuchen</a> </body> </html>" \end{verbatim}
+<head><title>Login Failed</title></head> <body> <h1>Login fehlgeschlagen</h1> <a href='/index.html'>Erneut versuchen</a> </body> </html>"
+  \end{minted}
+\end{code}
 
 Danach wird in \texttt{table3.sh}, also in der ToDo-Listen-Anwendung, die Session-Überprüfung nach der Weiterleitung durchgeführt, um sicherzustellen, dass nur angemeldete Nutzer Zugriff auf die Seite haben. Diese Überprüfung erfolgt durch das Prüfen des HTTP-Cookies und der gespeicherten Session in Redis.
 
 Falls ein Cookie existiert, wird die \texttt{session\_id} aus dem \texttt{HTTP\_COOKIE}-Header extrahiert:
-\begin{verbatim}
+\begin{code}{Cookie-Extraktion}{extraktion}
+        \begin{minted}{latex}
 session_id=""
-if [ -n "HTTPCOOKIE"];thensessionid=HTTPC​OOKIE"];thensessioni​d=(echo "$HTTP_COOKIE" | sed -n 's/.session_id=[;]∗[;]∗./\1/p')
+if [ -n "HTTP_COOKIE"]; then
+          sessionid=$(echo "$HTTP_COOKIE" | sed -n 
+          's/.*session_id=\([^;]*\).*/\1/p')
 fi
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Falls keine Session-ID gefunden wird, bedeutet dies, dass der Nutzer nicht eingeloggt ist oder seine Sitzung abgelaufen ist. In diesem Fall wird er mit einem HTTP-Redirect zur Login-Seite weitergeleitet:
 
-\begin{verbatim}
+\begin{code}{Abgelaufene Sitzung}{Sitzung}
+        \begin{minted}{latex}
 if [ -z "$session_id" ]; then
 echo "Status: 303 See Other"
 echo "Location: /index.html"
@@ -219,17 +236,21 @@ echo "Content-type: text/html"
 echo ""
 exit 0
 fi
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Sollte eine Session-ID vorhanden sein, wird nun in Redis überprüft, ob diese gültig ist. Dies geschieht mit dem folgenden Befehl:
 
-\begin{verbatim}
-user=(redis−cli−h"(redis−cli−h"REDIS_HOST" -p "REDISPORT"−a"REDISP​ORT"−a"REDIS_PASSWORD" GET "session:$session_id")
-\end{verbatim}
+\begin{code}{Session-Prüfung}{prüfen}
+        \begin{minted}{latex}
+user=(redis−cli−h"(redis−cli−h"REDIS_HOST" -p "REDISPORT"−a"REDISPORT"−a"REDIS_PASSWORD" GET "session:$session_id")
+  \end{minted}
+\end{code}
 
 Falls keine gültige Antwort zurückgegeben wird, ist die Session entweder ungültig oder abgelaufen. In diesem Fall erfolgt erneut eine Weiterleitung zur Login-Seite, da der Nutzer nicht authentifiziert ist:
 
-\begin{verbatim}
+\begin{code}{Fehlermeldung}{fehler}
+        \begin{minted}{latex}
 if [ -z "$user" ]; then
 echo "Status: 303 See Other"
 echo "Location: /index.html"
@@ -237,7 +258,8 @@ echo "Content-type: text/html"
 echo ""
 exit 0
 fi
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Falls die Session gültig ist und der Benutzer erfolgreich aus Redis abgerufen wurde, wird der Zugriff auf die geschützte ToDo-Seite gewährt. Dadurch bleibt der Nutzer eingeloggt, solange die Session in Redis existiert.
 
@@ -247,31 +269,39 @@ Durch dieses Verfahren wird sichergestellt, dass nur angemeldete Nutzer Zugriff 
 
 In dem Skript \texttt{logout.sh} wird zunächst die Session-ID des Benutzers aus dem HTTP-Cookie extrahiert. Dies wird durch den Zugriff auf den Header des HTTP-Requests erreicht, in dem das Cookie gespeichert ist:
 
-\begin{verbatim}
+\begin{code}{session-ID extraktion}{session}
+        \begin{minted}{latex}
 SESSION_ID=(echo"(echo"HTTP_COOKIE" | grep -o 'session_id=[^;]*' | cut -d'=' -f2)
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Falls eine gültige Session-ID im Cookie vorhanden ist, wird diese Session aus Redis gelöscht. Dies wird durch den Redis-Befehl \texttt{DEL} erreicht. Die Session-ID wird dabei hinter \texttt{session:} eingesetzt, der Redis-Befehl wird ausgeführt und die Ausgabe des Befehls wird verworfen mit \texttt{>/dev/null}:
 
-\begin{verbatim}
-if [ -n "SESSIONID"];thenredis−cli−h"SESSIONI​D"];thenredis−cli−h"REDIS_HOST" -p "REDISPORT"−a"REDISP​ORT"−a"REDIS_PASSWORD" DEL "session:$SESSION_ID" >/dev/null
+\begin{code}{Löschen der ID}{delete}
+        \begin{minted}{latex}
+if [ -n "SESSIONID"];thenredis−cli−h"SESSIONID"];thenredis−cli−h"REDIS_HOST" -p "REDISPORT"−a"REDISPORT"−a"REDIS_PASSWORD" DEL "session:$SESSION_ID" >/dev/null
 fi
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Nach der Löschung der Session wird das Cookie im Browser des Nutzers entfernt. Dies geschieht durch das Setzen des Cookies \texttt{session\_id} auf einen leeren Wert und das Festlegen eines Ablaufdatums in der Vergangenheit (1. Januar 1970). Dies sorgt dafür, dass das Cookie sofort aus dem Browser des Nutzers gelöscht wird:
 
-\begin{verbatim}
+\begin{code}{Session-ID wird auf null gesetzt}{null}
+        \begin{minted}{latex}
 echo "Content-type: text/html"
 echo "Set-Cookie: session_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/"
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Abschließend wird der Benutzer mit einem HTTP-Statuscode 303 (See Other) zur Login-Seite (\texttt{index.html}) weitergeleitet:
 
-\begin{verbatim}
+\begin{code}{Weiterleitung zum Login}{Weiterleiten}
+        \begin{minted}{latex}
 echo "Status: 303 See Other"
 echo "Location: /index.html"
 echo ""
-\end{verbatim}
+  \end{minted}
+\end{code}
 
 Das Skript sorgt also dafür, dass die Session des Nutzers aus Redis gelöscht wird, das Session-Cookie im Browser entfernt wird und der Nutzer auf die Login-Seite weitergeleitet wird. Dies stellt sicher, dass der Benutzer ordnungsgemäß abgemeldet wird.
 
