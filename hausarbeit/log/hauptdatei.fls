@@ -362,10 +362,10 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 OUTPUT log/hauptdatei.toc
-INPUT ./src/einleitung.tex
-INPUT ./src/struktur.tex
+INPUT ./src/1.tex
+INPUT ./src/3.tex
 INPUT /home/meroezdemir/.texlive2024/texmf-var/luatex-cache/generic/fonts/otl/lmmono12-regular.luc
-INPUT ./src/zurhauptdatei.tex
+INPUT ./src/4.tex
 OUTPUT log/_72CDA6978600F97B9A22D1FB2EBB1A01.data.minted
 INPUT ./log/_72CDA6978600F97B9A22D1FB2EBB1A01.config.minted
 INPUT ./log/_minted/default.style.minted
@@ -396,7 +396,7 @@ INPUT ./src/abbildungen/deckblatt.png
 INPUT ./src/abbildungen/deckblatt.png
 INPUT ./log/_minted/48607BCB665AB250A2BC4042F7936A9D.highlight.minted
 INPUT ./log/_minted/4779C16EADBE89D2158330A77645137E.highlight.minted
-INPUT ./src/latexschreiben.tex
+INPUT ./src/5.tex
 INPUT ./log/_minted/0C2C3643D1B873AF361E4CBBE571CFE7.highlight.minted
 INPUT ./log/_minted/BC5794D74D016DCBD7E818F64D13F981.highlight.minted
 INPUT ./src/abbildungen/section.png
@@ -419,7 +419,7 @@ INPUT ./log/_minted/16BECC64E01D07C9B7FF076E63A194B5.highlight.minted
 INPUT ./log/_minted/77303484CCB975D12835595055299153.highlight.minted
 INPUT ./log/_minted/184657B8AE3DFE8CE9B589A17F4A95BD.highlight.minted
 INPUT ./log/_minted/8264A7A3ADA448FA44BF45182183A986.highlight.minted
-INPUT ./src/literaturverwaltung.tex
+INPUT ./src/6.tex
 INPUT ./src/abbildungen/export.png
 INPUT ./src/abbildungen/export.png
 INPUT ./src/abbildungen/bibtex.png
@@ -427,8 +427,8 @@ INPUT ./src/abbildungen/bibtex.png
 INPUT ./log/_minted/055910EF03E27A60475D68A6D1C25D09.highlight.minted
 INPUT ./log/_minted/34769BA358F526D56265D3BB4C86E956.highlight.minted
 INPUT ./log/_minted/89867B10E88C6AA89E7E3CDD7F9D7D4C.highlight.minted
-INPUT ./src/projekt.tex
-INPUT ./src/fazit.tex
+INPUT ./src/7.tex
+INPUT ./src/8.tex
 INPUT ./log/hauptdatei.lof
 OUTPUT log/hauptdatei.lof
 INPUT ./log/hauptdatei.lot
@@ -449,6 +449,9 @@ INPUT ./src/basic_structure/erklaerung.tex
 INPUT ./log/hauptdatei.aux
 INPUT ./log/hauptdatei.run.xml
 OUTPUT log/hauptdatei.run.xml
+INPUT /usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb
+INPUT /usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb
+INPUT /usr/share/texmf/fonts/type1/public/lm/lmr12.pfb
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmsy6.pfb
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb
