@@ -137,9 +137,23 @@ Durch die Integration der myinit.sh in unsere Docker-Infrastruktur wird sicherge
 \subsection{HAProxy}
 Der HAProxy-Container bildet das Herzstück der Lastverteilung und sorgt dafür, dass die Anfragen der Nutzer zentral gebündelt und intelligent an die beiden Apache-Container weitergeleitet werden. Da HAProxy selbst als eigenständiger Dienst läuft, mussten wir ein spezielles Docker-Image erstellen, das genau auf diese Anforderungen zugeschnitten ist.  
 
-In der Dockerfile wurde dazu ein Ubuntu-Basis-Image verwendet, um auch hier wieder maximale Kontrolle über die Installation der benötigten Pakete zu haben. Neben HAProxy selbst wurden auch Tools wie vim, curl und wrk integriert – einerseits für Debugging-Zwecke, andererseits für spätere Lasttests. Das Skript myinit.sh wurde als zentraler Startpunkt festgelegt und im Container unter /usr/bin abgelegt. Durch das Setzen der Ausführungsberechtigungen mit chmod +x wird sichergestellt, dass das Skript beim Containerstart automatisch ausgeführt wird.  
+\begin{code}{Dockerfile}{haproxy}
+        \begin{minted}{latex}
+FROM ubuntu
+RUN apt-get -y update && apt-get -y upgrade
 
-Die eigentliche Magie passiert jedoch in der myinit.sh. Dieses Skript übernimmt drei Schlüsselaufgaben:  
+RUN apt-get -y install vim tree iproute2 curl w3m ncat less procps
+RUN apt-get -y install haproxy
+RUN apt-get -y install sudo wrk
+COPY myinit.sh /usr/bin/
+RUN chmod +x /usr/bin/myinit.sh
+
+CMD ["/usr/bin/myinit.sh"]
+  \end{minted}
+\end{code}
+
+
+In der Dockerfile wurde dazu ein Ubuntu-Basis-Image verwendet, um auch hier wieder maximale Kontrolle über die Installation der benötigten Pakete zu haben. Neben HAProxy selbst wurden auch Tools wie vim, curl und wrk integriert – einerseits für Debugging-Zwecke, andererseits für spätere Lasttests. Das Skript myinit.sh wurde als zentraler Startpunkt festgelegt und im Container unter /usr/bin abgelegt. Durch das Setzen der Ausführungsberechtigungen mit chmod +x wird sichergestellt, dass das Skript beim Containerstart automatisch ausgeführt wird. Die eigentliche Magie passiert jedoch in der myinit.sh. Dieses Skript übernimmt drei Schlüsselaufgaben:  
 
 Initialisierung: Beim Start des Containers wird eine Log-Datei (/var/log/docker.log) angelegt, die alle Ereignisse protokolliert – vom Hochfahren des Containers bis hin zu regelmäßigen „Ping“-Signalen, die alle 10 Sekunden geschrieben werden.  
 
@@ -147,21 +161,89 @@ Graceful Shutdown: Wird der Container per docker stop beendet, fängt das Skript
 
 Dienstüberwachung: Über service haproxy status wird der Status des HAProxy-Dienstes in die Log-Datei geschrieben, was später bei der Fehlersuche hilfreich sein kann.  
 
+\begin{code}{myinit.sh}{haproxy}
+        \begin{minted}{latex}
+
+#!/bin/bash
+
+log=/var/log/docker.log
+echo "HAProxy-Container gestartet: $(date)" >> "$log"
+
+function onexit {
+  echo "HAProxy-Container wird heruntergefahren: $(date)" >> "$log"
+  service haproxy stop
+  exit
+}
+
+trap onexit SIGTERM
+
+
+echo "Starte HAProxy..." >> "$log"
+service haproxy start
+
+echo "HAProxy-Status:" >> "$log"
+service haproxy status >> "$log"
+
+echo "HAProxy-Container läuft: $(date)" >> "$log"
+while true; do
+  echo "$(date +%FT%T) ping" >> "$log"
+  sleep 10
+done
+  \end{minted}
+\end{code}
+
 Die eigentliche Lastverteilung wird durch die haproxy.cfg-Konfiguration gesteuert, die beim Start des Containers in das Verzeichnis /etc/haproxy/ kopiert wird. Diese Datei definiert zwei zentrale Komponenten:  
 
 Frontend: Hier wird der öffentliche Port (:80) gebunden, über den die Anwendung erreichbar ist. Eine ACL-Regel (acl url\_direct path\_beg /direct) leitet Anfragen mit dem Pfad /direct an ein separates Backend weiter, das direkt eine Antwort zurückgibt – nützlich für Schnelltests der HAProxy-Infrastruktur.  
 
+\begin{code}{Frontend}{haproxy}
+        \begin{minted}{latex}
+
+frontend http-in
+  bind :80
+  acl url_direct path_beg /direct
+  use_backend direct-backend if url_direct
+  default_backend app-backend
+
+        \end{minted}
+\end{code}
+
 Backend: Die eigentliche Lastverteilung erfolgt über das app-backend, das die beiden Apache-Container (apache1:80 und apache2:80) einbindet. Mittels cookie SERVERID wird eine Sticky Session implementiert, die sicherstellt, dass Nutzer während ihrer Session immer denselben Apache-Container nutzen. Die Strategie roundrobin verteilt neue Sessions gleichmäßig auf beide Server.  
+
+\begin{code}{Backend}{haproxy}
+        \begin{minted}{latex}
+          backend direct-backend
+  http-request return status 200 content-type "text/plain" string "Moin from haproxy\n"
+
+backend app-backend
+  cookie SERVERID insert indirect nocache
+  server apache1 apache1:80 check cookie apache1
+  server apache2 apache2:80 check cookie apache2
+          \end{minted}
+\end{code}
+
+Des Weiteren wurde in der \texttt{start.sh} der Container so konfiguriert, dass er über den \textbf{Port 8000} auf dem Host erreichbar ist und gleichzeitig auf den \textbf{Port 80} im Container gemappt wird. Diese Port-Weiterleitung ermöglicht es, dass der HAProxy-Container als zentraler Load-Balancer fungiert und Anfragen an die beiden Apache-Container weiterleitet. Dadurch können beide Apache-Container über den Port 8000 erreicht werden, während HAProxy die Lastverteilung und das Routing übernimmt. Dadurch wird sichergestellt, dass die Last gleichmäßig auf die Backend-Server verteilt wird und die Anwendung auch bei hoher Auslastung stabil bleibt.
+
+\begin{code}{start.sh}{haproxy}
+        \begin{minted}{latex}
+          name=haproxy
+port=8000
+echo running "$name" "$port"
+docker container create \
+        --name "$name" \
+        --network mynet \
+        --init \
+        -p $port:80 \
+        image-haproxy
+docker container cp context/myinit.sh $name:/usr/bin
+docker container cp context/haproxy.cfg $name:/etc/haproxy/
+docker container start $name
+  \end{minted}
+\end{code}
 
 Um die Funktionsweise zu validieren, wurden gezielte Tests durchgeführt:  
 
-Beim Aufruf von http://localhost:8000 antwortet HAProxy direkt mit „Moin from haproxy“, ohne die Apache-Container zu involvieren. Dies dient als Gesundheitscheck für HAProxy selbst.  
-
-Bei Lasttests mit wrk wurde sichergestellt, dass die Anfragen gleichmäßig auf beide Apache-Container verteilt werden. Gleichzeitig blieben Sessions dank der Cookie-basierten Sticky Sessions stabil, selbst wenn einer der Container manuell gestoppt wurde.  
-
-Über den integrierten Stats-Socket (stats socket ipv4@127.0.0.1:9999) konnten wir in Echtzeit verfolgen, wie HAProxy die Last verteilt und ob beide Apache-Container als „healthy“ gemeldet werden.  
-
-Durch diese Kombination aus Docker-Image, Init-Skript und fein abgestimmter Konfiguration ist HAProxy nicht nur der Türsteher der Anwendung, sondern auch ein zentraler Stabilisator – unsichtbar für die Nutzer, aber unverzichtbar für die Skalierbarkeit und Ausfallsicherheit. 
+Beim Aufruf von http://localhost:8000 antwortet HAProxy direkt mit der Webanwendung, welche von den beiden Apache-Containern bezogen wird und reguliert wird. Bei Lasttests mit wrk wurde sichergestellt, dass die Anfragen gleichmäßig auf beide Apache-Container verteilt werden. Gleichzeitig blieben Sessions dank der Cookie-basierten Sticky Sessions stabil, selbst wenn einer der Container manuell gestoppt wurde. Über den integrierten Stats-Socket (stats socket ipv4@127.0.0.1:9999) konnten wir in Echtzeit verfolgen, wie HAProxy die Last verteilt und ob beide Apache-Container als „healthy“ gemeldet werden. Durch diese Kombination aus Docker-Image, Init-Skript und fein abgestimmter Konfiguration ist HAProxy nicht nur der Türsteher der Anwendung, sondern auch ein zentraler Stabilisator – unsichtbar für die Nutzer, aber unverzichtbar für die Skalierbarkeit und Ausfallsicherheit. 
 
 
 
