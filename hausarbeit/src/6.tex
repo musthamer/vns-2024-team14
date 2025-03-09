@@ -1,0 +1,465 @@
+\section{Systemarchitektur}\label{zitieren}
+Bei der Systemarchitektur stand für uns im Fokus, welche Docker-Container und wie viele davon benötigt werden, um das gelernte Wissen einzubinden und das Projekt so auszulegen, dass alle Möglichkeiten ausgereizt werden können. Unser Ziel war es, valide und aussagekräftige Testergebnisse zu generieren, die eine tiefgehende Analyse und Auswertung ermöglichen – nicht nur für die Funktionalität, sondern auch für die Skalierbarkeit und Resilienz der Anwendung. 
+
+Die Entscheidung, zwei identische Apache-Container parallel zu betreiben, fiel aus mehreren Gründen: 
+
+HAProxy als Loadbalancer testen: Wir wollten HAProxy nicht nur theoretisch verstehen, sondern praktisch erleben, wie es Last verteilt, auf Ausfälle reagiert und Sessions verwaltet. Herausforderungen wie die korrekte Konfiguration von Sticky Sessions oder die automatische Erkennung inaktiver Backend-Server waren dabei zentral. 
+
+Ausfallsicherheit demonstrieren: Ein zweiter Apache-Container fungiert als redundante Instanz. Fällt einer aus (z. B. durch Neustart oder Fehler), übernimmt der andere nahtlos – die Webanwendung bleibt für Nutzer uneingeschränkt verfügbar. 
+
+Lasttests unter Realbedingungen: Mit Tools wie wrk konnten wir simulieren, wie sich die Anwendung unter hoher Auslastung verhält. Zwei Container ermöglichen es, die Grenzen der Skalierbarkeit sichtbar zu machen (z. B. ab wann ein dritter Container nötig wäre). 
+
+Durch Redis und MariaDB haben wir zwei weitere zentrale Pfeiler integriert: 
+
+MariaDB speichert die Inhalte der Todo-Liste sowie die Login-Daten in strukturierten Tabellen. Die Verbindung zu den Apache-Containern erfolgt über eine gemeinsame my.cnf-Datei im context-Verzeichnis, die zentral Datenbank-Host, Benutzer und Passwörter definiert. Da beide Apache-Container identisch sind, greifen sie problemlos auf dieselbe Konfiguration zu. 
+
+Redis verwaltet die Benutzer-Sessions nach dem Login. Hier standen wir vor Herausforderungen, insbesondere bei der persistenten Speicherung der Sessions über Container-Neustarts hinweg und der korrekten Konfiguration des Session-Timeout. 
+
+Bevor wir mit dem Testen der Webanwendung begannen, lag unser Fokus auf der korrekten Vernetzung aller Docker-Container. Jeder Container wurde in ein benutzerdefiniertes Netzwerk (mynet) integriert, um die Kommunikation zwischen HAProxy, Apache, MariaDB und Redis zu ermöglichen. Erst nachdem diese Basis stabil lief, haben wir uns an die Feinjustierung der Anwendung gewagt – etwa durch Skripte zur automatisierten Erstellung von Todos oder Lasttests. 
+
+Die Vorlagen unseres Dozenten waren dabei ein entscheidender Baustein. Sie lieferten nicht nur das Grundgerüst für die Dockerfiles und Netzwerkkonfiguration, sondern auch Best Practices zur Sicherheit (z. B. Trennung von Frontend- und Backend-Netzwerken) und Ressourcenoptimierung. Dieses Fundament erlaubte es uns, uns schrittweise an komplexere Themen wie Loadbalancing oder Session-Persistence heranzutasten, ohne von Anfang an in Details verloren zu gehen. 
+
+Am Ende steht eine Architektur, die nicht nur funktioniert, sondern auch Raum für Erweiterungen lässt – sei es durch zusätzliche Apache-Container bei steigender Last oder durch die Integration weiterer Dienste wie Websocket oder Ähnliches.
+
+\subsection{Apache}
+Da es keine vorgefertigte Vorlage für einen Apache-Container gab, mussten wir improvisieren und den vorhandenen Tomcat-Container aus dem Docker-Full anpassen, um unsere CGI-Skripte verwenden zu können. Die Umwandlung des Tomcat-Containers in einen Apache-Container war überschaubar – bis auf belegte Ports gab es keine größeren Probleme. Die notwendigen Änderungen beschränkten sich hauptsächlich auf die Dateien start.sh, Dockerfile und myinit.sh.
+
+In der start.sh mussten wir lediglich den Namen und den Port anpassen. Da wir zwei identische Apache-Container erstellen wollten, haben wir das Skript so modifiziert, dass es zwei Container erzeugt, anstatt nur einer. Wir haben die Container apache1 und apache2 genannt und ihnen die Ports 8081 und 8082 auf dem Host-System zugewiesen.
+
+\begin{code}{start.sh}{start}
+        \begin{minted}{latex}
+#!/bin/bash
+
+
+docker container create \
+    --name apache1 \
+    --net mynet \
+    --publish 8081:80 \
+    --init \
+    image-apache
+
+docker container cp context/myinit.sh apache1:/usr/bin
+docker container start apache1
+
+docker container create \
+    --name apache2 \
+    --net mynet \
+    --publish 8082:80 \
+    --init \
+    image-apache
+
+docker container cp context/myinit.sh apache2:/usr/bin
+docker container start apache2
+
+  \end{minted}
+\end{code}
+
+
+Die Angabe :80 hinter dem Port (z. B. --publish 8081:80) bedeutet, dass der Apache-Server im Container auf dem internen Port 80 läuft. Dies ist der Standard-Port für HTTP-Verkehr. Docker leitet den Verkehr vom externen Port 8081 (oder 8082) auf dem Host-System an den internen Port 80 im Container weiter. Diese Konfiguration war insbesondere für die Integration mit HAProxy wichtig, da HAProxy die beiden Apache-Container über ihren internen Port 80 ansprechen und unter einem gemeinsamen externen Port (in unserem Fall 8000) zusammenführen kann. Um sicherzustellen, dass beide Apache-Container identisch sind und HAProxy die Last korrekt verteilt, führten wir Tests durch. Einen Test konnten wir direkt zu Anfang machen in dem wir einen der Container manuell abgeschaltet haben:
+
+ Während die Anwendung unter localhost:8000 lief, stoppten wir einen der Apache-Container. HAProxy leitete die Anfragen automatisch an den verbleibenden Container weiter, sodass die Anwendung weiterhin verfügbar blieb.
+
+Durch diese Konfiguration konnten wir sicherstellen, dass die Last gleichmäßig auf beide Apache-Container verteilt wird und ein Ausfall eines Containers kompensiert werden kann, ohne dass die Verfügbarkeit der Anwendung beeinträchtigt wird.
+
+
+
+In der Dockerfile haben wir ebenfalls Anpassungen vorgenommen, um die gewünschten Funktionen der Anwendung umzusetzen. Dazu gehörte unter anderem die Installation von apache-spezifischen Programmen wie apache2, libapache2-mod-fcgid und apache2-utils, die für den Betrieb unserer CGI-Skripte und die Webanwendung notwendig sind. Als Basis-Image nutzten wir deshalb ubuntu, um maximale Flexibilität bei der Installation der benötigten Pakete zu haben
+
+Darüber hinaus mussten wir auch Abhängigkeiten (Dependencies) berücksichtigen, die durch die anderen Docker-Container (z. B. MariaDB und Redis) erforderlich sind. Ein Beispiel hierfür ist die Installation von uuid-runtime, das für die Generierung von eindeutigen IDs (UUIDs) benötigt wird, die in unserer Anwendung für die Session-Verwaltung oder andere Funktionen genutzt werden könnten.
+\begin{code}{Dockerfile}{docker}
+        \begin{minted}{latex}
+FROM ubuntu
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install apache2 apache2-utils libapache2-mod-fcgid curl vim mariadb-client redis-tools
+RUN apt-get -y install uuid-runtime
+COPY cgi-bin/ /usr/lib/cgi-bin/
+COPY html/ /var/www/html/
+COPY myinit.sh /usr/bin/myinit.sh
+RUN chmod +x /usr/bin/myinit.sh
+RUN chmod +x /usr/lib/cgi-bin/vns/todo/*
+RUN a2enmod cgi
+
+CMD ["/usr/bin/myinit.sh"]  
+ \end{minted}
+\end{code}
+
+Nachdem alle notwendigen Pakete installiert waren, haben wir die Skripte und Dateien der Webanwendung in das Docker-Image kopiert. Dazu gehören:
+
+Die CGI-Skripte, die in das Verzeichnis /usr/lib/cgi-bin/ kopiert wurden.
+
+Die HTML-Dateien, die in das Verzeichnis /var/www/html/ kopiert wurden.
+
+Abschließend wurde die myinit.sh in das Image integriert und als Hauptprozess des Containers festgelegt.
+
+
+Die myinit.sh ist ein wichtiger Bestandteil unseres Docker-Setups und dient als Init-Skript für den Apache-Webserver. Dieses Skript verwaltet den Start und Stopp des Servers und protokolliert wichtige Ereignisse.
+
+\begin{code}{myinit.sh}{initialisierung}
+        \begin{minted}{latex}
+#!/bin/bash
+log=/docker.log
+echo starte >> $log
+
+trap onexit SIGTERM
+
+function onexit {
+  #shutdown ...
+  echo shutting down >> $log
+
+  read pid < /run/apache2/apache2.pid
+  apachectl stop
+  while test "$pid" != "" && ps -p $pid >/dev/null; do
+    echo wait for shutdown of pid $pid >> $log
+    sleep 0.01
+  done
+
+  exit
+}
+# start services
+apachectl start
+
+while true; do
+        echo "$(date +%FT%T) ping" >> $log
+  read -t 1 </dev/fd/1
+done
+  \end{minted}
+\end{code}
+
+Das Skript beginnt mit der Initialisierung einer Log-Datei (/docker.log), in der alle relevanten Ereignisse festgehalten werden. Sobald der Container gestartet wird, schreibt das Skript den Eintrag „starte“ in die Log-Datei, um den Beginn des Prozesses zu dokumentieren.
+
+Ein zentrales Feature der myinit.sh ist die Implementierung eines graceful shutdowns. Mithilfe der trap-Funktion wird das SIGTERM-Signal abgefangen, das vom Docker-Daemon gesendet wird, wenn der Container gestoppt wird. In diesem Fall wird die Funktion onexit aufgerufen, die den Apache-Server ordnungsgemäß herunterfährt. Dazu wird die Prozess-ID (PID) des Apache-Servers aus der Datei /run/apache2/apache2.pid ausgelesen und der Befehl apachectl stop ausgeführt. Das Skript wartet anschließend, bis der Apache-Prozess vollständig beendet ist, und protokolliert den Fortschritt in der Log-Datei.
+
+Nachdem der Apache-Server gestartet wurde, führt das Skript eine Endlosschleife aus, die jede Sekunde einen „ping“-Eintrag mit Zeitstempel in die Log-Datei schreibt. Diese Schleife sorgt dafür, dass das Skript aktiv bleibt und nicht vorzeitig beendet wird. Gleichzeitig ermöglicht sie eine kontinuierliche Überwachung des Containerzustands.
+
+Durch die Integration der myinit.sh in unsere Docker-Infrastruktur wird sichergestellt, dass der Apache-Server zuverlässig startet, korrekt heruntergefahren wird und alle wichtigen Ereignisse protokolliert werden. Dies trägt zur Stabilität und Nachvollziehbarkeit unserer Anwendung bei.
+
+
+\subsection{HAProxy}
+Der HAProxy-Container bildet das Herzstück der Lastverteilung und sorgt dafür, dass die Anfragen der Nutzer zentral gebündelt und intelligent an die beiden Apache-Container weitergeleitet werden. Da HAProxy selbst als eigenständiger Dienst läuft, mussten wir ein spezielles Docker-Image erstellen, das genau auf diese Anforderungen zugeschnitten ist.  
+
+\begin{code}{Dockerfile}{haproxy}
+        \begin{minted}{latex}
+FROM ubuntu
+RUN apt-get -y update && apt-get -y upgrade
+
+RUN apt-get -y install vim tree iproute2 curl w3m ncat less procps
+RUN apt-get -y install haproxy
+RUN apt-get -y install sudo wrk
+COPY myinit.sh /usr/bin/
+RUN chmod +x /usr/bin/myinit.sh
+
+CMD ["/usr/bin/myinit.sh"]
+  \end{minted}
+\end{code}
+
+
+In der Dockerfile wurde dazu ein Ubuntu-Basis-Image verwendet, um auch hier wieder maximale Kontrolle über die Installation der benötigten Pakete zu haben. Neben HAProxy selbst wurden auch Tools wie vim, curl und wrk integriert – einerseits für Debugging-Zwecke, andererseits für spätere Lasttests. Das Skript myinit.sh wurde als zentraler Startpunkt festgelegt und im Container unter /usr/bin abgelegt. Durch das Setzen der Ausführungsberechtigungen mit chmod +x wird sichergestellt, dass das Skript beim Containerstart automatisch ausgeführt wird. Die eigentliche Magie passiert jedoch in der myinit.sh. Dieses Skript übernimmt drei Schlüsselaufgaben:  
+
+Initialisierung: Beim Start des Containers wird eine Log-Datei (/var/log/docker.log) angelegt, die alle Ereignisse protokolliert – vom Hochfahren des Containers bis hin zu regelmäßigen „Ping“-Signalen, die alle 10 Sekunden geschrieben werden.  
+
+Graceful Shutdown: Wird der Container per docker stop beendet, fängt das Skript das SIGTERM-Signal ab. HAProxy wird gezielt gestoppt, und der Container sorgt dafür, dass keine laufenden Verbindungen abrupt unterbrochen werden.  
+
+Dienstüberwachung: Über service haproxy status wird der Status des HAProxy-Dienstes in die Log-Datei geschrieben, was später bei der Fehlersuche hilfreich sein kann.  
+
+\begin{code}{myinit.sh}{haproxy}
+        \begin{minted}{latex}
+
+#!/bin/bash
+
+log=/var/log/docker.log
+echo "HAProxy-Container gestartet: $(date)" >> "$log"
+
+function onexit {
+  echo "HAProxy-Container wird heruntergefahren: $(date)" >> "$log"
+  service haproxy stop
+  exit
+}
+
+trap onexit SIGTERM
+
+
+echo "Starte HAProxy..." >> "$log"
+service haproxy start
+
+echo "HAProxy-Status:" >> "$log"
+service haproxy status >> "$log"
+
+echo "HAProxy-Container läuft: $(date)" >> "$log"
+while true; do
+  echo "$(date +%FT%T) ping" >> "$log"
+  sleep 10
+done
+  \end{minted}
+\end{code}
+
+Die eigentliche Lastverteilung wird durch die haproxy.cfg-Konfiguration gesteuert, die beim Start des Containers in das Verzeichnis /etc/haproxy/ kopiert wird. Diese Datei definiert zwei zentrale Komponenten:  
+
+Frontend: Hier wird der öffentliche Port (:80) gebunden, über den die Anwendung erreichbar ist. Eine ACL-Regel (acl url\_direct path\_beg /direct) leitet Anfragen mit dem Pfad /direct an ein separates Backend weiter, das direkt eine Antwort zurückgibt – nützlich für Schnelltests der HAProxy-Infrastruktur.  
+
+\begin{code}{Frontend}{haproxy}
+        \begin{minted}{latex}
+
+frontend http-in
+  bind :80
+  acl url_direct path_beg /direct
+  use_backend direct-backend if url_direct
+  default_backend app-backend
+
+        \end{minted}
+\end{code}
+
+Backend: Die eigentliche Lastverteilung erfolgt über das app-backend, das die beiden Apache-Container (apache1:80 und apache2:80) einbindet. Mittels cookie SERVERID wird eine Sticky Session implementiert, die sicherstellt, dass Nutzer während ihrer Session immer denselben Apache-Container nutzen. Die Strategie roundrobin verteilt neue Sessions gleichmäßig auf beide Server.  
+
+\begin{code}{Backend}{haproxy}
+        \begin{minted}{latex}
+          backend direct-backend
+  http-request return status 200 content-type "text/plain" string "Moin from haproxy\n"
+
+backend app-backend
+  cookie SERVERID insert indirect nocache
+  server apache1 apache1:80 check cookie apache1
+  server apache2 apache2:80 check cookie apache2
+          \end{minted}
+\end{code}
+
+Des Weiteren wurde in der \texttt{start.sh} der Container so konfiguriert, dass er über den \textbf{Port 8000} auf dem Host erreichbar ist und gleichzeitig auf den \textbf{Port 80} im Container gemappt wird. Diese Port-Weiterleitung ermöglicht es, dass der HAProxy-Container als zentraler Load-Balancer fungiert und Anfragen an die beiden Apache-Container weiterleitet. Dadurch können beide Apache-Container über den Port 8000 erreicht werden, während HAProxy die Lastverteilung und das Routing übernimmt. Dadurch wird sichergestellt, dass die Last gleichmäßig auf die Backend-Server verteilt wird und die Anwendung auch bei hoher Auslastung stabil bleibt.
+
+\begin{code}{start.sh}{haproxy}
+        \begin{minted}{latex}
+          name=haproxy
+port=8000
+echo running "$name" "$port"
+docker container create \
+        --name "$name" \
+        --network mynet \
+        --init \
+        -p $port:80 \
+        image-haproxy
+docker container cp context/myinit.sh $name:/usr/bin
+docker container cp context/haproxy.cfg $name:/etc/haproxy/
+docker container start $name
+  \end{minted}
+\end{code}
+
+Um die Funktionsweise zu validieren, wurden gezielte Tests durchgeführt:  
+
+Beim Aufruf von http://localhost:8000 antwortet HAProxy direkt mit der Webanwendung, welche von den beiden Apache-Containern bezogen wird und reguliert wird. Bei Lasttests mit wrk wurde sichergestellt, dass die Anfragen gleichmäßig auf beide Apache-Container verteilt werden. Gleichzeitig blieben Sessions dank der Cookie-basierten Sticky Sessions stabil, selbst wenn einer der Container manuell gestoppt wurde. Über den integrierten Stats-Socket (stats socket ipv4@127.0.0.1:9999) konnten wir in Echtzeit verfolgen, wie HAProxy die Last verteilt und ob beide Apache-Container als „healthy“ gemeldet werden. Durch diese Kombination aus Docker-Image, Init-Skript und fein abgestimmter Konfiguration ist HAProxy nicht nur der Türsteher der Anwendung, sondern auch ein zentraler Stabilisator – unsichtbar für die Nutzer, aber unverzichtbar für die Skalierbarkeit und Ausfallsicherheit. 
+
+
+
+\subsection{MariaDB (Datenbank)}
+Die MariaDB-Datenbank dient als zentrale Speicherlösung für die ToDo-Listen-Daten und die Benutzerverwaltung. Sie gewährleistet eine strukturierte und persistente Speicherung der Aufgaben und Nutzerdaten, sodass sie auch nach einem Neustart des Systems erhalten bleiben. Die Datenbank wurde innerhalb eines Docker-Containers betrieben, wobei das Datenverzeichnis über ein Docker-Volume gesichert wurde, um Datenverlust beim Neustart oder Austausch des Containers zu vermeiden.
+
+
+\subsubsection{Datenbank-Erstellung und Benutzerverwaltung}
+Beim Aufbauen der Umgebung wird zunächst sichergestellt, dass die Datenbank \texttt{todo\_app} existiert. Falls sie nicht vorhanden ist, wird sie mit folgendem Befehl erstellt:
+
+\begin{code}
+  {Erstellen der Datenbank}{todo\_app}
+        \begin{minted}{latex}
+CREATE DATABASE IF NOT EXISTS todo_app;
+\end{minted}
+\end{code}
+
+Damit extern auf die Datenbank zugegriffen werden kann, wurde ein Datenbankbenutzer mit entsprechenden Berechtigungen angelegt:
+
+\begin{code}{Erstellen des Users}{dbuser}
+        \begin{minted}{latex}
+CREATE USER IF NOT EXISTS 'dbuser'@'%' IDENTIFIED BY '12345';
+GRANT ALL PRIVILEGES ON todoa_pp.* TO 'dbuser'@'%';
+FLUSH PRIVILEGES;
+\end{minted}
+\end{code}
+
+Hierbei wird der Benutzer \texttt{dbuser} mit dem Passwort \texttt{12345} erstellt, der von überall (\texttt{\%} steht für jede IP-Adresse) auf die Datenbank zugreifen kann. Durch \texttt{GRANT ALL PRIVILEGES} erhält dieser Benutzer vollständige Rechte auf die Datenbank \texttt{todo\_app}, wodurch er neue Tabellen anlegen, Daten einfügen oder bestehende Einträge bearbeiten kann.
+
+\subsubsection{Tabellenstruktur für ToDo-Einträge}
+
+Innerhalb der \texttt{todo\_app}-Datenbank existiert die zentrale Tabelle \texttt{todos}, in der die Aufgaben gespeichert werden.
+
+\begin{code}{Erstellen der Tabelle todos}{todos}
+        \begin{minted}{latex}
+CREATE TABLE IF NOT EXISTS todos (
+id INT AUTO_INCREMENT PRIMARY KEY,
+task VARCHAR(255) NOT NULL,
+details TEXT NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ \end{minted}
+\end{code}
+
+    \texttt{id INT AUTO\_INCREMENT PRIMARY KEY}: Jede Aufgabe erhält eine eindeutige ID, die automatisch hochgezählt wird.
+
+    \texttt{task VARCHAR(255) NOT NULL}: Die Überschrift der Task, die maximal 255 Zeichen lang sein kann.
+
+    \texttt{details TEXT NOT NULL}: Die Beschreibung der Task, in der zusätzliche Details gespeichert werden können.
+
+    \texttt{created\_at TIMESTAMP DEFAULT CURRENT\_TIMESTAMP}: Speichert das Erstellungsdatum der Aufgabe, das automatisch mit der aktuellen Uhrzeit belegt wird.
+
+
+
+\subsubsection{Benutzerverwaltung und Authentifizierung}
+Zusätzlich zur \texttt{todos}-Tabelle gibt es die Tabelle \texttt{users}, in der die Benutzerinformationen für das Login hinterlegt sind. Die Tabelle wird mit folgendem SQL-Befehl erstellt:
+
+\begin{code}{Erstellen der Tabelle users}{users}
+        \begin{minted}{latex}
+CREATE TABLE users (
+name VARCHAR(50) PRIMARY KEY,
+password VARCHAR(50) NOT NULL
+);
+  \end{minted}
+\end{code}
+
+    \texttt{name VARCHAR(50) PRIMARY KEY}: Der Benutzername dient als eindeutige ID.
+
+    \texttt{password VARCHAR(50) NOT NULL}: Das Passwort wird bei uns im Klartext gespeichert, was nicht sicher ist, aber für dieses Projekt ausreicht. Eine sichere Alternative wäre das Hashen des Passworts.
+
+Beim Start der Datenbank wird ein Standardbenutzer mit dem Namen \texttt{admin} und dem Passwort \texttt{admin} angelegt, um den Zugriff auf die Webanwendung zu ermöglichen:
+
+\begin{code}{Festlegen der Login-Daten}{login}
+        \begin{minted}{latex}
+INSERT INTO users (name, password) VALUES ('admin', 'admin');
+  \end{minted}
+\end{code}
+
+Dieser Benutzer kann sich in der Webanwendung anmelden und Aufgaben verwalten.
+
+\subsection{Redis}
+Die Redis-Integration in der ToDo-Listen-Anwendung wird zur Verwaltung von Nutzersitzungen eingesetzt. Anstatt Sessions in MariaDB zu speichern, wurde Redis als schnelle und effiziente In-Memory-Datenbank verwendet, um Login-Sitzungen zu verwalten. Dies verbessert die Performance und Skalierbarkeit der Anwendung erheblich, da Redis Zugriffe wesentlich schneller verarbeitet als jedes Mal die Datensätze aus der Datenbank abzurufen um zu überprüfen ob die aktuelle Sitzung noch läuft. Beim Login eines Nutzers wird zunächst überprüft, ob die eingegebenen Zugangsdaten in der MariaDB-Datenbank vorhanden sind. Falls der Benutzername und das Passwort korrekt sind, wird eine eindeutige Session-ID generiert, die anschließend mit einer definierten Ablaufzeit in Redis gespeichert wird. Zur Verwaltung von Benutzersitzungen wird Redis verwendet. Dabei wird eine eindeutige Session-ID generiert und in Redis gespeichert. Der folgende Befehl zeigt, wie die Session mit einer TTL (Time-To-Live) von 3600 Sekunden gespeichert wird:
+
+\begin{code}{Session erstellen}{uuidgen}
+        \begin{minted}{latex}
+SESSION_ID=(uuidgen)redisresult=(uuidgen)redisresult=(redis-cli -h "REDISHOST"−p"REDISHOST"−p"REDIS_PORT" -a "REDISPASSWORD" SETEX"session:REDISPASSWORD" SETEX"session:SESSION_ID" 3600 "$USERNAME")
+  \end{minted}
+\end{code}
+
+
+Durch die Verwendung von \texttt{SETEX} wird sichergestellt, dass die Session nach Ablauf der definierten Zeit automatisch gelöscht wird. Dies verhindert, dass Speicherplatz durch inaktive Sitzungen verbraucht wird.
+
+Nach erfolgreichem Speichern der Session in Redis wird ein HTTP-Cookie gesetzt, das die Session-ID enthält. Dieses Cookie wird an den Client übermittelt, sodass der Nutzer für weitere Anfragen authentifiziert bleibt:
+
+\begin{code}{Erfolgreiche Anmeldung}{cookie}
+        \begin{minted}{latex}
+echo "Set-Cookie: session_id=$SESSION_ID; Path=/; HttpOnly; SameSite=Lax"
+echo "Status: 303 See Other"
+echo "Location: /cgi-bin/vns/todo/table3.sh"
+  \end{minted}
+\end{code}
+
+Das Attribut \texttt{HttpOnly} stellt sicher, dass das Cookie nur von der Serveranwendung genutzt werden kann und nicht von JavaScript im Browser ausgelesen wird. Dies minimiert Sicherheitsrisiken wie Cross-Site Scripting (XSS). Das Attribut \texttt{SameSite=Lax} verhindert, dass das Cookie ungewollt bei externen Anfragen gesendet wird.
+
+Falls Redis das Speichern der Session nicht erfolgreich abschließt, wird eine Fehlermeldung ausgegeben:
+
+\begin{code}{Fehlermeldung}{fehler}
+        \begin{minted}{latex}
+echo "Content-type: text/html"
+echo ""
+echo "<html><body><h1>Fehler beim Speichern der Session in Redis</h1></body></html>"
+exit 1
+  \end{minted}
+\end{code}
+
+Dies kann durch Verbindungsprobleme mit Redis oder fehlerhafte Konfigurationen verursacht werden. In einem solchen Fall kann der Nutzer die Anmeldung erneut versuchen.
+
+Wird ein fehlerhaftes Passwort oder ein nicht vorhandener Benutzername eingegeben, schlägt der Login-Vorgang fehl, und der Nutzer erhält eine Meldung mit einem Link zur erneuten Anmeldung:
+
+\begin{code}{Login-Fehler}{Login}
+        \begin{minted}{latex}
+echo "<html>
+<head><title>Login Failed</title></head> <body> <h1>Login fehlgeschlagen</h1> <a href='/index.html'>Erneut versuchen</a> </body> </html>"
+  \end{minted}
+\end{code}
+
+Danach wird in \texttt{table3.sh}, also in der ToDo-Listen-Anwendung, die Session-Überprüfung nach der Weiterleitung durchgeführt, um sicherzustellen, dass nur angemeldete Nutzer Zugriff auf die Seite haben. Diese Überprüfung erfolgt durch das Prüfen des HTTP-Cookies und der gespeicherten Session in Redis.
+
+Falls ein Cookie existiert, wird die \texttt{session\_id} aus dem \texttt{HTTP\_COOKIE}-Header extrahiert:
+\begin{code}{Cookie-Extraktion}{extraktion}
+        \begin{minted}{latex}
+session_id=""
+if [ -n "HTTP_COOKIE"]; then
+          sessionid=$(echo "$HTTP_COOKIE" | sed -n 
+          's/.*session_id=\([^;]*\).*/\1/p')
+fi
+  \end{minted}
+\end{code}
+
+Falls keine Session-ID gefunden wird, bedeutet dies, dass der Nutzer nicht eingeloggt ist oder seine Sitzung abgelaufen ist. In diesem Fall wird er mit einem HTTP-Redirect zur Login-Seite weitergeleitet:
+
+\begin{code}{Abgelaufene Sitzung}{Sitzung}
+        \begin{minted}{latex}
+if [ -z "$session_id" ]; then
+echo "Status: 303 See Other"
+echo "Location: /index.html"
+echo "Content-type: text/html"
+echo ""
+exit 0
+fi
+  \end{minted}
+\end{code}
+
+Sollte eine Session-ID vorhanden sein, wird nun in Redis überprüft, ob diese gültig ist. Dies geschieht mit dem folgenden Befehl:
+
+\begin{code}{Session-Prüfung}{prüfen}
+        \begin{minted}{latex}
+user=(redis−cli−h"(redis−cli−h"REDIS_HOST" -p "REDISPORT"−a"REDISPORT"−a"REDIS_PASSWORD" GET "session:$session_id")
+  \end{minted}
+\end{code}
+
+Falls keine gültige Antwort zurückgegeben wird, ist die Session entweder ungültig oder abgelaufen. In diesem Fall erfolgt erneut eine Weiterleitung zur Login-Seite, da der Nutzer nicht authentifiziert ist:
+
+\begin{code}{Fehlermeldung}{fehler}
+        \begin{minted}{latex}
+if [ -z "$user" ]; then
+echo "Status: 303 See Other"
+echo "Location: /index.html"
+echo "Content-type: text/html"
+echo ""
+exit 0
+fi
+  \end{minted}
+\end{code}
+
+Falls die Session gültig ist und der Benutzer erfolgreich aus Redis abgerufen wurde, wird der Zugriff auf die geschützte ToDo-Seite gewährt. Dadurch bleibt der Nutzer eingeloggt, solange die Session in Redis existiert.
+
+Durch dieses Verfahren wird sichergestellt, dass nur angemeldete Nutzer Zugriff auf die Anwendung haben. Gleichzeitig bleibt die Sitzung speicherschonend, da Redis die Sessions im Arbeitsspeicher hält und automatisch verwaltet. Sollte der Nutzer inaktiv sein, wird die Session nach Ablauf der definierten Zeit automatisch aus Redis entfernt.
+
+\subsubsection{Logout-Prozess}
+
+In dem Skript \texttt{logout.sh} wird zunächst die Session-ID des Benutzers aus dem HTTP-Cookie extrahiert. Dies wird durch den Zugriff auf den Header des HTTP-Requests erreicht, in dem das Cookie gespeichert ist:
+
+\begin{code}{session-ID extraktion}{session}
+        \begin{minted}{latex}
+SESSION_ID=(echo"(echo"HTTP_COOKIE" | grep -o 'session_id=[^;]*' | cut -d'=' -f2)
+  \end{minted}
+\end{code}
+
+Falls eine gültige Session-ID im Cookie vorhanden ist, wird diese Session aus Redis gelöscht. Dies wird durch den Redis-Befehl \texttt{DEL} erreicht. Die Session-ID wird dabei hinter \texttt{session:} eingesetzt, der Redis-Befehl wird ausgeführt und die Ausgabe des Befehls wird verworfen mit \texttt{>/dev/null}:
+
+\begin{code}{Löschen der ID}{delete}
+        \begin{minted}{latex}
+if [ -n "SESSIONID"];thenredis−cli−h"SESSIONID"];thenredis−cli−h"REDIS_HOST" -p "REDISPORT"−a"REDISPORT"−a"REDIS_PASSWORD" DEL "session:$SESSION_ID" >/dev/null
+fi
+  \end{minted}
+\end{code}
+
+Nach der Löschung der Session wird das Cookie im Browser des Nutzers entfernt. Dies geschieht durch das Setzen des Cookies \texttt{session\_id} auf einen leeren Wert und das Festlegen eines Ablaufdatums in der Vergangenheit (1. Januar 1970). Dies sorgt dafür, dass das Cookie sofort aus dem Browser des Nutzers gelöscht wird:
+
+\begin{code}{Session-ID wird auf null gesetzt}{null}
+        \begin{minted}{latex}
+echo "Content-type: text/html"
+echo "Set-Cookie: session_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/"
+  \end{minted}
+\end{code}
+
+Abschließend wird der Benutzer mit einem HTTP-Statuscode 303 (See Other) zur Login-Seite (\texttt{index.html}) weitergeleitet:
+
+\begin{code}{Weiterleitung zum Login}{Weiterleiten}
+        \begin{minted}{latex}
+echo "Status: 303 See Other"
+echo "Location: /index.html"
+echo ""
+  \end{minted}
+\end{code}
+
+Das Skript sorgt also dafür, dass die Session des Nutzers aus Redis gelöscht wird, das Session-Cookie im Browser entfernt wird und der Nutzer auf die Login-Seite weitergeleitet wird. Dies stellt sicher, dass der Benutzer ordnungsgemäß abgemeldet wird.
+

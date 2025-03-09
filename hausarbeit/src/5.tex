@@ -1,0 +1,131 @@
+\section{Projektidee und Vorhaben}
+
+Im Rahmen des Moduls Vernetzte Systeme haben wir eine Webanwendung zur Verwaltung von ToDo-Listen entwickelt. Die Anwendung ermöglicht es Nutzern, sich mit einem vordefinierten Benutzerkonto anzumelden und persönliche Aufgaben zu erstellen, zu bearbeiten und zu löschen. Ursprünglich war eine Registrierung vorgesehen, wurde jedoch später aus dem Projekt entfernt, da wir uns nicht lange mit der Webanwendung selbst aufhalten lassen wollten sondern die Hauptziele darin legen, die Docker-Architektur zu verstehen, ein vernetztes System aufzubauen und Lasttests durchzuführen. 
+
+Anfangs lag unser Fokus stark auf der Entwicklung der Webanwendung selbst, da wir die Funktionalität der ToDo-Liste als zentral erachteten. Im Verlauf des Projekts erkannten wir jedoch, dass die eigentliche Anwendungsentwicklung eher in den Bereich Software Engineering (SWE) fällt, während in diesem Modul die Infrastruktur, Skalierbarkeit und Vernetzung der Systeme im Mittelpunkt stehen. Daraufhin haben wir unsere Herangehensweise angepasst und uns verstärkt mit Containerisierung, Lastverteilung und Session-Management beschäftigt, um die Kernaspekte des Moduls optimal abzudecken. 
+
+Ein wesentliches Ziel war die Skalierbarkeit, Ausfallsicherheit und effiziente Lastverteilung der Anwendung. Dies wurde durch die Containerisierung mit Docker, den Einsatz von HAProxy als Load Balancer und die Verwendung von Redis für das Session-Management erreicht. Dank der Sticky Sessions in Redis blieben Nutzer stets mit der gleichen Instanz verbunden, was eine stabile Sitzung gewährleistete. Die Speicherung der Aufgaben erfolgte in einer MariaDB-Datenbank. 
+
+Docker spielte eine Schlüsselrolle bei der Bereitstellung und Skalierung der einzelnen Komponenten. Der Webserver wurde mit Apache betrieben, während HAProxy für die Verteilung der Anfragen sorgte. Diese Kombination ermöglichte eine stabile und leistungsfähige Architektur, die sowohl hohe Lasten bewältigen als auch Ausfälle einzelner Instanzen kompensieren konnte. Die Integration von Redis für das Session-Management sorgte für eine schnelle und effiziente Speicherung der Sitzungsdaten, wodurch die Gesamtperformance weiter optimiert wurde. 
+
+Durch diesen Technologiestack wurde eine effiziente, skalierbare und robuste ToDo-Listen-Anwendung realisiert. Der Fokus lag darauf, eine belastbare Infrastruktur zu schaffen, die Lastverteilung, Session-Management und Containerisierung optimal integriert und sowohl für den produktiven Einsatz als auch für verschiedene Lasttests genutzt werden konnte.
+
+\subsection{Die Verezeichnisstruktur}\label{Projektidee}
+Unser Docker Verzeichnis hat sich durch die ganzen Komponenten und den dazugehörigen Inhalten ziemlich vergrößert. Im Hauptverzeichnis befindet sich das Skript build-all.sh, das den Build-Prozess aller Docker-Container steuert. Darüber hinaus gibt es mehrere Unterverzeichnisse, die jeweils spezifische Komponenten des Systems enthalten. 
+
+Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den Apache-Webserver, einschließlich der CGI-Skripte für die Todo-Anwendung. Diese Skripte ermöglichen das Hinzufügen, Bearbeiten und Löschen von Aufgaben sowie das Anmelden und Abmelden von Benutzern. Im Verzeichnis docker-haproxy finden sich die Konfigurationsdateien für den HAProxy-Load-Balancer sowie Testskripte und Ergebnisse von Lasttests, die die Leistungsfähigkeit des Systems überprüfen.Für die Datenbankverwaltung ist das Verzeichnis docker-mariadb zuständig, das die Docker-Konfiguration für MariaDB sowie Skripte für Stresstests enthält. Ähnlich strukturiert ist das Verzeichnis docker-redis, das die Konfiguration für den Redis-Server und Benchmark-Tests bereitstellt. Das Verzeichnis docker-work dient als zentrale Anlaufstelle für allgemeine Skripte zur Verwaltung der Docker-Umgebung. Es enthält außerdem Testskripte für Last- und Performance-Tests, die mit Tools wie k6 und playwright durchgeführt werden. Schließlich bietet das Verzeichnis general Skripte für die Netzwerkverwaltung, wie das Erstellen und Löschen von Docker-Netzwerken sowie die Bereinigung der gesamten Docker-Umgebung.
+
+
+\FloatBarrier
+\begin{figure}[!ht]
+    \dirtree{%
+        .1 /.
+        .2 build-all.sh.
+        .2 docker-apache/.
+        .3 bin/.
+        .4 build.sh.
+        .4 start.sh.
+        .4 stop.sh.
+        .3 context/.
+        .4 cgi-bin/.
+        .5 vns/.
+        .6 test.sh.
+        .6 todo/.
+        .7 addTodo.sh.
+        .7 deleteTodo.sh.
+        .7 editTodo.sh.
+        .7 login.sh.
+        .7 logout.sh.
+        .7 my.cnf.
+        .7 styles.css.
+        .7 table3.sh.
+        .4 Dockerfile.
+        .4 html/.
+        .5 index.html.
+        .4 myinit.sh.
+        .2 docker-haproxy/.
+        .3 bin/.
+        .4 build.sh.
+        .4 start.sh.
+        .4 stop.sh.
+        .3 context/.
+        .4 Dockerfile.
+        .4 haproxy.cfg.
+        .4 lasttest/.
+        .5 haproxy_loadtest.txt.
+        .5 haproxy_load_wrk.sh.
+        .5 haproxy_sesion_curl.sh.
+        .5 haproxy_session_test.txt.
+        .5 haproxy_sticky_test_1.txt.
+        .5 haproxy_sticky_test_2.txt.
+        .5 haproxy_sticky_test_apache1.txt.
+        .5 readme.txt.
+        .4 myinit.sh.
+        .2 docker-mariadb/.
+        .3 bin/.
+        .4 build.sh.
+        .4 deploy.sh.
+        .4 start.sh.
+        .4 stop.sh.
+        .3 context/.
+        .4 Dockerfile.
+        .4 lasttest/.
+        .5 mariadb_stresstest_read.txt.
+        .5 mariadb_stresstest_write.txt.
+        .5 mariadb_sysbench.sh.
+        .5 Readme.txt.
+        .4 myinit.sh.
+        .2 docker-redis/.
+        .3 bin/.
+        .4 build.sh.
+        .4 start.sh.
+        .4 stop.sh.
+        .3 context/.
+        .4 Dockerfile.
+        .4 lasttest/.
+        .5 README.txt.
+        .5 redis_benchmark_results.txt.
+        .5 redis_benchmark.sh.
+        .4 myinit.sh.
+        .4 redis.conf.
+        .2 docker-work/.
+        .3 bin/.
+        .4 build.sh.
+        .4 restart.sh.
+        .4 start.sh.
+        .4 stop.sh.
+        .3 context/.
+        .4 050_sudo_general.
+        .4 Dockerfile.
+        .4 install-k6.sh.
+        .4 lasttest/.
+        .5 ab_test.sh.
+        .5 k6-addtodo.sh.
+        .5 k6_allgemein.sh.
+        .5 k6-login.sh.
+        .5 playwright_test.sh.
+        .5 readme.txt.
+        .5 tcpdump-alles.sh.
+        .5 tcpdump-anylse.sh.
+        .5 tcpdump_logs/.
+        .6 haproxy_http_test.txt.
+        .6 haproxy_loadtest.txt.
+        .6 mariadb_sysbench.txt.
+        .6 network.pcap.
+        .6 redis_benchmark.txt.
+        .6 redis_get.txt.
+        .6 redis_set.txt.
+        .4 myinit.sh.
+        .4 run-playwright-demo.sh.
+        .2 general/.
+        .3 create-mynet-network.sh.
+        .3 delete-all-containers.sh.
+        .3 destroy-mynet-network.sh.
+        .3 info.sh.
+        .3 prune-all.sh.
+    }
+    \caption[Verzeichnisstruktur]{Verzeichnisstruktur}
+    \label{dirtree}
+\end{figure}
+\FloatBarrier
+

@@ -1,0 +1,8 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+CREATE TABLE IF NOT EXISTS todos (
+id INT AUTO\PYG{n+nb}{\PYGZus{}}INCREMENT PRIMARY KEY,
+task VARCHAR(255) NOT NULL,
+details TEXT NOT NULL,
+created\PYG{n+nb}{\PYGZus{}}at TIMESTAMP DEFAULT CURRENT\PYG{n+nb}{\PYGZus{}}TIMESTAMP
+);
+\end{MintedVerbatim}

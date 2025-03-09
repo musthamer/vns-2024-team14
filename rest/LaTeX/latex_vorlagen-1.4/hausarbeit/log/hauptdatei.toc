@@ -1,0 +1,27 @@
+\babel@toc {ngerman}{}\relax 
+\contentsline {section}{\numberline {1}Einleitung}{3}{section.3}%
+\contentsline {section}{\numberline {2}Projektorganisation und Teamarbeit}{3}{section.4}%
+\contentsline {section}{\numberline {3}Die Verzeichnisstruktur}{4}{section.5}%
+\contentsline {section}{\numberline {4}Die Hauptdatei}{6}{section.7}%
+\contentsline {subsection}{\numberline {4.1}Die Präambel}{6}{subsection.8}%
+\contentsline {subsubsection}{\numberline {4.1.1}Der Zitierstil}{7}{subsubsection.11}%
+\contentsline {subsubsection}{\numberline {4.1.2}Das Deckblatt}{8}{subsubsection.13}%
+\contentsline {subsection}{\numberline {4.2}Den Inhalt einbinden}{11}{subsection.16}%
+\contentsline {section}{\numberline {5}Den Inhalt erstellen}{12}{section.19}%
+\contentsline {subsection}{\numberline {5.1}Float und FloatBarrier}{16}{subsection.27}%
+\contentsline {subsection}{\numberline {5.2}Abbildungen}{18}{subsection.32}%
+\contentsline {subsection}{\numberline {5.3}Listings}{19}{subsection.35}%
+\contentsline {subsection}{\numberline {5.4}Tabellen}{21}{subsection.39}%
+\contentsline {subsection}{\numberline {5.5}Labels und Verweise}{25}{subsection.47}%
+\contentsline {section}{\numberline {6}Literaturverwaltung und zitieren}{26}{section.50}%
+\contentsline {section}{\numberline {7}Das Template herunterladen und bauen}{29}{section.56}%
+\contentsline {section}{Literaturverzeichnis}{30}{section*.57}%
+\contentsline {section}{Abbildungsverzeichnis}{31}{section*.59}%
+\contentsline {section}{Tabellenverzeichnis}{32}{section*.60}%
+\contentsline {section}{Listingverzeichnis}{33}{section*.61}%
+\contentsline {section}{Anhang}{34}{section*.62}%
+\contentsline {subsection}{\numberline {I}Die Poster}{35}{subsection.63}%
+\contentsline {subsection}{\numberline {II}Beamer}{36}{subsection.65}%
+\contentsline {subsection}{\numberline {III}Quickbuild}{39}{subsection.69}%
+\contentsline {section}{Selbstständigkeitserklärung}{40}{section*.72}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

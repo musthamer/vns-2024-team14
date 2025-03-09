@@ -1,0 +1,3 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+user=(redis−cli−h\PYGZdq{}(redis−cli−h\PYGZdq{}REDIS\PYG{n+nb}{\PYGZus{}}HOST\PYGZdq{} \PYGZhy{}p \PYGZdq{}REDISPORT\PYGZdq{}−a\PYGZdq{}REDISPORT\PYGZdq{}−a\PYGZdq{}REDIS\PYG{n+nb}{\PYGZus{}}PASSWORD\PYGZdq{} GET \PYGZdq{}session:\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{session}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{id\PYGZdq{}}\PYG{o}{)}
+\end{MintedVerbatim}
