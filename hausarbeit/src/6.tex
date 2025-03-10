@@ -1,13 +1,13 @@
 \section{Systemarchitektur}\label{zitieren}
 Bei der Systemarchitektur stand für uns im Fokus, welche Docker-Container und wie viele davon benötigt werden, um das gelernte Wissen einzubinden und das Projekt so auszulegen, dass alle Möglichkeiten ausgereizt werden können. Unser Ziel war es, valide und aussagekräftige Testergebnisse zu generieren, die eine tiefgehende Analyse und Auswertung ermöglichen – nicht nur für die Funktionalität, sondern auch für die Skalierbarkeit und Resilienz der Anwendung. 
 
-Die Entscheidung, zwei identische Apache-Container parallel zu betreiben, fiel aus mehreren Gründen: 
+Die Entscheidung, drei identische Apache-Container parallel zu betreiben, fiel aus mehreren Gründen: 
 
 HAProxy als Loadbalancer testen: Wir wollten HAProxy nicht nur theoretisch verstehen, sondern praktisch erleben, wie es Last verteilt, auf Ausfälle reagiert und Sessions verwaltet. Herausforderungen wie die korrekte Konfiguration von Sticky Sessions oder die automatische Erkennung inaktiver Backend-Server waren dabei zentral. 
 
-Ausfallsicherheit demonstrieren: Ein zweiter Apache-Container fungiert als redundante Instanz. Fällt einer aus (z. B. durch Neustart oder Fehler), übernimmt der andere nahtlos – die Webanwendung bleibt für Nutzer uneingeschränkt verfügbar. 
+Ausfallsicherheit demonstrieren: Ein zweiter und dritter Apache-Container fungieren als redundante Instanz. Fällt einer aus (z. B. durch Neustart oder Fehler), übernehmen die anderen nahtlos – die Webanwendung bleibt für Nutzer uneingeschränkt verfügbar. 
 
-Lasttests unter Realbedingungen: Mit Tools wie wrk konnten wir simulieren, wie sich die Anwendung unter hoher Auslastung verhält. Zwei Container ermöglichen es, die Grenzen der Skalierbarkeit sichtbar zu machen (z. B. ab wann ein dritter Container nötig wäre). 
+Lasttests unter Realbedingungen: Mit Tools wie wrk konnten wir simulieren, wie sich die Anwendung unter hoher Auslastung verhält. Drei Container ermöglichen es, die Grenzen der Skalierbarkeit sichtbar zu machen (z. B. ab wann ein vierter Container nötig wäre). 
 
 Durch Redis und MariaDB haben wir zwei weitere zentrale Pfeiler integriert: 
 
@@ -26,47 +26,39 @@ Da es keine vorgefertigte Vorlage für einen Apache-Container gab, mussten wir i
 
 In der start.sh mussten wir lediglich den Namen und den Port anpassen. Da wir zwei identische Apache-Container erstellen wollten, haben wir das Skript so modifiziert, dass es zwei Container erzeugt, anstatt nur einer. Wir haben die Container apache1 und apache2 genannt und ihnen die Ports 8081 und 8082 auf dem Host-System zugewiesen.
 
-\begin{code}{start.sh}{start}
+\begin{code}{start.sh}{apache start}
         \begin{minted}{latex}
 #!/bin/bash
 
+for i in {1..3}; do
+    port=$((8080 + i))
+    docker container create \
+        --name apache$i \
+        --net mynet \
+        --publish $port:80 \
+        --init \
+        --cpus=1 \
+        image-apache
 
-docker container create \
-    --name apache1 \
-    --net mynet \
-    --publish 8081:80 \
-    --init \
-    image-apache
+    docker container cp context/myinit.sh apache$i:/usr/bin
+    docker container start apache$i
 
-docker container cp context/myinit.sh apache1:/usr/bin
-docker container start apache1
-
-docker container create \
-    --name apache2 \
-    --net mynet \
-    --publish 8082:80 \
-    --init \
-    image-apache
-
-docker container cp context/myinit.sh apache2:/usr/bin
-docker container start apache2
+done
 
   \end{minted}
 \end{code}
 
 
-Die Angabe :80 hinter dem Port (z. B. --publish 8081:80) bedeutet, dass der Apache-Server im Container auf dem internen Port 80 läuft. Dies ist der Standard-Port für HTTP-Verkehr. Docker leitet den Verkehr vom externen Port 8081 (oder 8082) auf dem Host-System an den internen Port 80 im Container weiter. Diese Konfiguration war insbesondere für die Integration mit HAProxy wichtig, da HAProxy die beiden Apache-Container über ihren internen Port 80 ansprechen und unter einem gemeinsamen externen Port (in unserem Fall 8000) zusammenführen kann. Um sicherzustellen, dass beide Apache-Container identisch sind und HAProxy die Last korrekt verteilt, führten wir Tests durch. Einen Test konnten wir direkt zu Anfang machen in dem wir einen der Container manuell abgeschaltet haben:
+Der Schalter --cpus=1 beschränkt die CPU-Leistung des Containers auf maximal 100\%. Die Angabe :80 hinter dem Port (z. B. --publish \$port:80) bedeutet, dass der Apache-Server im Container auf dem internen Port 80 läuft. Dies ist der Standard-Port für HTTP-Verkehr. Docker leitet den Verkehr vom externen Port 8081 (oder 8082/8083) auf dem Host-System an den internen Port 80 im Container weiter. Diese Konfiguration war insbesondere für die Integration mit HAProxy wichtig, da HAProxy die beiden Apache-Container über ihren internen Port 80 ansprechen und unter einem gemeinsamen externen Port (in unserem Fall 8000) zusammenführen kann. Um sicherzustellen, dass beide Apache-Container identisch sind und HAProxy die Last korrekt verteilt, führten wir Tests durch. Einen Test konnten wir direkt zu Anfang machen in dem wir einen der Container manuell abgeschaltet haben:
 
- Während die Anwendung unter localhost:8000 lief, stoppten wir einen der Apache-Container. HAProxy leitete die Anfragen automatisch an den verbleibenden Container weiter, sodass die Anwendung weiterhin verfügbar blieb.
-
-Durch diese Konfiguration konnten wir sicherstellen, dass die Last gleichmäßig auf beide Apache-Container verteilt wird und ein Ausfall eines Containers kompensiert werden kann, ohne dass die Verfügbarkeit der Anwendung beeinträchtigt wird.
+ Während die Anwendung unter localhost:8000 lief, stoppten wir einen der Apache-Container. HAProxy leitete die Anfragen automatisch an den verbleibenden Container weiter, sodass die Anwendung weiterhin verfügbar blieb. Durch diese Konfiguration konnten wir sicherstellen, dass die Last gleichmäßig auf beide Apache-Container verteilt wird und ein Ausfall eines Containers kompensiert werden kann, ohne dass die Verfügbarkeit der Anwendung beeinträchtigt wird.
 
 
 
 In der Dockerfile haben wir ebenfalls Anpassungen vorgenommen, um die gewünschten Funktionen der Anwendung umzusetzen. Dazu gehörte unter anderem die Installation von apache-spezifischen Programmen wie apache2, libapache2-mod-fcgid und apache2-utils, die für den Betrieb unserer CGI-Skripte und die Webanwendung notwendig sind. Als Basis-Image nutzten wir deshalb ubuntu, um maximale Flexibilität bei der Installation der benötigten Pakete zu haben
 
 Darüber hinaus mussten wir auch Abhängigkeiten (Dependencies) berücksichtigen, die durch die anderen Docker-Container (z. B. MariaDB und Redis) erforderlich sind. Ein Beispiel hierfür ist die Installation von uuid-runtime, das für die Generierung von eindeutigen IDs (UUIDs) benötigt wird, die in unserer Anwendung für die Session-Verwaltung oder andere Funktionen genutzt werden könnten.
-\begin{code}{Dockerfile}{docker}
+\begin{code}{Dockerfile}{apache docker}
         \begin{minted}{latex}
 FROM ubuntu
 RUN apt-get -y update && apt-get -y upgrade
@@ -94,7 +86,7 @@ Abschließend wurde die myinit.sh in das Image integriert und als Hauptprozess d
 
 Die myinit.sh ist ein wichtiger Bestandteil unseres Docker-Setups und dient als Init-Skript für den Apache-Webserver. Dieses Skript verwaltet den Start und Stopp des Servers und protokolliert wichtige Ereignisse.
 
-\begin{code}{myinit.sh}{initialisierung}
+\begin{code}{myinit.sh}{apache Initialisierung}
         \begin{minted}{latex}
 #!/bin/bash
 log=/docker.log
@@ -137,7 +129,7 @@ Durch die Integration der myinit.sh in unsere Docker-Infrastruktur wird sicherge
 \subsection{HAProxy}
 Der HAProxy-Container bildet das Herzstück der Lastverteilung und sorgt dafür, dass die Anfragen der Nutzer zentral gebündelt und intelligent an die beiden Apache-Container weitergeleitet werden. Da HAProxy selbst als eigenständiger Dienst läuft, mussten wir ein spezielles Docker-Image erstellen, das genau auf diese Anforderungen zugeschnitten ist.  
 
-\begin{code}{Dockerfile}{haproxy}
+\begin{code}{Dockerfile}{haproxy dockerfile}
         \begin{minted}{latex}
 FROM ubuntu
 RUN apt-get -y update && apt-get -y upgrade
@@ -161,7 +153,7 @@ Graceful Shutdown: Wird der Container per docker stop beendet, fängt das Skript
 
 Dienstüberwachung: Über service haproxy status wird der Status des HAProxy-Dienstes in die Log-Datei geschrieben, was später bei der Fehlersuche hilfreich sein kann.  
 
-\begin{code}{myinit.sh}{haproxy}
+\begin{code}{myinit.sh}{haproxy Initialisierung}
         \begin{minted}{latex}
 
 #!/bin/bash
@@ -196,7 +188,7 @@ Die eigentliche Lastverteilung wird durch die haproxy.cfg-Konfiguration gesteuer
 
 Frontend: Hier wird der öffentliche Port (:80) gebunden, über den die Anwendung erreichbar ist. Eine ACL-Regel (acl url\_direct path\_beg /direct) leitet Anfragen mit dem Pfad /direct an ein separates Backend weiter, das direkt eine Antwort zurückgibt – nützlich für Schnelltests der HAProxy-Infrastruktur.  
 
-\begin{code}{Frontend}{haproxy}
+\begin{code}{Frontend}{haproxy.cfg}
         \begin{minted}{latex}
 
 frontend http-in
@@ -208,37 +200,42 @@ frontend http-in
         \end{minted}
 \end{code}
 
-Backend: Die eigentliche Lastverteilung erfolgt über das app-backend, das die beiden Apache-Container (apache1:80 und apache2:80) einbindet. Mittels cookie SERVERID wird eine Sticky Session implementiert, die sicherstellt, dass Nutzer während ihrer Session immer denselben Apache-Container nutzen. Die Strategie roundrobin verteilt neue Sessions gleichmäßig auf beide Server.  
+Backend: Die eigentliche Lastverteilung erfolgt über das app-backend, das die beiden Apache-Container (apache1:80, apache2:80 und apache3:80) einbindet. Mittels cookie SERVERID wird eine Sticky Session implementiert, die sicherstellt, dass Nutzer während ihrer Session immer denselben Apache-Container nutzen. Die Strategie roundrobin verteilt neue Sessions gleichmäßig auf alle Server.  
 
-\begin{code}{Backend}{haproxy}
+\begin{code}{Backend}{haproxy.cfg}
         \begin{minted}{latex}
           backend direct-backend
   http-request return status 200 content-type "text/plain" string "Moin from haproxy\n"
 
 backend app-backend
+ balance roundrobin
   cookie SERVERID insert indirect nocache
   server apache1 apache1:80 check cookie apache1
   server apache2 apache2:80 check cookie apache2
+  server apache3 apache3:80 check cookie apache3
           \end{minted}
 \end{code}
 
-Des Weiteren wurde in der \texttt{start.sh} der Container so konfiguriert, dass er über den \textbf{Port 8000} auf dem Host erreichbar ist und gleichzeitig auf den \textbf{Port 80} im Container gemappt wird. Diese Port-Weiterleitung ermöglicht es, dass der HAProxy-Container als zentraler Load-Balancer fungiert und Anfragen an die beiden Apache-Container weiterleitet. Dadurch können beide Apache-Container über den Port 8000 erreicht werden, während HAProxy die Lastverteilung und das Routing übernimmt. Dadurch wird sichergestellt, dass die Last gleichmäßig auf die Backend-Server verteilt wird und die Anwendung auch bei hoher Auslastung stabil bleibt.
+Des Weiteren wurde in der \texttt{start.sh} der Container so konfiguriert, dass er über den \textbf{Port 8000} auf dem Host erreichbar ist und gleichzeitig auf den \textbf{Port 80} im Container gemappt wird. Diese Port-Weiterleitung ermöglicht es, dass der HAProxy-Container als zentraler Load-Balancer fungiert und Anfragen an die beiden Apache-Container weiterleitet. Dadurch können alle Apache-Container über den Port 8000 erreicht werden, während HAProxy die Lastverteilung und das Routing übernimmt. Dadurch wird sichergestellt, dass die Last gleichmäßig auf die Backend-Server verteilt wird und die Anwendung auch bei hoher Auslastung stabil bleibt. Auch hier beschränkt der Schalter --cpus=1 die CPU-Leistung des Containers auf 100\%. 
 
-\begin{code}{start.sh}{haproxy}
+\begin{code}{start.sh}{haproxy start}
         \begin{minted}{latex}
-          name=haproxy
+  #!/bin/bash
+
+name=haproxy
 port=8000
 echo running "$name" "$port"
 docker container create \
         --name "$name" \
         --network mynet \
         --init \
+         --cpus=1 \
         -p $port:80 \
         image-haproxy
 docker container cp context/myinit.sh $name:/usr/bin
 docker container cp context/haproxy.cfg $name:/etc/haproxy/
 docker container start $name
-  \end{minted}
+        \end{minted}
 \end{code}
 
 Um die Funktionsweise zu validieren, wurden gezielte Tests durchgeführt:  
