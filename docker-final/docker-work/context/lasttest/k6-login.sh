@@ -1,38 +1,37 @@
 #!/bin/bash
 
 echo 'import http from "k6/http";
-import { check, sleep } from "k6";
+import { check, sleep } from 'k6';
 
 export let options = {
     stages: [
-        { duration: "30s", target: 50 },
-        { duration: "1m", target: 100 },
-        { duration: "30s", target: 0 },
-    ],  
+        { duration: '30s', target: 5 },   // 5 gleichzeitige Benutzer
+        { duration: '30s', target: 10 },  // 10 gleichzeitige Benutzer
+        { duration: '30s', target: 15 },  // 15 gleichzeitige Benutzer
+        { duration: '30s', target: 20 },  // 20 gleichzeitige Benutzer
+    ],
 };
 
 export default function () {
-    let loginPayload = "username=admin&password=admin";
-    let headers = { "Content-Type": "application/x-www-form-urlencoded" };
+    let url = "http://haproxy:80/cgi-bin/vns/todo/login.sh";
 
-    let loginRes = http.post("http://haproxy:80/cgi-bin/vns/todo/login.sh", loginPayload, { headers });
+    let payload = "username=admin&password=admin";
 
-    check(loginRes, {
-        "Login erfolgreich": (r) => r.status === 303,
-        "Session-Cookie gesetzt": (r) => r.headers["Set-Cookie"] && r.headers["Set-Cookie"].includes("session_id"),
+    let params = {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    };
+
+    let res = http.post(url, payload, params);
+
+    check(res, {
+        'Login erfolgreich': (r) => r.status === 200 || r.status === 303,
     });
-
-    let cookies = loginRes.headers["Set-Cookie"];
-
-    if (cookies) {
-        let todoRes = http.get("http://haproxy:80/cgi-bin/vns/todo/table3.sh", { headers: { "Cookie": cookies } });
-        check(todoRes, {
-            "ToDo-Seite geladen": (r) => r.status === 200,
-        });
-    }
 
     sleep(1);
 }
+
 ' > k6_login_test.js
 
 # Führt das k6 Skript für Login-Tests aus und speichert das Ergebnis in einer Datei

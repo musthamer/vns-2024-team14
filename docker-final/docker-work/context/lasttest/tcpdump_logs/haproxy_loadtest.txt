@@ -1,1 +1,0 @@
-unable to resolve haproxy:80 Name or service not known

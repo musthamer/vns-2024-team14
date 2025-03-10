@@ -2,7 +2,6 @@
 
 echo 'import http from "k6/http";
 import { check, sleep } from "k6";
-import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 import grpc from "k6/net/grpc";
 
 export let options = {
@@ -39,13 +38,6 @@ export default function () {
 
 }
 
-export function handleSummary(data) {
-    return {
-        "haproxy_result.txt": textSummary(data, { indent: "", enableColors: false }),
-        "apache_result.txt": textSummary(data, { indent: "", enableColors: false }),
-        "apache2_result.txt": textSummary(data, { indent: "", enableColors: false }),
-    };
-}
 
 ' > k6_test.js
 

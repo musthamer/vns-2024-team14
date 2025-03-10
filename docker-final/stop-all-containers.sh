@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Container-Verzeichnisse und Stop-Skripte definieren
 for service in mariadb apache redis haproxy work; do
     echo "Stopping container: docker-$service"
     cd docker-$service

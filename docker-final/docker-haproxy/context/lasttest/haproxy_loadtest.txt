@@ -1,9 +1,0 @@
-Running 10s test @ http://haproxy:80
-  8 threads and 100 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    18.15ms   19.60ms 245.55ms   91.32%
-    Req/Sec   841.52    299.08     2.07k    74.65%
-  67468 requests in 7.49s, 124.25MB read
-  Socket errors: connect 0, read 34, write 0, timeout 96
-Requests/sec:   9007.55
-Transfer/sec:     16.59MB
