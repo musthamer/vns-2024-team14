@@ -19,9 +19,12 @@ Durch diesen Technologiestack wurde eine effiziente, skalierbare und robuste ToD
 \begin{figure}[ht!]
         \centering
         \includegraphics[width=0.65\textwidth]{src/abbildungen/skizze.png}
-        \caption{OSI-Modell und TCP/IP Modell}
+        \caption{Skizze über unser Vernetztes System}
 \end{figure}
 \FloatBarrier
+
+In der Abbildung 5.2 haben wir eine grobe Skizze erstellt, die die Zusammenhänge der ganzen Docker-Container darstellt. Die Skizze zeigt, wie wir uns die Netzwerkarchitektur des Docker-basierten Systems vorgestellt haben. Nutzer senden HTTP-Anfragen, die von HAProxy auf Port 8000 empfangen und anschließend über das interne Netzwerk auf Port 80 an mehrere Apache-Instanzen weitergeleitet werden. Diese Instanzen, die auf den Ports 8081, 8082 und 8083 laufen, sind für die Verarbeitung der Anfragen zuständig. Zur Speicherung und Bereitstellung von Daten greifen die Apache-Server auf eine MariaDB-Datenbank und ein Redis-Caching-System zu. Redis verwaltet ebenfalls die Sessions, die von den Cookies extrahiert werden. Die gesamte Kommunikation findet innerhalb des Docker-Netzwerks "mynet" statt, das eine isolierte und sichere Umgebung für die Container bietet. Diese Architektur sorgt für effiziente Lastverteilung, Skalierbarkeit und stabile Performance.
+
 \subsection{Die Verezeichnisstruktur}\label{Projektidee}
 Unser Docker Verzeichnis hat sich durch die ganzen Komponenten und den dazugehörigen Inhalten ziemlich vergrößert. Im Hauptverzeichnis befindet sich das Skript build-all.sh, das den Build-Prozess aller Docker-Container steuert. Darüber hinaus gibt es mehrere Unterverzeichnisse, die jeweils spezifische Komponenten des Systems enthalten. 
 
