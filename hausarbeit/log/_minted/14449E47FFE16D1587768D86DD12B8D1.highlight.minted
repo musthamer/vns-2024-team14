@@ -1,9 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{k}{\PYGZbs{}documentclass}\PYG{n+na}{[../hauptdatei.tex]}\PYG{n+nb}{\PYGZob{}}subfiles\PYG{n+nb}{\PYGZcb{}}
-\PYG{k}{\PYGZbs{}begin}\PYG{n+nb}{\PYGZob{}}document\PYG{n+nb}{\PYGZcb{}}
-\PYG{k}{\PYGZbs{}section}\PYG{n+nb}{\PYGZob{}}Beispiel\PYG{n+nb}{\PYGZcb{}}
-
-Hier könnte sinnvoller Inhalt stehen.
-
-\PYG{k}{\PYGZbs{}end}\PYG{n+nb}{\PYGZob{}}document\PYG{n+nb}{\PYGZcb{}}
-\end{MintedVerbatim}

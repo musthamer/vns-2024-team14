@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install apache2 apache2-utils libapache2-mod-fcgid curl vim mariadb-client redis-tools
 RUN apt-get -y install uuid-runtime

@@ -13,36 +13,35 @@
 \contentsline {subsection}{\numberline {4.2}Das ISO/OSI-Modell}{8}{subsection.14}%
 \contentsline {section}{\numberline {5}Projektidee und Vorhaben}{12}{section.17}%
 \contentsline {subsection}{\numberline {5.1}Die Verezeichnisstruktur}{14}{subsection.20}%
-\contentsline {section}{\numberline {6}Systemarchitektur}{18}{section.24}%
-\contentsline {subsection}{\numberline {6.1}Apache}{19}{subsection.25}%
-\contentsline {subsection}{\numberline {6.2}HAProxy}{22}{subsection.29}%
-\contentsline {subsection}{\numberline {6.3}MariaDB (Datenbank)}{26}{subsection.35}%
-\contentsline {subsubsection}{\numberline {6.3.1}Datenbank-Erstellung und Benutzerverwaltung}{26}{subsubsection.36}%
+\contentsline {section}{\numberline {6}Systemarchitektur}{19}{section.24}%
+\contentsline {subsection}{\numberline {6.1}Apache}{20}{subsection.25}%
+\contentsline {subsection}{\numberline {6.2}HAProxy}{23}{subsection.29}%
+\contentsline {subsection}{\numberline {6.3}MariaDB (Datenbank)}{27}{subsection.35}%
+\contentsline {subsubsection}{\numberline {6.3.1}Datenbank-Erstellung und Benutzerverwaltung}{27}{subsubsection.36}%
 \contentsline {subsubsection}{\numberline {6.3.2}Tabellenstruktur für ToDo-Einträge}{27}{subsubsection.39}%
-\contentsline {subsubsection}{\numberline {6.3.3}Benutzerverwaltung und Authentifizierung}{27}{subsubsection.41}%
-\contentsline {subsection}{\numberline {6.4}Redis}{28}{subsection.44}%
-\contentsline {subsubsection}{\numberline {6.4.1}Logout-Prozess}{31}{subsubsection.53}%
-\contentsline {section}{\numberline {7}Implementierung und Ergebnisse}{32}{section.58}%
-\contentsline {subsection}{\numberline {7.1}MariaDB Stresstest}{33}{subsection.59}%
-\contentsline {subsection}{\numberline {7.2}Redis Benchmark}{34}{subsection.60}%
-\contentsline {subsection}{\numberline {7.3}HAProxy Session-Stickiness}{35}{subsection.61}%
-\contentsline {subsection}{\numberline {7.4}HAProxy Load-Balancing Test}{36}{subsection.62}%
-\contentsline {subsubsection}{\numberline {7.4.1}Erweiterter Load-Balancing Test unter erhöhter Last}{37}{subsubsection.63}%
-\contentsline {subsection}{\numberline {7.5}Umfassender Netzwerk- und Performance-Test}{37}{subsection.64}%
-\contentsline {subsection}{\numberline {7.6}TCP Dump – Netzwerk- und Performance-Test}{38}{subsection.65}%
-\contentsline {subsubsection}{\numberline {7.6.1}Erweiterter Netzwerk- und Performance-Test}{39}{subsubsection.66}%
-\contentsline {subsection}{\numberline {7.7}k6 Lasttest – Performance-Analyse von HAProxy und Apache}{40}{subsection.67}%
-\contentsline {subsubsection}{\numberline {7.7.1}k6 Login-Lasttest}{41}{subsubsection.68}%
-\contentsline {subsubsection}{\numberline {7.7.2}k6 Add-ToDo-Liste}{42}{subsubsection.69}%
-\contentsline {subsection}{\numberline {7.8}Diagramm – Gnuplot: CPU- und RAM-Nutzungsanalyse}{43}{subsection.70}%
-\contentsline {section}{\numberline {8}Fazit und Ausblick}{45}{section.72}%
-\contentsline {section}{Literaturverzeichnis}{46}{section*.73}%
-\contentsline {section}{Abbildungsverzeichnis}{46}{section*.74}%
-\contentsline {section}{Tabellenverzeichnis}{47}{section*.75}%
-\contentsline {section}{Listingverzeichnis}{48}{section*.76}%
-\contentsline {section}{Anhang}{49}{section*.77}%
-\contentsline {subsection}{\numberline {I}Die Poster}{50}{subsection.78}%
-\contentsline {subsection}{\numberline {II}Beamer}{51}{subsection.80}%
-\contentsline {subsection}{\numberline {III}Quickbuild}{54}{subsection.84}%
-\contentsline {section}{Selbstständigkeitserklärung}{55}{section*.87}%
+\contentsline {subsubsection}{\numberline {6.3.3}Benutzerverwaltung und Authentifizierung}{28}{subsubsection.41}%
+\contentsline {subsection}{\numberline {6.4}Redis}{29}{subsection.44}%
+\contentsline {subsubsection}{\numberline {6.4.1}Logout-Prozess}{32}{subsubsection.53}%
+\contentsline {section}{\numberline {7}Implementierung und Ergebnisse}{33}{section.58}%
+\contentsline {subsection}{\numberline {7.1}MariaDB Stresstest}{34}{subsection.59}%
+\contentsline {subsection}{\numberline {7.2}Redis Benchmark}{35}{subsection.60}%
+\contentsline {subsection}{\numberline {7.3}HAProxy Session-Stickiness}{36}{subsection.61}%
+\contentsline {subsection}{\numberline {7.4}HAProxy Load-Balancing Test}{37}{subsection.62}%
+\contentsline {subsubsection}{\numberline {7.4.1}Erweiterter Load-Balancing Test unter erhöhter Last}{38}{subsubsection.63}%
+\contentsline {subsection}{\numberline {7.5}Umfassender Netzwerk- und Performance-Test}{38}{subsection.64}%
+\contentsline {subsection}{\numberline {7.6}TCP Dump – Netzwerk- und Performance-Test}{39}{subsection.65}%
+\contentsline {subsubsection}{\numberline {7.6.1}Erweiterter Netzwerk- und Performance-Test}{40}{subsubsection.66}%
+\contentsline {subsection}{\numberline {7.7}k6 Lasttest – Performance-Analyse von HAProxy und Apache}{41}{subsection.67}%
+\contentsline {subsubsection}{\numberline {7.7.1}k6 Login-Lasttest}{42}{subsubsection.68}%
+\contentsline {subsubsection}{\numberline {7.7.2}k6 Add-ToDo-Liste}{43}{subsubsection.69}%
+\contentsline {subsection}{\numberline {7.8}Diagramm – Gnuplot: CPU- und RAM-Nutzungsanalyse}{44}{subsection.70}%
+\contentsline {section}{\numberline {8}Fazit und Ausblick}{46}{section.72}%
+\contentsline {subsection}{\numberline {8.1}Celal:}{46}{subsection.73}%
+\contentsline {subsection}{\numberline {8.2}Mert:}{47}{subsection.74}%
+\contentsline {subsection}{\numberline {8.3}Mohammed:}{48}{subsection.75}%
+\contentsline {subsection}{\numberline {8.4}Mustafa:}{50}{subsection.76}%
+\contentsline {section}{Literaturverzeichnis}{52}{section*.77}%
+\contentsline {section}{Abbildungsverzeichnis}{52}{section*.78}%
+\contentsline {section}{Listingverzeichnis}{53}{section*.79}%
+\contentsline {section}{Selbstständigkeitserklärung}{54}{section*.80}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
