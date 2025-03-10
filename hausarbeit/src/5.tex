@@ -67,14 +67,6 @@ Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den 
         .3 context/.
         .4 Dockerfile.
         .4 haproxy.cfg.
-        .4 lasttest/.
-        .5 haproxy\_loadtest.txt.
-        .5 haproxy\_load\_wrk.sh.
-        .5 haproxy\_sesion\_curl.sh.
-        .5 haproxy\_session\_test.txt.
-        .5 haproxy\_sticky\_test\_1.txt.
-        .5 haproxy\_sticky\_test\_2.txt.
-        .5 haproxy\_sticky\_test\_apache1.txt.
         .4 myinit.sh.
     }
     \caption[Verzeichnisstruktur (Teil 1)]{Verzeichnisstruktur (Teil 1)}
@@ -127,23 +119,23 @@ Das Verzeichnis docker-apache beinhaltet die Konfiguration und Skripte für den 
         .4 stop.sh.
         .3 context/.
         .4 050\_sudo\_general.
+        .4 cookies.txt
+        .4 curl\_session.sh
         .4 Dockerfile.
         .4 install-k6.sh.
         .4 lasttest/.
+        .5 ab\_test.sh
+        .5 curl\_load.sh
+        .5 haproxy\_load\_wrk.sh
         .5 k6\_addtodo.sh.
         .5 k6\_allgemein.sh.
         .5 k6\_login.sh.
+        .5 mariadb\_sysbench.sh
+        .5 redis\_benchmark.sh
         .5 tcpdump\_alles.sh.
         .5 tcpdump\_anylse.sh.
-        .5 tcpdump\_logs/.
-        .6 haproxy\_http\_test.txt.
-        .6 haproxy\_loadtest.txt.
-        .6 mariadb\_sysbench.txt.
-        .6 network.pcap.
-        .6 redis\_benchmark.txt.
-        .6 redis\_get.txt.
-        .6 redis\_set.txt.
         .4 myinit.sh.
+        .4 run-playwright-demo.sh.
         .2 general/.
         .3 create-mynet-network.sh.
         .3 delete-all-containers.sh.
