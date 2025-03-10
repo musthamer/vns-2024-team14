@@ -1,0 +1,14 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+FROM ubuntu
+RUN apt\PYGZhy{}get \PYGZhy{}y update \PYG{n+nb}{\PYGZam{}}\PYG{n+nb}{\PYGZam{}} apt\PYGZhy{}get \PYGZhy{}y upgrade
+RUN apt\PYGZhy{}get \PYGZhy{}y install apache2 apache2\PYGZhy{}utils libapache2\PYGZhy{}mod\PYGZhy{}fcgid curl vim mariadb\PYGZhy{}client redis\PYGZhy{}tools
+RUN apt\PYGZhy{}get \PYGZhy{}y install uuid\PYGZhy{}runtime
+COPY cgi\PYGZhy{}bin/ /usr/lib/cgi\PYGZhy{}bin/
+COPY html/ /var/www/html/
+COPY myinit.sh /usr/bin/myinit.sh
+RUN chmod +x /usr/bin/myinit.sh
+RUN chmod +x /usr/lib/cgi\PYGZhy{}bin/vns/todo/*
+RUN a2enmod cgi
+
+CMD [\PYGZdq{}/usr/bin/myinit.sh\PYGZdq{}]
+\end{MintedVerbatim}

@@ -1,0 +1,28 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+
+\PYGZsh{}!/bin/bash
+
+log=/var/log/docker.log
+echo \PYGZdq{}HAProxy\PYGZhy{}Container gestartet: \PYG{l+s}{\PYGZdl{}}\PYG{o}{(}\PYG{n+nb}{date}\PYG{o}{)}\PYG{n+nb}{\PYGZdq{} \PYGZgt{}\PYGZgt{} \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}log\PYGZdq{}
+
+function onexit \PYG{n+nb}{\PYGZob{}}
+  echo \PYGZdq{}HAProxy\PYGZhy{}Container wird heruntergefahren: \PYG{l+s}{\PYGZdl{}}\PYG{o}{(}\PYG{n+nb}{date}\PYG{o}{)}\PYG{n+nb}{\PYGZdq{} \PYGZgt{}\PYGZgt{} \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}log\PYGZdq{}
+  service haproxy stop
+  exit
+\PYG{n+nb}{\PYGZcb{}}
+
+trap onexit SIGTERM
+
+
+echo \PYGZdq{}Starte HAProxy...\PYGZdq{} \PYGZgt{}\PYGZgt{} \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{log\PYGZdq{}}
+\PYG{n+nb}{service haproxy start}
+
+\PYG{n+nb}{echo \PYGZdq{}HAProxy}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{Status:\PYGZdq{} \PYGZgt{}\PYGZgt{} \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}log\PYGZdq{}
+service haproxy status \PYGZgt{}\PYGZgt{} \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{log\PYGZdq{}}
+
+\PYG{n+nb}{echo \PYGZdq{}HAProxy}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{Container läuft: }\PYG{l+s}{\PYGZdl{}}(date)\PYGZdq{} \PYGZgt{}\PYGZgt{} \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{log\PYGZdq{}}
+\PYG{n+nb}{while true; do}
+\PYG{n+nb}{  echo \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}(date +\PYG{c}{\PYGZpc{}FT\PYGZpc{}T) ping\PYGZdq{} \PYGZgt{}\PYGZgt{} \PYGZdq{}\PYGZdl{}log\PYGZdq{}}
+  sleep 10
+done
+\end{MintedVerbatim}

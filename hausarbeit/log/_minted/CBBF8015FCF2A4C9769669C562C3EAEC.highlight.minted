@@ -1,0 +1,19 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYGZsh{}!/bin/bash
+
+for i in \PYG{n+nb}{\PYGZob{}}1..3\PYG{n+nb}{\PYGZcb{}}; do
+    port=\PYG{l+s}{\PYGZdl{}}\PYG{o}{(}\PYG{o}{(}\PYG{l+m}{8080}\PYG{n+nb}{ }\PYG{o}{+}\PYG{n+nb}{ i}\PYG{o}{)}\PYG{o}{)}
+\PYG{n+nb}{    docker container create }\PYG{n+nv}{\PYGZbs{}}
+\PYG{n+nb}{        }\PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{name apache}\PYG{l+s}{\PYGZdl{}}i \PYG{k}{\PYGZbs{}}
+        \PYGZhy{}\PYGZhy{}net mynet \PYG{k}{\PYGZbs{}}
+        \PYGZhy{}\PYGZhy{}publish \PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{port:}\PYG{l+m}{80}\PYG{n+nb}{ }\PYG{n+nv}{\PYGZbs{}}
+\PYG{n+nb}{        }\PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{init }\PYG{n+nv}{\PYGZbs{}}
+\PYG{n+nb}{        }\PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{cpus}\PYG{o}{=}\PYG{l+m}{1}\PYG{n+nb}{ }\PYG{n+nv}{\PYGZbs{}}
+\PYG{n+nb}{        image}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{apache}
+
+\PYG{n+nb}{    docker container cp context}\PYG{o}{/}\PYG{n+nb}{myinit.sh apache}\PYG{l+s}{\PYGZdl{}}i:/usr/bin
+    docker container start apache\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{i}
+
+\PYG{n+nb}{done}
+
+\end{MintedVerbatim}
