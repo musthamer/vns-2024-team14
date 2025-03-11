@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.2.14)  11 MAR 2025 01:29
+This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.2.14)  11 MAR 2025 01:34
  system commands enabled.
 **hauptdatei.tex
 (./hauptdatei.tex
@@ -1842,7 +1842,7 @@ LaTeX Warning: Label `haproxy.cfg' multiply defined.
 ! Missing \endcsname inserted.
 <to be read again> 
 \protect 
-l.90 ...}{27}{\captiontitle }{listing.caption.38}{}}
+l.90 ...}{26}{\captiontitle }{listing.caption.38}{}}
                                                   
 The control sequence marked <to be read again> should
 not appear between \csname and \endcsname.
@@ -1850,7 +1850,7 @@ not appear between \csname and \endcsname.
 ! Missing \endcsname inserted.
 <to be read again> 
 \protect 
-l.90 ...}{27}{\captiontitle }{listing.caption.38}{}}
+l.90 ...}{26}{\captiontitle }{listing.caption.38}{}}
                                                   
 The control sequence marked <to be read again> should
 not appear between \csname and \endcsname.
@@ -2096,29 +2096,25 @@ Package luatex.def Info: src/abbildungen/tcp.png  used on input line 20.
 
 [9<./src/abbildungen/osi.png>]
 
-[10<./src/abbildungen/tcp.png>]
-
-[11
-
-]) (./src/5.tex
-<src/abbildungen/uml.png, id=160, 720.44156pt x 478.78876pt>
+[10<./src/abbildungen/tcp.png>]) (./src/5.tex
+<src/abbildungen/uml.png, id=155, 720.44156pt x 478.78876pt>
 File: src/abbildungen/uml.png Graphic file (type png)
 <use src/abbildungen/uml.png>
 Package luatex.def Info: src/abbildungen/uml.png  used on input line 7.
 (luatex.def)             Requested size: 291.28238pt x 193.57962pt.
 
 
-[12<./src/abbildungen/uml.png>]
-<src/abbildungen/skizze.png, id=168, 762.34813pt x 571.13374pt>
+[11]
+<src/abbildungen/skizze.png, id=161, 762.34813pt x 571.13374pt>
 File: src/abbildungen/skizze.png Graphic file (type png)
 <use src/abbildungen/skizze.png>
 Package luatex.def Info: src/abbildungen/skizze.png  used on input line 21.
 (luatex.def)             Requested size: 291.28238pt x 218.21829pt.
 
 
-[13<./src/abbildungen/skizze.png>]
+[12<./src/abbildungen/uml.png>]
 
-[14]
+[13<./src/abbildungen/skizze.png>]
 Overfull \hbox (0.7083pt too wide) in paragraph at lines 40--41
 []\TU/TeXGyreTermes(0)/m/n/12 Durch die-se ver-bes-ser-te Struk-tur ha-ben wir 
 ei-ne kla-re-re Über-sicht über un-se-re Docker-Umgebung
@@ -2130,24 +2126,24 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             See the microtype manual for details.
 
 
+[14]
+
 [15]
 
-[16]
+[16]) (./src/6.tex
 
-[17]) (./src/6.tex
-
-[18
+[17
 
 ]
 
-[19]
+[18]
 \pydata@fh@_72CDA6978600F97B9A22D1FB2EBB1A01.data.minted=\write8
 
 \openout8 = _72CDA6978600F97B9A22D1FB2EBB1A01.data.minted
-runsystem(latexminted config  --timestamp 20250311012922 72CDA6978600F97B9A22D1F
+runsystem(latexminted config  --timestamp 20250311013413 72CDA6978600F97B9A22D1F
 B2EBB1A01)...executed.
  (./log/_72CDA6978600F97B9A22D1FB2EBB1A01.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20250311012922 72CDA6978600F97B9A
+runsystem(latexminted cleanconfig  --timestamp 20250311013413 72CDA6978600F97B9A
 22D1FB2EBB1A01)...executed.
 
 (./log/_minted/default.style.minted)
@@ -2159,7 +2155,7 @@ Package hyperref Info: bookmark level for unknown listing defaults to 0 on inpu
 t line 41.
 
 
-[20] (./log/_minted/26CE9B6B1D747C207F75B54E22DED10A.highlight.minted
+[19] (./log/_minted/26CE9B6B1D747C207F75B54E22DED10A.highlight.minted
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -2168,13 +2164,13 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 4.
 )
 
-[21] (./log/_minted/2AADEF22CF7A4C58B8BA20772F6095EA.highlight.minted)
+[20] (./log/_minted/2AADEF22CF7A4C58B8BA20772F6095EA.highlight.minted)
 
-[22] (./log/_minted/9FF500432C0B7354944741D8C45BEC17.highlight.minted)
+[21] (./log/_minted/9FF500432C0B7354944741D8C45BEC17.highlight.minted)
 
-[23] (./log/_minted/F13CF6A333E9A87D8CB0FFE5196B0525.highlight.minted
+[22] (./log/_minted/F13CF6A333E9A87D8CB0FFE5196B0525.highlight.minted
 
-[24]) (./log/_minted/224E78898C56C5A4BFA7B3232FF7C1BA.highlight.minted)
+[23]) (./log/_minted/224E78898C56C5A4BFA7B3232FF7C1BA.highlight.minted)
 (./log/_minted/3EDA50BB12BEB2BD2DA9537F525B0070.highlight.minted
 LaTeX Font Info:    Font shape `TU/TeXGyreTermes(0)/bx/n' in size <10> not avai
 lable
@@ -2182,75 +2178,77 @@ lable
  line 3.
 
 
-[25]) (./log/_minted/DF3A2C611BC60776A2F92CA80B13C2F7.highlight.minted)
+[24]) (./log/_minted/DF3A2C611BC60776A2F92CA80B13C2F7.highlight.minted)
 
-[26] (./log/_minted/686B22AD83F7B135F37160FB0392003E.highlight.minted)
+[25] (./log/_minted/686B22AD83F7B135F37160FB0392003E.highlight.minted)
 (./log/_minted/15362BC5A3B4C74ED9ED476B8A534682.highlight.minted)
 (./log/_minted/4F58CE3776F11AC13D3AEBEF67720BD9.highlight.minted
 
-[27]) (./log/_minted/4E0C638719F874084EBD6C8D38F8E7CB.highlight.minted)
+[26]) (./log/_minted/4E0C638719F874084EBD6C8D38F8E7CB.highlight.minted)
 (./log/_minted/8ECF24C9778D7AEEB82C79C885F42931.highlight.minted
 
-[28]) (./log/_minted/E0A321B8C81B0EB29CEB93C0F6CCCB04.highlight.minted)
+[27]) (./log/_minted/E0A321B8C81B0EB29CEB93C0F6CCCB04.highlight.minted)
 (./log/_minted/8DF341BD102B91A52B40427D63BF793E.highlight.minted)
 
-[29] (./log/_minted/F1A22328D73899AEB9CD821514ED2505.highlight.minted)
+[28] (./log/_minted/F1A22328D73899AEB9CD821514ED2505.highlight.minted)
 (./log/_minted/AA81FEE50A5FEB47878482AC62363A90.highlight.minted)
 (./log/_minted/C1846ADF98304464DBDE3AADA2D63A15.highlight.minted)
 
-[30] (./log/_minted/BE332E8271F4E6216775738629880434.highlight.minted)
+[29] (./log/_minted/BE332E8271F4E6216775738629880434.highlight.minted)
 (./log/_minted/925E53CDCB7ABB08A3D26ECEE7ADDF31.highlight.minted)
 (./log/_minted/F7C4BFB46F7E65DFCEE19D6ACC9DA713.highlight.minted)
 
-[31] (./log/_minted/5F44EC44FF47747A8DB5F7CCEE3E371A.highlight.minted)
+[30] (./log/_minted/5F44EC44FF47747A8DB5F7CCEE3E371A.highlight.minted)
 (./log/_minted/CC460A34B7C9CBF8726287E37B2D037B.highlight.minted)
 (./log/_minted/A336F5E22D48BD2688122B083BB8E3EC.highlight.minted)
 
-[32] (./log/_minted/447EACFCEB2A0EB7A9C8EE42A047514E.highlight.minted))
+[31] (./log/_minted/447EACFCEB2A0EB7A9C8EE42A047514E.highlight.minted))
 (./src/7.tex
-<src/abbildungen/gnu.jpg, id=287, 903.375pt x 451.6875pt>
+<src/abbildungen/gnu.jpg, id=282, 903.375pt x 451.6875pt>
 File: src/abbildungen/gnu.jpg Graphic file (type jpg)
 <use src/abbildungen/gnu.jpg>
-Package luatex.def Info: src/abbildungen/gnu.jpg  used on input line 9.
+Package luatex.def Info: src/abbildungen/gnu.jpg  used on input line 11.
 (luatex.def)             Requested size: 291.28238pt x 145.64569pt.
 
 
-[33] (./log/_minted/C9CD009321BFE887C5D2B033EF749659.highlight.minted
+[32] (./log/_minted/C9CD009321BFE887C5D2B033EF749659.highlight.minted
 
-[34<./src/abbildungen/gnu.jpg>])
+[33<./src/abbildungen/gnu.jpg>])
 
-[35] (./log/_minted/241DF5919D4D13C63F8260A107D8E19F.highlight.minted)
+[34] (./log/_minted/241DF5919D4D13C63F8260A107D8E19F.highlight.minted)
 (./log/_minted/57DE1C9FEA3A020FECC48DBD2C852181.highlight.minted
 
-[36]) (./log/_minted/86FCD1F37C349E6FE5E666A28D430CD6.highlight.minted)
+[35]) (./log/_minted/86FCD1F37C349E6FE5E666A28D430CD6.highlight.minted)
 (./log/_minted/619BC6ECFAA2B33095F947F5E5775E0A.highlight.minted
 
-[37])
+[36])
 
-[38] (./log/_minted/9C37E09F2C1FDC42C2D759730A978F13.highlight.minted)
-Overfull \hbox (8.8035pt too wide) in paragraph at lines 97--100
+[37] (./log/_minted/9C37E09F2C1FDC42C2D759730A978F13.highlight.minted)
+Overfull \hbox (8.8035pt too wide) in paragraph at lines 99--102
 []\TU/TeXGyreTermes(0)/m/n/12 Vor den vor-ge-nom-me-nen Än-de-run-gen ha-ben wi
 r ei-nen um-fang-rei-chen Netzwerk- und Performance-
  []
 
 
 
-[39]
-Overfull \hbox (1.8355pt too wide) in paragraph at lines 103--104
+[38]
+Overfull \hbox (1.8355pt too wide) in paragraph at lines 105--106
 \TU/TeXGyreTermes(0)/m/n/12 Wir ha-ben ei-nen er-wei-ter-ten Netzwerk- und Perfo
 rmance-Test mit dem Skript tcpdump-analyse.sh
  []
 
 
 
-[40] (./log/_minted/A76A2F6633822509DA193FDF60143679.highlight.minted)
+[39] (./log/_minted/A76A2F6633822509DA193FDF60143679.highlight.minted)
 
-[41] (./log/_minted/33B6DEB206B991FB3C54A778464750C9.highlight.minted)
+[40] (./log/_minted/33B6DEB206B991FB3C54A778464750C9.highlight.minted)
 (./log/_minted/A551727DFBB8932C7807FC74DB4D815D.highlight.minted
 
-[42])
+[41])
 
-[43]) (./src/8.tex
+[42]) (./src/8.tex
+
+[43]
 
 [44]
 
@@ -2258,19 +2256,9 @@ rmance-Test mit dem Skript tcpdump-analyse.sh
 
 [46]
 
-[47]
+[47])
 
 [48]
-Overfull \hbox (31.77252pt too wide) in paragraph at lines 56--57
-[][][]$\TU/lmtt/m/n/12 https://grafana.com/blog/2020/03/03/open-source-load-test
-ing-tool-review/$[][] 
- []
-
-
-
-[49])
-
-[50]
 
 LaTeX Warning: Empty bibliography on input line 343.
 
@@ -2281,17 +2269,23 @@ Package tocbasic Info: character protrusion at lof deactivated on input line 34
 
 \openout9 = hauptdatei.lof
 
+Overfull \hbox (31.77252pt too wide) in paragraph at lines 355--356
+[][][]$\TU/lmtt/m/n/12 https://grafana.com/blog/2020/03/03/open-source-load-test
+ing-tool-review/$[][] 
+ []
 
-[51]
-Package tocbasic Info: character protrusion at lol deactivated on input line 36
-2.
+
+
+[49]
+Package tocbasic Info: character protrusion at lol deactivated on input line 38
+4.
  (./log/hauptdatei.lol)
 \tf@lol=\write10
 
 \openout10 = hauptdatei.lol
 
 
-[52] (./src/basic_structure/erklaerung.tex
+[50] (./src/basic_structure/erklaerung.tex
 > Step: init table outer spec.
 > Step: parse table options.
 > Step: split table.
@@ -2301,17 +2295,17 @@ Package tocbasic Info: character protrusion at lol deactivated on input line 36
 > Step: calculate cell and line sizes.
 > Step: build the whole table.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 12--407
+Underfull \hbox (badness 10000) in paragraph at lines 12--429
 
  []
 
 
 
-[53] (./log/hauptdatei.aux
+[51] (./log/hauptdatei.aux
 ! Missing \endcsname inserted.
 <to be read again> 
 \protect 
-l.90 ...}{27}{\captiontitle }{listing.caption.38}{}}
+l.90 ...}{26}{\captiontitle }{listing.caption.38}{}}
                                                   
 The control sequence marked <to be read again> should
 not appear between \csname and \endcsname.
@@ -2319,7 +2313,7 @@ not appear between \csname and \endcsname.
 ! Missing \endcsname inserted.
 <to be read again> 
 \protect 
-l.90 ...}{27}{\captiontitle }{listing.caption.38}{}}
+l.90 ...}{26}{\captiontitle }{listing.caption.38}{}}
                                                   
 The control sequence marked <to be read again> should
 not appear between \csname and \endcsname.
@@ -2327,7 +2321,7 @@ not appear between \csname and \endcsname.
 ! Extra \endcsname.
 \@testdef ...r \bbl@tempa \csname #1@#2\endcsname 
                                                   \def \bbl@tempb {#3}\@safe...
-l.90 ...}{27}{\captiontitle }{listing.caption.38}{}}
+l.90 ...}{26}{\captiontitle }{listing.caption.38}{}}
                                                   
 I'm ignoring this, since I wasn't doing a \csname.
 
@@ -2346,12 +2340,12 @@ Package logreq Info: Writing requests to 'hauptdatei.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 73522 strings out of 475518
+ 73519 strings out of 475518
  125009,3417909 words of node,token memory allocated
  1623 words of node memory still in use:
    7 hlist, 1 vlist, 1 rule, 2 local_par, 118 glue, 3 kern, 2 penalty, 1 margin_
 kern, 8 glyph, 64 attribute, 72 glue_spec, 33 attribute_list, 1 write nodes
-   avail lists: 1:4,2:3402,3:553,4:558,5:1052,6:231,7:9451,8:73,9:2061,10:88,11:
+   avail lists: 1:5,2:3402,3:698,4:558,5:1052,6:231,7:9451,8:73,9:2061,10:88,11:
 1143,12:1
  94865 multiletter control sequences out of 65536+600000
  90 fonts using 11379599 bytes
@@ -2367,10 +2361,10 @@ etermes-bold.otf></usr/share/texmf/fonts/opentype/public/tex-gyre/texgyreadvento
 r-regular.otf></usr/share/texmf/fonts/opentype/public/tex-gyre/texgyreadventor-b
 old.otf></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/font
 s/type1/public/lm/lmsy6.pfb>
-Output written on hauptdatei.pdf (53 pages, 917669 bytes).
+Output written on hauptdatei.pdf (51 pages, 918542 bytes).
 
-PDF statistics: 651 PDF objects out of 1000 (max. 8388607)
- 358 compressed objects within 4 object streams
- 144 named destinations out of 1000 (max. 131072)
+PDF statistics: 640 PDF objects out of 1000 (max. 8388607)
+ 349 compressed objects within 4 object streams
+ 141 named destinations out of 1000 (max. 131072)
  383 words of extra memory for PDF output out of 10000 (max. 100000000)
 

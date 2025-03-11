@@ -12,35 +12,35 @@
 \contentsline {section}{\numberline {4}Technologische Grundlagen}{7}{section.13}%
 \contentsline {subsection}{\numberline {4.1}Docker: Grundlagen und Anwendung}{7}{subsection.14}%
 \contentsline {subsection}{\numberline {4.2}Das ISO/OSI-Modell}{8}{subsection.15}%
-\contentsline {section}{\numberline {5}Projektidee und Vorhaben}{12}{section.18}%
-\contentsline {subsection}{\numberline {5.1}Die Verezeichnisstruktur}{14}{subsection.21}%
-\contentsline {section}{\numberline {6}Systemarchitektur}{19}{section.25}%
-\contentsline {subsection}{\numberline {6.1}Apache}{20}{subsection.26}%
-\contentsline {subsection}{\numberline {6.2}HAProxy}{23}{subsection.30}%
-\contentsline {subsection}{\numberline {6.3}MariaDB (Datenbank)}{27}{subsection.36}%
-\contentsline {subsubsection}{\numberline {6.3.1}Datenbank-Erstellung und Benutzerverwaltung}{27}{subsubsection.37}%
-\contentsline {subsubsection}{\numberline {6.3.2}Tabellenstruktur für ToDo-Einträge}{27}{subsubsection.40}%
-\contentsline {subsubsection}{\numberline {6.3.3}Benutzerverwaltung und Authentifizierung}{28}{subsubsection.42}%
-\contentsline {subsection}{\numberline {6.4}Redis}{29}{subsection.45}%
-\contentsline {subsubsection}{\numberline {6.4.1}Logout-Prozess}{32}{subsubsection.54}%
-\contentsline {section}{\numberline {7}Implementierung und Ergebnisse}{33}{section.59}%
-\contentsline {subsection}{\numberline {7.1}MariaDB Stresstest}{35}{subsection.61}%
-\contentsline {subsection}{\numberline {7.2}Redis Benchmark}{36}{subsection.63}%
-\contentsline {subsection}{\numberline {7.3}HAProxy Lasttest}{37}{subsection.65}%
-\contentsline {subsubsection}{\numberline {7.3.1}Curl}{37}{subsubsection.66}%
-\contentsline {subsubsection}{\numberline {7.3.2}Wrk}{37}{subsubsection.69}%
-\contentsline {subsection}{\numberline {7.4}TCP Dump – Netzwerk- und Performance-Test}{39}{subsection.71}%
-\contentsline {subsubsection}{\numberline {7.4.1}Erweiterter Netzwerk- und Performance-Test}{40}{subsubsection.73}%
-\contentsline {subsection}{\numberline {7.5}k6 Lasttest – Performance-Analyse von HAProxy und Apache}{40}{subsection.74}%
-\contentsline {subsubsection}{\numberline {7.5.1}k6 Login-Lasttest}{41}{subsubsection.76}%
-\contentsline {subsubsection}{\numberline {7.5.2}k6 Add-ToDo-Liste}{42}{subsubsection.78}%
-\contentsline {section}{\numberline {8}Fazit und Ausblick}{44}{section.80}%
-\contentsline {subsection}{\numberline {8.1}Celal}{44}{subsection.81}%
-\contentsline {subsection}{\numberline {8.2}Mert}{45}{subsection.82}%
-\contentsline {subsection}{\numberline {8.3}Mohammed}{46}{subsection.83}%
-\contentsline {subsection}{\numberline {8.4}Mustafa}{48}{subsection.84}%
-\contentsline {section}{Literaturverzeichnis}{51}{section*.86}%
-\contentsline {section}{Abbildungsverzeichnis}{51}{section*.87}%
-\contentsline {section}{Listingverzeichnis}{52}{section*.88}%
-\contentsline {section}{Selbstständigkeitserklärung}{53}{section*.89}%
+\contentsline {section}{\numberline {5}Projektidee und Vorhaben}{11}{section.18}%
+\contentsline {subsection}{\numberline {5.1}Die Verezeichnisstruktur}{13}{subsection.21}%
+\contentsline {section}{\numberline {6}Systemarchitektur}{18}{section.25}%
+\contentsline {subsection}{\numberline {6.1}Apache}{19}{subsection.26}%
+\contentsline {subsection}{\numberline {6.2}HAProxy}{22}{subsection.30}%
+\contentsline {subsection}{\numberline {6.3}MariaDB (Datenbank)}{26}{subsection.36}%
+\contentsline {subsubsection}{\numberline {6.3.1}Datenbank-Erstellung und Benutzerverwaltung}{26}{subsubsection.37}%
+\contentsline {subsubsection}{\numberline {6.3.2}Tabellenstruktur für ToDo-Einträge}{26}{subsubsection.40}%
+\contentsline {subsubsection}{\numberline {6.3.3}Benutzerverwaltung und Authentifizierung}{27}{subsubsection.42}%
+\contentsline {subsection}{\numberline {6.4}Redis}{28}{subsection.45}%
+\contentsline {subsubsection}{\numberline {6.4.1}Logout-Prozess}{31}{subsubsection.54}%
+\contentsline {section}{\numberline {7}Implementierung und Ergebnisse}{32}{section.59}%
+\contentsline {subsection}{\numberline {7.1}MariaDB Stresstest}{34}{subsection.61}%
+\contentsline {subsection}{\numberline {7.2}Redis Benchmark}{35}{subsection.63}%
+\contentsline {subsection}{\numberline {7.3}HAProxy Lasttest}{36}{subsection.65}%
+\contentsline {subsubsection}{\numberline {7.3.1}Curl}{36}{subsubsection.66}%
+\contentsline {subsubsection}{\numberline {7.3.2}Wrk}{36}{subsubsection.69}%
+\contentsline {subsection}{\numberline {7.4}TCP Dump – Netzwerk- und Performance-Test}{38}{subsection.71}%
+\contentsline {subsubsection}{\numberline {7.4.1}Erweiterter Netzwerk- und Performance-Test}{39}{subsubsection.73}%
+\contentsline {subsection}{\numberline {7.5}k6 Lasttest – Performance-Analyse von HAProxy und Apache}{39}{subsection.74}%
+\contentsline {subsubsection}{\numberline {7.5.1}k6 Login-Lasttest}{40}{subsubsection.76}%
+\contentsline {subsubsection}{\numberline {7.5.2}k6 Add-ToDo-Liste}{41}{subsubsection.78}%
+\contentsline {section}{\numberline {8}Fazit und Ausblick}{43}{section.80}%
+\contentsline {subsection}{\numberline {8.1}Celal}{43}{subsection.81}%
+\contentsline {subsection}{\numberline {8.2}Mert}{44}{subsection.82}%
+\contentsline {subsection}{\numberline {8.3}Mohammed}{45}{subsection.83}%
+\contentsline {subsection}{\numberline {8.4}Mustafa}{47}{subsection.84}%
+\contentsline {section}{Literaturverzeichnis}{49}{section*.85}%
+\contentsline {section}{Abbildungsverzeichnis}{49}{section*.86}%
+\contentsline {section}{Listingverzeichnis}{50}{section*.87}%
+\contentsline {section}{Selbstständigkeitserklärung}{51}{section*.88}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
