@@ -24,7 +24,8 @@ Ein weiterer Schritt zur Optimierung unserer Webanwendung war die Implementierun
 Um die Lastverteilung der eingehenden Anfragen weiter zu optimieren, haben wir ein Load Balancing-System mit der Round-Robin-Methode implementiert. Diese Methode sorgt dafür, dass eingehende Anfragen gleichmäßig auf mehrere Webserver (Apache-Container) verteilt werden. Dies verhindert, dass einzelne Container überlastet werden und erhöht die Verfügbarkeit und Stabilität der Anwendung.
 \subsubsection{Skalierung der Apache-Container}
 Zusätzlich zum Load Balancing haben wir unsere Infrastruktur erweitert und insgesamt drei Apache-Container erstellt. Durch diese Maßnahme wird die Last nicht nur auf einen, sondern auf drei unabhängige Container verteilt. Dies sorgt für eine gleichmäßigere Verteilung der Anfragen und reduziert die Wahrscheinlichkeit von Engpässen und Verzögerungen.
-
+\subsubsection{Ergebnis der Optimierung}
+Mit diesen Maßnahmen – der CPU-Begrenzung, dem Einsatz von Redis zur Caching-Optimierung, dem Load Balancing mit Round Robin und der Skalierung auf drei Apache-Container – konnten wir die Performance unserer Webanwendung erheblich verbessern. Die Anwendung reagiert nun schneller, bleibt stabiler und ist besser gegen Lastspitzen gewappnet. Diese Kombination aus Maßnahmen hat unsere Infrastruktur robuster und skalierbarer gemacht und ermöglicht eine effizientere Nutzung der Anwendung.
 
 \subsection{MariaDB Stresstest}
 \begin{code}{mariadb\_sysbench.sh}{mariadb}
