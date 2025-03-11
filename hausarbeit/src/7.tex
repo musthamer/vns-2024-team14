@@ -1,161 +1,213 @@
 \section{Implementierung und Ergebnisse}
 In modernen vernetzten Systemen ist die Leistungsfähigkeit und Stabilität der Infrastruktur von entscheidender Bedeutung. Mit der zunehmenden Komplexität von Anwendungen und der steigenden Anzahl gleichzeitiger Nutzer wird es immer wichtiger, die Grenzen der Systeme zu verstehen und sicherzustellen, dass sie auch unter hoher Last zuverlässig funktionieren. Lasttests sind ein unverzichtbares Werkzeug, um die Performance, Skalierbarkeit und Stabilität von Systemen zu bewerten. Sie simulieren reale Belastungsszenarien und helfen, Engpässe, Schwachstellen und Optimierungspotenziale zu identifizieren.
 
-In unserem Projekt haben wir umfangreiche Lasttests durchgeführt, um die Leistungsfähigkeit unserer Infrastruktur zu überprüfen. Dabei haben wir verschiedene Komponenten wie HAProxy, MariaDB und Redis unter die Lupe genommen. Mithilfe von Tools wie wrk, sysbench, k6, Tcp-dump, Curl und Redis-Benchmark haben wir gezielt hohe Last erzeugt und die Reaktion des Systems analysiert. Die Ergebnisse dieser Tests liefern wertvolle Einblicke in das Verhalten unserer Anwendung unter realistischen Bedingungen und zeigen, wie gut das System mit einer großen Anzahl gleichzeitiger Anfragen umgehen kann.
+In unserem Projekt haben wir umfangreiche Lasttests durchgeführt, um die Leistungsfähigkeit unserer Infrastruktur zu überprüfen. Dabei haben wir verschiedene Komponenten wie HAProxy, MariaDB und Redis unter die Lupe genommen. Mithilfe von Tools wie wrk, sysbench, k6, tcpdump, Curl und Redis-Benchmark haben wir gezielt hohe Last erzeugt und die Reaktion des Systems analysiert. Die Ergebnisse dieser Tests liefern wertvolle Einblicke in das Verhalten unserer Anwendung unter realistischen Bedingungen und zeigen, wie gut das System mit einer großen Anzahl gleichzeitiger Anfragen umgehen kann.
 
-Ein besonderer Fokus lag dabei auf der Datenbankperformance. MariaDB wurde mit intensiven Lese- und Schreiboperationen belastet, um zu überprüfen, wie effizient die Datenbank Anfragen verarbeitet und ob sie unter hoher Last stabil bleibt. Darüber hinaus haben wir die Lastverteilung durch HAProxy getestet, um sicherzustellen, dass Anfragen korrekt an die Backend-Server weitergeleitet werden und keine Engpässe entstehen. Auch die Performance von Redis als In-Memory-Cache wurde untersucht, um die Geschwindigkeit des Systems bei häufig abgerufenen Daten zu optimieren.
 
-Die Ergebnisse unserer Lasttests zeigen, dass unser System insgesamt stabil und leistungsfähig ist. Allerdings gab es vereinzelt Latenzspitzen und Fehler, die auf Optimierungsbedarf hinweisen. Diese Erkenntnisse sind entscheidend, um die Infrastruktur weiter zu verbessern und sicherzustellen, dass sie auch in Zukunft zuverlässig arbeitet. In den folgenden Abschnitten werden wir die Methodik, Durchführung und Ergebnisse der Lasttests detailliert darstellen und diskutieren.
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=0.65\textwidth]{src/abbildungen/gnu.jpg}
+        \caption{Gnuplot}
+\end{figure}
+\FloatBarrier
 
+In dieser Grafik wird die CPU-Auslastung der verschiedenen Server-Komponenten über einen Zeitraum von 30 Minuten dargestellt. Die getesteten Services umfassen Apache-1, Apache-2, Apache-3, HAProxy, MariaDB und Redis. Während dieser Zeit wurden verschiedene Lasttests und Analysen durchgeführt, um die Performance und Stabilität des Systems zu überprüfen. Es wurden folgende Tools eingesetzt: k6 für das Testen der HTTP-Performance und der ToDo-List-Funktionalität, wrk für das Belastungstesten von HAProxy zur Simulation hoher Zugriffszahlen, MariaDB sysbench für die Überprüfung der Leistungsfähigkeit der Datenbank, Redis-Benchmark zur Messung der Geschwindigkeit und Stabilität von Redis sowie tcpdump zur Netzwerkanalyse und Aufzeichnung des gesamten Datenverkehrs. Die Grafik zeigt deutliche Spitzenlasten, insbesondere bei den Apache-Servern und HAProxy, die bei Spitzenwerten die CPU stark beanspruchen. Redis und MariaDB zeigen ebenfalls gelegentliche CPU-Peaks, was auf intensive Datenbankoperationen und Cache-Interaktionen hinweist. Zwischen den Lastspitzen herrscht eine niedrige Grundlast, was auf einen stabilen Leerlauf hinweist. Die durchgeführten Tests deckten alle Komponenten ab, einschließlich der individuellen Apache-Instanzen und der gesamten Infrastruktur. Die Nutzung von k6, wrk, sysbench und redis-benchmark sowie die Analyse mit tcpdump ermöglichte eine umfassende Performance- und Stabilitätsbewertung.   
+Um das System zu verbessern, könnte ein automatisches System erstellt werden, das neue Apache-Server hinzufügt, wenn die CPU-Auslastung zu hoch wird. Dieses System würde ständig die CPU-Last der Apache-Server überwachen. Wenn einer der Server 80\% CPU-Auslastung erreicht, startet das System automatisch einen neuen Apache-Container. Dieser neue Server wird dann direkt in HAProxy eingebunden, damit der Datenverkehr gleichmäßig auf alle Apache-Server verteilt wird. Dadurch sinkt die Auslastung jedes einzelnen Apache-Servers, und das System bleibt stabil. So kann das System auch bei vielen Nutzern flüssig arbeiten und lange Wartezeiten vermeiden. Mit dieser Lösung passt sich das System automatisch an die aktuelle Belastung an und sorgt für eine bessere Leistung.
 
 \subsection{MariaDB Stresstest}
-Um die Leistungsfähigkeit unserer MariaDB-Datenbank unter realistischen Bedingungen zu testen, haben wir einen umfangreichen Stresstest durchgeführt. Ziel war es, herauszufinden, wie gut die Datenbank mit einer hohen Anzahl gleichzeitiger Anfragen zurechtkommt. Dafür haben wir das Tool Sysbench verwendet, das sich hervorragend eignet, um die Performance von Datenbanken unter Last zu messen. 
+\begin{code}{mariadb\_sysbench.sh}{mariadb}
+        \begin{minted}{latex}
+docker exec -i work sysbench --db-driver=mysql \
+    --mysql-host=mariadb --mysql-user=dbuser --mysql-password=12345 \
+    --mysql-db=todo_app --tables=20 oltp_read_write cleanup  | prepare | 
+oltp_read_only run
+        \end{minted}
+\end{code}
 
-Zunächst haben wir sichergestellt, dass Sysbench auf unserem Work-Container installiert ist. Anschließend haben wir 15 Tabellen mit jeweils 20.000 Datensätzen erstellt, um eine realistische Auslastung zu simulieren. Mit diesem Setup haben wir zwei Haupttests durchgeführt: einen Lese-Last-Test und einen Schreib-Last-Test. 
-
-Beim Lese-Last-Test haben wir untersucht, wie schnell die Datenbank auf eine große Anzahl gleichzeitiger SELECT-Abfragen reagiert. Die Ergebnisse waren beeindruckend: Im Durchschnitt wurden 18.502 Abfragen pro Sekunde verarbeitet, was einer Rate von 1.156 Transaktionen pro Sekunde entspricht. Die durchschnittliche Latenz, also die Zeit, die eine Anfrage benötigt, lag bei 17,28 Millisekunden. Besonders erfreulich war, dass 95\% der Abfragen in weniger als 34,33 Millisekunden abgeschlossen wurden. Allerdings gab es vereinzelte Spitzenwerte, bei denen die Latenz auf bis zu 217,96 Millisekunden anstieg. Dennoch blieb die Datenbank stabil, und es gab keine Verbindungsabbrüche oder fehlerhaften Abfragen. 
-
-Der Schreib-Last-Test konzentrierte sich darauf, wie effizient die Datenbank INSERT- und UPDATE-Abfragen verarbeiten kann. Hier erreichten wir eine Rate von 13.631 Abfragen pro Sekunde bei 2.271 Transaktionen pro Sekunde. Die durchschnittliche Latenz lag bei 8,79 Millisekunden, und 95\% der Abfragen wurden in weniger als 17,95 Millisekunden abgeschlossen. Die maximale Latenz betrug hier 199,20 Millisekunden. Auch in diesem Test gab es nur eine einzige Fehlermeldung, die jedoch ignoriert werden konnte, da sie keinen Einfluss auf die Gesamtperformance hatte. 
-
-Was bedeuten diese Ergebnisse für uns? Insgesamt zeigt der Test, dass MariaDB auch unter hoher Last stabil und zuverlässig arbeitet. Die hohe Anzahl an Transaktionen pro Sekunde ist ein klarer Indikator dafür, dass die Datenbank effizient arbeitet. Allerdings haben wir festgestellt, dass es bei extrem hoher Last zu Latenzspitzen kommt, insbesondere beim Lese-Test. Diese Spitzen könnten darauf hinweisen, dass noch Optimierungspotenzial besteht. 
-
-Mögliche Ansatzpunkte für Verbesserungen sind die Optimierung von Indizes, um Daten schneller zu finden, die Implementierung von Query-Caching, um wiederholte Anfragen effizienter zu bearbeiten, und eine bessere Lastverteilung, um Engpässe zu vermeiden. 
-
-Zusammenfassend lässt sich sagen, dass MariaDB eine solide und leistungsfähige Datenbank ist, die auch unter hoher Belastung stabil läuft. Mit einigen gezielten Optimierungen könnten wir jedoch die Performance weiter verbessern und die Latenzspitzen reduzieren. Dieser Test hat uns wertvolle Einblicke geliefert, und wir sind zuversichtlich, dass wir die Datenbank noch effizienter machen können. 
-
+Der Befehl docker exec -i work sysbench wird genutzt, um im Docker-Container work den Sysbench-Test auszuführen. Sysbench ist ein Testprogramm, das speziell dafür gemacht ist, die Leistung von Datenbanken wie MariaDB zu prüfen. Mit dem Parameter --db-driver=mysql wird festgelegt, dass der Test für eine MySQL-kompatible Datenbank gedacht ist. Die Verbindungsdaten zur Datenbank werden mit --mysql-host=mariadb, --mysql-user=dbuser und --mysql-password=12345 angegeben. Die Datenbank, die getestet werden soll, heißt todo\_app und wird durch --mysql-db=todo\_app festgelegt. Der Befehl --tables=20 sorgt dafür, dass 20 Tabellen erstellt werden, was die Datenbank ähnlich wie in einem echten Einsatz belastet. Es gibt verschiedene Modi im Befehl: Mit oltp\_read\_write cleanup werden alte Testdaten und Tabellen gelöscht, damit ein sauberer Neustart erfolgen kann. Der Modus prepare erstellt neue Testtabellen und füllt diese mit Daten. So wird eine Grundlage für die späteren Tests geschaffen. Der Modus oltp\_read\_only run führt einen Lese-Test durch. Hierbei wird geprüft, wie schnell und gut die Datenbank viele Abfragen auf einmal bearbeiten kann. Diese Kombination von Befehlen hilft uns zu verstehen, wie stabil und leistungsfähig die Datenbank bei starker Belastung arbeitet.
+Vor der Änderung: Wir haben unsere MariaDB-Datenbank einem Belastungstest unterzogen, um ihre Stabilität und Leistung zu überprüfen. In der ursprünglichen Konfiguration haben wir mehrere Tabellen mit vielen Datensätzen erstellt, um eine realistische Belastung zu simulieren. Wir führten dabei zwei Tests durch: einen Lese-Test und einen Schreib-Test. Beim Lese-Test wurde geprüft, wie schnell die Datenbank auf viele gleichzeitige Abfragen reagieren kann. Die Ergebnisse waren gut und die Datenbank blieb stabil. Auch beim Schreib-Test zeigte sich, dass die Datenbank zuverlässig arbeitet und nur gelegentlich Verzögerungen auftraten, die jedoch unkritisch blieben.
+Nach der Änderung haben wir die CPU-Leistung aller Container auf 1 begrenzt – außer bei der MariaDB, die auf 2 gesetzt wurde – und einen dritten Apache-Server hinzugefügt. Trotz dieser Anpassungen blieb die MariaDB-Datenbank stabil und zuverlässig. Im Lese-Test gab es leichte Verzögerungen, die jedoch akzeptabel waren und keine gravierenden Probleme verursachten. Manche Abfragen dauerten etwas länger als zuvor, jedoch war der Unterschied gering. Im Schreib-Test hingegen zeigte sich eine positive Veränderung: Die Effizienz bei der Verarbeitung von Einfügungs- und Änderungsabfragen verbesserte sich leicht, was auf eine optimierte Ressourcennutzung hindeutet. Dies führte dazu, dass die Datenbank insgesamt noch stabiler und effizienter arbeitete.
 
 \subsection{Redis Benchmark}
-Um die Leistungsfähigkeit unseres Redis-Servers zu testen, haben wir einen umfangreichen Benchmark durchgeführt. Ziel war es, herauszufinden, wie gut Redis mit einer hohen Anzahl gleichzeitiger Anfragen umgehen kann. Dafür haben wir das Redis-Benchmark-Tool verwendet, das speziell für solche Lasttests entwickelt wurde.
 
-Der Test bestand aus zwei Hauptkomponenten: SET-Operationen, bei denen Daten in Redis gespeichert werden, und GET-Operationen, bei denen Daten aus Redis abgerufen werden. Um eine realistische Last zu simulieren, haben wir 100.000 Anfragen mit 50 parallelen Clients durchgeführt.
+Um die Leistung unseres Redis-Servers unter realistischen Bedingungen zu überprüfen, haben wir einen umfangreichen Benchmark-Test durchgeführt. Hierfür verwendeten wir das Tool Redis-Benchmark, das speziell zur Bewertung der Leistungsfähigkeit von Redis entwickelt wurde. Der Test wurde direkt innerhalb des Redis-Containers mit dem folgenden Befehl gestartet:
 
-Die Ergebnisse im Detail
+\begin{code}{Redis-Befehl}{redis}
+        \begin{minted}{latex}
+docker exec -ti redis redis-benchmark -p 6379 -a foobared -t set,get -n \$anzahl\_db
+  \end{minted}
+\end{code}
 
-Bei den SET-Operationen, also dem Schreiben von Daten in Redis, wurden alle 100.000 Anfragen in nur 1,18 Sekunden abgeschlossen. Das entspricht einem beeindruckenden Durchsatz von 84.388 Anfragen pro Sekunde. Die durchschnittliche Latenz lag bei 0,320 Millisekunden, und 95\% aller Anfragen wurden in weniger als 0,471 Millisekunden abgeschlossen. Die maximale Latenz betrug 3,399 Millisekunden. Diese Ergebnisse zeigen, dass Redis Daten extrem schnell speichern kann, mit einer durchschnittlichen Verzögerung von weniger als einer halben Millisekunde.
-
-Bei den GET-Operationen, also dem Abrufen von Daten aus Redis, wurden die 100.000 Anfragen in 1,45 Sekunden abgeschlossen. Der Durchsatz lag hier bei 69.204 Anfragen pro Sekunde, und die durchschnittliche Latenz betrug 0,377 Millisekunden. 95\% der Anfragen wurden in weniger als 0,599 Millisekunden abgeschlossen, während die maximale Latenz bei 11,087 Millisekunden lag. Auch hier zeigt sich, dass Redis unglaublich schnell ist, allerdings mit etwas höheren Latenzen als beim Schreiben.
-
-Was bedeuten diese Ergebnisse für uns?
-
-Die Ergebnisse des Benchmarks bestätigen, dass Redis eine extrem leistungsfähige In-Memory-Datenbank ist, die in der Lage ist, eine sehr hohe Anzahl von Anfragen in kürzester Zeit zu verarbeiten. Selbst bei 50 gleichzeitigen Clients bleiben die Antwortzeiten sehr niedrig, was Redis zu einer hervorragenden Wahl für Anwendungen macht, die schnellen Datenzugriff erfordern.
-
-Allerdings haben wir festgestellt, dass die Latenz im GET-Test etwas höher ist als im SET-Test. Dies könnte verschiedene Ursachen haben. Zum einen könnten Cache-Misses eine Rolle spielen, bei denen einige Anfragen nicht direkt im Speicher gefunden werden und daher länger dauern. Zum anderen könnten Netzwerkverzögerungen oder eine höhere Systembelastung durch andere parallel laufende Prozesse zu den leicht erhöhten Latenzen beigetragen haben.
+Vor der Änderung: Wir haben unseren Redis-Server einem umfangreichen Benchmark-Test unterzogen, um seine Leistung und Stabilität zu analysieren. Der Test umfasste sowohl SET- als auch GET-Operationen. In dieser ersten Testreihe führten wir 100.000 Anfragen mit 50 parallelen Clients durch. Beim SET-Test zeigte Redis beeindruckende Ergebnisse und verarbeitete alle Anfragen in sehr kurzer Zeit. Die durchschnittliche Latenz war extrem niedrig, und auch die maximale Latenz blieb im akzeptablen Bereich. Im GET-Test verlief der Test ähnlich stabil, wobei die Latenz hier etwas höher war als beim SET-Test. Diese etwas höheren Verzögerungen könnten auf Cache-Misses oder Netzwerkverzögerungen zurückzuführen sein. Insgesamt zeigte Redis in diesem Test eine sehr gute Performance und blieb auch unter hoher Last stabil und zuverlässig.
+Nach der Änderung, bei der wir die CPU-Kapazität aller Container auf 1 begrenzt haben (außer MariaDB auf 2) und einen dritten Apache-Server hinzugefügt haben, wiederholten wir den Redis-Benchmark-Test mit einer erhöhten Anzahl von Anfragen – insgesamt 1.000.000 SET- und GET-Anfragen. Auch hier wurde der Test mit 50 parallelen Clients und einer kleinen Payload von 3 Bytes durchgeführt. Im SET-Test konnte Redis 1.000.000 Anfragen in 39,20 Sekunden erfolgreich abschließen. Der Durchsatz lag bei 25.510 Anfragen pro Sekunde, und die durchschnittliche Latenz betrug 1,45 ms. Die maximale Latenz stieg jedoch auf 66,62 ms an. Im GET-Test verlief der Test sogar etwas besser als beim SET-Test. Hier wurden 1.000.000 Anfragen in 36,36 Sekunden abgeschlossen, was einem Durchsatz von 27.504 Anfragen pro Sekunde entspricht. Die durchschnittliche Latenz war mit 1,32 ms etwas geringer als beim SET-Test, jedoch lag die maximale Latenz bei 118,39 ms.
+Vergleicht man die Ergebnisse vor und nach der Änderung, fällt auf, dass die GET-Operationen nach der Änderung insgesamt etwas schneller verarbeitet wurden und eine bessere Performance zeigten. Die SET-Operationen hingegen waren nach der Änderung etwas langsamer, was vermutlich mit der begrenzten CPU-Kapazität und den zusätzlichen Apache-Servern zusammenhängt. Auch die maximalen Latenzwerte bei beiden Operationen sind nach der Änderung etwas angestiegen, was auf temporäre Engpässe oder Verzögerungen hinweisen könnte.
 
 
-Insgesamt zeigt der Benchmark, dass Redis eine äußerst leistungsfähige und zuverlässige Lösung für Anwendungen ist, die schnellen Datenzugriff erfordern. Die Ergebnisse sind zufriedenstellend und selbst unter hoher Last bleibt Redis stabil und schnell. Mit einigen gezielten Optimierungen, wie der Reduzierung von Cache-Misses oder der Minimierung von Netzwerkverzögerungen, könnten wir die Performance jedoch noch weiter verbessern.
+\subsection{HAProxy Lasttest}
+\subsubsection{Curl}
 
-\subsection{HAProxy Session-Stickiness}
-Um sicherzustellen, dass unsere Lastverteilung korrekt funktioniert und Benutzeranfragen während einer aktiven Session immer an denselben Server weitergeleitet werden, haben wir einen umfangreichen Session-Stickiness-Test mit HAProxy durchgeführt. Session Stickiness ist ein entscheidender Faktor, um eine konsistente Benutzererfahrung zu gewährleisten, da sie verhindert, dass Anfragen während einer Session zwischen verschiedenen Backend-Servern hin- und herspringen.
+\begin{code}{Beispielcode 1}{curl}
+        \begin{minted}{latex}
+for i in {1..10}; do
+    curl -s -i -c cookies.txt -d "username=admin&password=admin" \
+    "http://localhost:8000/cgi-bin/vns/todo/login.sh" | grep 'SERVERID'
 
-Der Test bestand aus mehreren Schritten, um die Funktionsweise von HAProxy unter die Lupe zu nehmen. Zunächst haben wir überprüft, ob Anfragen desselben Clients tatsächlich immer an denselben Backend-Server weitergeleitet werden. Dazu haben wir zehn aufeinanderfolgende Anfragen gesendet und analysiert, ob sie alle am selben Server ankamen. Zusätzlich haben wir die manuelle Cookie-Setzung getestet, indem wir explizit einen bestimmten Server (apache1) als Ziel vorgaben, um zu sehen, ob HAProxy diese Anweisung korrekt umsetzt.
+        \end{minted}
+\end{code}
 
-Der Test begann mit einer ersten Anfrage, bei der das HAProxy-Session-Cookie gespeichert wurde. Dieses Cookie enthält die Information, welcher Backend-Server für die aktuelle Session zuständig ist. Anschließend haben wir zehn weitere Anfragen gesendet, um zu überprüfen, ob HAProxy diese Anfragen tatsächlich an denselben Server weiterleitet. In einem zweiten Schritt haben wir die manuelle Cookie-Setzung getestet, indem wir den Server "apache1" explizit als Ziel angaben. Dies diente dazu, die Flexibilität und Genauigkeit des HAProxy-Routings zu überprüfen.
+\begin{code}{Beispielcode 2}{curl2}
+        \begin{minted}{latex}
+          or i in {1..10}; do curl -s -b cookies.txt "http://haproxy:80/cgi-bin/vns/todo/table3.sh" > /dev/null echo "Anfrage $i → SERVERID=$SERVERID" done
+        \end{minted}
+\end{code}
 
-Die Ergebnisse des Tests waren durchweg positiv. HAProxy leitete wiederholte Anfragen konsistent an denselben Server weiter, was bestätigt, dass die Session Stickiness korrekt funktioniert. Die Serverantworten zeigten, dass Apache als Backend-Server verwendet wurde, was die korrekte Funktionsweise der Stickiness unterstrich. Auch die manuelle Cookie-Setzung über "SERVERID=apache1" funktionierte einwandfrei, und HAProxy leitete die Anfragen wie erwartet an den angegebenen Server weiter. Darüber hinaus blieben die Antwortzeiten stabil und zeigten eine konsistente Geschwindigkeit, was darauf hindeutet, dass unser Load-Balancer effizient arbeitet und keine Engpässe verursacht.
+In unserem Projekt haben wir das Tool curl verwendet, um verschiedene Tests und Überprüfungen durchzuführen. Dabei lag der Fokus auf den Bereichen Login-Tests, Session-Stickiness und Load-Balancing. Mit curl haben wir getestet, ob sich Benutzer korrekt am System anmelden können. Dabei haben wir überprüft, ob eine erfolgreiche Anmeldung eine Session-ID erstellt und diese im Cookie gespeichert wird. Dies ist wichtig, um sicherzustellen, dass der Anmeldeprozess korrekt funktioniert. Ein weiterer Test überprüfte, ob ein Benutzer nach dem Login auf demselben Apache-Server bleibt, was als Session-Stickiness bekannt ist. Dies ist entscheidend für Benutzerkomfort und Datensicherheit, da ein Wechsel zwischen Servern während einer Sitzung Probleme verursachen kann. Zusätzlich haben wir mit curl simuliert, dass mehrere Benutzer sich neu anmelden und dabei geprüft, ob der Load-Balancer (HAProxy) die Anfragen fair auf alle Apache-Server verteilt. Dies zeigt, dass der Traffic gleichmäßig verteilt wird und keine Überlastung einzelner Server entsteht. Insgesamt war curl ein hilfreiches Tool, um die Funktionalität unseres Systems zu testen und sicherzustellen, dass sowohl der Login-Prozess, die Session-Stickiness als auch das Load-Balancing korrekt arbeiten. Durch diese Tests konnten wir mögliche Fehler in der Konfiguration erkennen und beheben.
 
-Was bedeuten diese Ergebnisse für uns? Der Test hat gezeigt, dass unser HAProxy-Setup mit Session Stickiness wie erwartet funktioniert. Dies bedeutet, dass Benutzeranfragen während einer Session nicht zwischen den Backend-Servern hin- und hergeschoben werden, was eine konsistente Benutzererfahrung gewährleistet. Gleichzeitig funktioniert die Cookie-basierte Steuerung von HAProxy zuverlässig, sodass wir Anfragen gezielt an bestimmte Server leiten können. Die stabilen Antwortzeiten bestätigen, dass unser Load-Balancer effizient arbeitet und auch unter Last keine Performance-Einbußen verursacht.
+\subsubsection{Wrk}
 
-Zusammenfassend lässt sich sagen, dass unser HAProxy-Setup mit Session Stickiness korrekt konfiguriert ist und zuverlässig arbeitet. Dies ist ein wichtiger Schritt, um eine konsistente und effiziente Benutzererfahrung zu gewährleisten. Mit diesem Setup können wir sicher sein, dass unsere Lastverteilung auch unter hoher Belastung stabil bleibt und unsere Anwendungen reibungslos funktionieren.
+Um die Leistungsfähigkeit unseres Systems unter Last zu testen, haben wir das Tool wrk verwendet. WRK ist ein leistungsstarkes und vielseitiges Benchmark-Tool, das speziell für das Testen von HTTP-Servern entwickelt wurde. Mit WRK lassen sich verschiedene Parameter wie die Anzahl der Threads, gleichzeitige Verbindungen und die Testdauer flexibel anpassen, um realistische Belastungsszenarien zu simulieren.
 
-\subsection{HAProxy Load-Balancing Test}
-Um die Leistungsfähigkeit und Stabilität unseres HAProxy-Setups zu überprüfen, haben wir einen umfangreichen Load-Balancing-Test durchgeführt. Für den Test haben wir das Tool wrk verwendet, das speziell für HTTP-Lasttests entwickelt wurde. Die Testbedingungen waren so gewählt, dass sie eine realistische Belastung simulieren: 4 Threads, 50 gleichzeitige Verbindungen und eine Testdauer von 10 Sekunden. Die getestete Instanz war unter der URL http://haproxy:80 erreichbar.
+\begin{code}{Wrk-Befehl}{Wrk}
+        \begin{minted}{latex}
+docker exec -ti work wrk -t10 -c100 -d10s http://haproxy:80
+        \end{minted}
+\end{code}
+Vor der Änderung haben wir unseren HAProxy einem erweiterten Load-Balancing-Test unterzogen, um die Leistungsfähigkeit unter erhöhter Last zu analysieren. Hierbei wurde der Test mit 10 Threads und 150 gleichzeitigen Verbindungen über einen Zeitraum von 30 Sekunden durchgeführt. Während dieses Tests wurden insgesamt 317.129 Anfragen erfolgreich verarbeitet, was einer durchschnittlichen Rate von 10.922 Anfragen pro Sekunde entspricht. Die durchschnittliche Latenz lag bei 15,24 Millisekunden und die maximale Latenz erreichte 249,78 Millisekunden. Trotz dieser insgesamt guten Ergebnisse traten während des Tests 5.618 Lese-Fehler und 150 Timeouts auf, was darauf hindeutet, dass das System unter dieser Last an seine Grenzen stößt. Dies deutete auf Optimierungspotenzial hin, beispielsweise durch Anpassungen der HAProxy-Konfiguration oder durch eine genauere Überwachung des Backend-Systems zur Identifikation möglicher Engpässe.
+Nach der Änderung, bei der die CPU-Kapazität aller Container auf 1 begrenzt und ein zusätzlicher Apache-Container hinzugefügt wurde (insgesamt 3 Apache-Instanzen), wurde der Lasttest mit HAProxy erneut durchgeführt. Diesmal wurde der Test mit 10 Threads und 100 gleichzeitigen Verbindungen über einen Zeitraum von 10 Sekunden durchgeführt. Die Ergebnisse zeigen, dass unser System unter diesen Bedingungen 85.576 Anfragen erfolgreich verarbeitet hat, was einer durchschnittlichen Rate von 8.501 Anfragen pro Sekunde entspricht. Die durchschnittliche Latenzzeit betrug 12,62 Millisekunden, was angesichts der CPU-Beschränkung und der zusätzlichen Apache-Instanz ein zufriedenstellender Wert ist. Die maximale gemessene Latenz lag bei 103,24 Millisekunden. Obwohl diese maximalen Latenzwerte höher als zuvor waren, blieb die Leistung im akzeptablen Bereich und zeigte, dass das System stabil arbeitet.
+Ein positiver Aspekt war die geringe Anzahl von nur 12 Lese-Fehlern bei dieser hohen Anzahl an Anfragen, was darauf hinweist, dass die Infrastruktur trotz der CPU-Drosselung stabil arbeitet und kaum Verbindungsprobleme auftraten. Die Datenübertragungsrate lag bei 15,66 MB/s und bestätigt, dass die Einführung eines zusätzlichen Apache-Containers zur besseren Lastverteilung beigetragen hat.
+Vergleicht man die Ergebnisse vor und nach der Änderung, wird deutlich, dass sich die durchschnittliche Latenz nach der Begrenzung der CPU-Kapazitäten und der Einführung eines zusätzlichen Apache-Containers leicht verbessert hat. Die maximale Latenz ist zwar gestiegen, jedoch noch im akzeptablen Rahmen. Positiv hervorzuheben ist die deutlich geringere Anzahl an Socket-Fehlern und die insgesamt stabile Performance des Systems. Dies zeigt, dass die hinzugefügte Apache-Instanz die Last effizienter verteilt und Engpässe verringert hat.
 
-Während des Tests wurden insgesamt 114.414 Anfragen erfolgreich verarbeitet. Die durchschnittliche Latenz lag bei 4,66 Millisekunden, was ein hervorragender Wert ist und die Effizienz unseres Systems unterstreicht. Die maximale Latenz betrug 62,49 Millisekunden, was ebenfalls noch im akzeptablen Bereich liegt. Pro Sekunde wurden im Schnitt 11.418,83 Anfragen bearbeitet, und die Übertragungsrate erreichte 21,03 MB/s. Es gab während des Tests 14 Lese-Fehler, was zwar nicht ideal ist, aber angesichts der Gesamtanzahl an Anfragen nur einen sehr geringen Anteil ausmacht. Verbindungsfehler, Schreibfehler oder Timeout-Probleme traten nicht auf.
-
-Diese Ergebnisse zeigen, dass unser HAProxy-Setup stabil läuft und mit einer hohen Anzahl von Anfragen gut zurechtkommt. Die Performance ist insgesamt sehr stark und verlässlich, was bedeutet, dass wir mit unserer aktuellen Konfiguration auf einem soliden Stand sind. Dennoch sollten wir die Lese-Fehler im Auge behalten und gegebenenfalls Maßnahmen ergreifen, um diese weiter zu minimieren. Mögliche Ansätze hierfür könnten Optimierungen in der Netzwerkverbindung oder eine Feinjustierung der HAProxy-Konfiguration sein. Zusätzlich könnte es sinnvoll sein, in zukünftigen Tests die Anzahl der Threads und gleichzeitigen Verbindungen zu erhöhen, um zu sehen, wie unser System bei noch stärkerer Belastung reagiert.
-
-\subsubsection{Erweiterter Load-Balancing Test unter erhöhter Last}
-Um unser System noch stärker zu fordern, haben wir einen zweiten Load-Balancing-Test durchgeführt, bei dem wir die Testbedingungen deutlich verschärft haben. Diesmal haben wir die Anzahl der Threads auf 10 und die gleichzeitigen Verbindungen auf 150 erhöht. Der Test lief über einen Zeitraum von 30 Sekunden und wurde ebenfalls mit wrk durchgeführt.
-
-In dieser Zeit wurden insgesamt 317.129 Anfragen verarbeitet und dabei 584,01 MB an Daten übertragen. Die durchschnittliche Latenz betrug 15,24 Millisekunden, wobei die höchste gemessene Latenz bei 249,78 Millisekunden lag. Die Anzahl der Anfragen pro Sekunde belief sich auf 10.922,29, was zeigt, dass unser System auch unter dieser deutlich höheren Last noch eine beeindruckende Performance liefern kann. Allerdings traten während des Tests 5.618 Lese-Fehler und 150 Timeouts auf. Obwohl dies im Vergleich zur Gesamtanzahl an Anfragen nur einen kleinen Prozentsatz ausmacht, deutet es darauf hin, dass das System unter dieser erhöhten Last an seine Grenzen stößt.
-
-Für uns bedeutet das, dass unser HAProxy-Setup auch bei höherer Last grundsätzlich stabil läuft und eine gute Performance bietet. Die durchschnittliche Latenz von 15,24 ms ist zwar etwas höher als beim vorherigen Test, liegt aber noch im akzeptablen Bereich. Die gestiegene Anzahl an Lese-Fehlern und Timeouts zeigt jedoch, dass hier noch Optimierungspotenzial besteht. Mögliche Maßnahmen zur Verbesserung könnten eine weitere Feinjustierung der HAProxy-Konfiguration sein, z. B. durch das Anpassen von Timeouts oder die Erhöhung der maximalen gleichzeitigen Verbindungen. Auch ein genaueres Monitoring des Backend-Systems könnte helfen, Engpässe oder Flaschenhälse zu identifizieren.
-
-\subsection{Umfassender Netzwerk- und Performance-Test}
-Um die Interaktion verschiedener Komponenten unserer Infrastruktur zu analysieren, haben wir einen umfangreichen Netzwerk- und Performance-Test mit unserem Skript tcpdump-alles.sh durchgeführt. Dieses Skript kombiniert mehrere Tools wie TCPDump, wrk, sysbench und redis-benchmark, um die Aktivität und Stabilität unserer Infrastruktur unter realistischen Bedingungen zu prüfen.
-
-Im ersten Schritt wurde die Netzwerkanalyse mit TCPDump gestartet, die sämtliche HTTP-, HTTPS-, MariaDB- und Redis-Anfragen erfasste. Parallel dazu wurde ein HTTP-Lasttest über HAProxy durchgeführt, bei dem wir mit curl und wrk mehrere GET-Anfragen an HAProxy gesendet haben, um den HTTP-Datenfluss zu simulieren. Danach folgte der MariaDB-Lasttest, bei dem mit sysbench eine intensive Schreib- und Lese-Belastung in der Datenbank erzeugt wurde. Anschließend wurde ein Redis-Benchmark durchgeführt, um die Performance von Redis beim Speichern und Abrufen von Daten zu testen. Abschließend erfolgten gezielte Tests mit Einzelzugriffen auf Redis, bei denen ein Key-Wert-Paar (todos_cache) gesetzt und ausgelesen wurde.
-
-Während der gesamten Testphase wurden 1.283.518 Netzwerkpakete erfasst, von denen keine vom Kernel verworfen wurden, was auf eine saubere Paketverarbeitung hinweist. Bei der Analyse der erfassten Daten konnten wir feststellen, dass insgesamt 201.013 HTTP-Anfragen an Port 80 gerichtet wurden, was die hohe Anzahl der GET- und POST-Operationen während der HAProxy-Tests widerspiegelt. Bei den MariaDB-Operationen (Port 3306) wurden 580.952 Anfragen gezählt, was zeigt, dass die Datenbank während der Tests stark belastet wurde. Zusätzlich wurden 400.836 Redis-Operationen (Port 6379) registriert, was auf einen intensiven Cache-Einsatz hinweist.
-
-Die HTTP-Statuscodes zeigten dabei überwiegend erfolgreiche Anfragen: 100.506 Anfragen erhielten den Statuscode 200 (OK), was auf eine fehlerfreie Verarbeitung hinweist. Allerdings gab es auch eine einzelne Anfrage mit dem Statuscode 400 (Bad Request), was auf einen fehlerhaften Request hinweisen könnte. Bei der detaillierten Fehleranalyse wurden 2 Fehler in den Logs erkannt, was in Anbetracht der hohen Gesamtanzahl an Anfragen minimal ist. Zusätzlich wurde 1 Timeout festgestellt, was darauf hindeutet, dass es möglicherweise kurzzeitig zu Verzögerungen in der Antwortzeit gekommen ist.
-
-
-Insgesamt zeigt der Test, dass unsere Infrastruktur stabil und leistungsfähig ist. Die hohe Anzahl an erfolgreich verarbeiteten Anfragen und der geringe Anteil an Fehlern sprechen für eine gut konfigurierte Umgebung. Die wenigen Fehler und das eine Timeout deuten darauf hin, dass unter sehr hoher Last gelegentlich kleine Verzögerungen auftreten können. Hier könnten Optimierungen an den Timeouts in HAProxy, MariaDB oder Redis vorgenommen werden, um das System noch robuster zu machen. Auch ein genaueres Monitoring der Netzwerkverbindungen könnte sinnvoll sein, um mögliche Flaschenhälse zu erkennen und zu beheben.
-Insgesamt sind wir mit den Ergebnissen sehr zufrieden, da unser System die umfangreiche Belastung gut bewältigt hat und zuverlässig auf alle Anfragen reagierte. Die Tests haben uns wertvolle Einblicke geliefert, und wir sind zuversichtlich, dass wir unsere Infrastruktur weiter optimieren können, um zukünftige Lastspitzen noch besser zu bewältigen.
 
 \subsection{TCP Dump – Netzwerk- und Performance-Test}
-Um die Aktivität und Stabilität unserer Infrastruktur unter realistischen Bedingungen zu analysieren, haben wir einen umfangreichen Netzwerk- und Performance-Test mit unserem Skript tcpdump-alles.sh durchgeführt. Dieses Skript kombiniert mehrere Tools wie TCPDump, wrk, sysbench und redis-benchmark, um die Interaktion verschiedener Komponenten wie HAProxy, MariaDB und Redis zu prüfen. 
+In unserem Projekt haben wir TCPDump gezielt eingesetzt, um die Netzwerkaktivitäten und die Kommunikation zwischen den verschiedenen Diensten wie HAProxy, MariaDB und Redis zu analysieren. Dabei wurde TCPDump als leistungsstarkes Tool verwendet, um den gesamten Datenverkehr in Echtzeit aufzuzeichnen und detaillierte Einblicke in die Paketübertragungen zu erhalten.
 
-Der Test begann mit einer Netzwerkanalyse mittels TCPDump, die sämtliche HTTP-, HTTPS-, MariaDB- und Redis-Anfragen erfasste. Parallel dazu wurde ein HTTP-Lasttest über HAProxy durchgeführt, bei dem wir mit curl und wrk mehrere GET-Anfragen an HAProxy gesendet haben, um den HTTP-Datenfluss zu simulieren. Anschließend folgte ein MariaDB-Lasttest, bei dem mit sysbench eine intensive Schreib- und Lese-Belastung in der Datenbank erzeugt wurde. Danach wurde ein Redis-Benchmark durchgeführt, um die Performance von Redis beim Speichern und Abrufen von Daten zu testen. Abschließend erfolgten gezielte Tests mit Einzelzugriffen auf Redis, bei denen ein Key-Wert-Paar (todos_cache) gesetzt und ausgelesen wurde. 
+\begin{code}{Tcpdump-alles.sh}{tcpdump}
+        \begin{minted}{latex}
+#Beispiel-Code-1:
+sudo tcpdump -i eth0 port 80 or port 3306 or port 6379 -w $LOG_DIR/network.pcap &
 
-Während der gesamten Testphase wurden 1.283.518 Netzwerkpakete erfasst, von denen keine vom Kernel verworfen wurden. Dies deutet auf eine saubere Paketverarbeitung und stabile Netzwerkbedingungen hin. Bei der Analyse der erfassten Daten zeigte sich, dass insgesamt 201.013 HTTP-Anfragen an Port 80 gerichtet wurden, was die hohe Anzahl der GET- und POST-Operationen während der HAProxy-Tests widerspiegelt. Bei den MariaDB-Operationen (Port 3306) wurden 580.952 Anfragen gezählt, was zeigt, dass die Datenbank während der Tests stark belastet wurde. Zusätzlich wurden 400.836 Redis-Operationen (Port 6379) registriert, was auf einen intensiven Cache-Einsatz hinweist. 
+#Beispiel-Code-2  
+tcpdump -r $LOG_DIR/network.pcap -nn port ...
 
-Die HTTP-Statuscodes zeigten überwiegend erfolgreiche Anfragen: 100.506 Anfragen erhielten den Statuscode 200 (OK), was auf eine fehlerfreie Verarbeitung hinweist. Allerdings gab es auch eine einzelne Anfrage mit dem Statuscode 400 (Bad Request), was möglicherweise auf einen fehlerhaften Request hindeutet. Bei der detaillierten Fehleranalyse wurden 2 Fehler in den Logs erkannt, was in Anbetracht der hohen Gesamtanzahl an Anfragen minimal ist. Zusätzlich wurde 1 Timeout festgestellt, was darauf hindeutet, dass es möglicherweise kurzzeitig zu Verzögerungen in der Antwortzeit gekommen ist. 
+        \end{minted}
+\end{code}
+
+Mit dem Befehl  Beispiel-Code-1   haben wir den gesamten Netzwerkverkehr für Haproxy (Port 80), MariaDB (Port 3306) und Redis (Port 6379) aufgezeichnet. Anschließend konnten wir mit Beispiel-Code-2 die aufgezeichneten Daten analysieren und so erkennen, welche Anfragen gestellt wurden und wie die Kommunikation zwischen den Diensten ablief.
+
+Vor den vorgenommenen Änderungen haben wir einen umfangreichen Netzwerk- und Performance-Test durchgeführt, um die Stabilität und Effizienz unserer Infrastruktur zu prüfen. Dabei wurde das Skript tcpdump-alles.sh verwendet, das mehrere Tools wie TCPDump, wrk, sysbench und redis-benchmark kombiniert. In diesem Test wurden sämtliche HTTP-, MariaDB- und Redis-Anfragen erfasst, während parallel dazu intensive Lasttests durchgeführt wurden. Besonders hervorzuheben war die hohe Anzahl an Netzwerkpaketen: 1.283.518 Pakete wurden während des Tests erfasst, ohne dass eines davon vom Kernel verworfen wurde – ein positives Zeichen für eine stabile Netzwerkumgebung. Während der Testphase wurden 201.013 HTTP-Anfragen, 580.952 MariaDB-Anfragen und 400.836 Redis-Operationen registriert. Die HTTP-Statuscodes zeigten überwiegend erfolgreiche Anfragen mit 100.506 erfolgreichen HTTP-200-Responses und nur einer einzigen HTTP-400-Fehlermeldung. In der detaillierten Fehleranalyse wurden lediglich zwei Fehler sowie ein Timeout festgestellt. Insgesamt bestätigten die Ergebnisse, dass unsere Infrastruktur stabil arbeitet, jedoch gelegentlich kleinere Verzögerungen unter sehr hoher Last auftreten können.
+Nach der vorgenommenen Anpassung, bei der die CPU-Leistung der Container auf 1 begrenzt (außer MariaDB auf 2) und ein zusätzlicher Apache-Server hinzugefügt wurde, wurde der Netzwerk- und Performance-Test erneut durchgeführt. Diesmal wurden während der 60-sekündigen Testphase insgesamt 595.028 Pakete erfasst, was auf eine weiterhin hohe Netzwerkauslastung und intensive Kommunikation zwischen den Diensten hinweist. Bei den HTTP-Anfragen über HAProxy wurden 128.819 Anfragen gezählt, von denen 64.409 erfolgreich mit einem HTTP-200-Statuscode beantwortet wurden. Es wurde erneut ein einzelner HTTP-400-Fehler festgestellt, was zeigt, dass der Anteil an fehlerhaften Anfragen weiterhin minimal blieb. Die Anzahl der MariaDB-Anfragen reduzierte sich auf 68, was zeigt, dass der Datenbankzugriff seltener erfolgte – ein Zeichen dafür, dass Redis als Cache-Dienst effektiver genutzt wurde. Redis verzeichnete erneut eine sehr hohe Aktivität mit insgesamt 400.836 Anfragen, was auf die intensive Nutzung von Redis als Cache-Mechanismus hindeutet.
+Ein Vergleich der Ergebnisse vor und nach den Änderungen zeigt, dass sich die Gesamtanzahl der erfassten Netzwerkpakete zwar reduziert hat, was auf eine effizientere Ressourcennutzung hindeutet. Besonders auffällig war die Reduktion der MariaDB-Anfragen, was den verstärkten Einsatz von Redis als Cache widerspiegelt und zu einer Entlastung der Datenbank führte. Positiv hervorzuheben ist zudem, dass nach den Änderungen keine Timeouts mehr auftraten und die Anzahl der Fehler mit 8 insgesamt gering blieb. Dies bestätigt, dass die vorgenommenen Anpassungen zur CPU-Beschränkung und der zusätzliche Apache-Server dazu beigetragen haben, die Infrastruktur effizienter und stabiler zu gestalten.
 
  
 \subsubsection{Erweiterter Netzwerk- und Performance-Test}
-Um noch detailliertere Einblicke in den Datenverkehr und mögliche Fehlerquellen zu erhalten, haben wir einen erweiterten Netzwerk- und Performance-Test mit unserem Skript tcpdump-analyse.sh durchgeführt. Dieses Skript ermöglicht es, die Laufzeit der Analyse flexibel festzulegen. Für diesen Test haben wir eine Laufzeit von 250 Sekunden gewählt.
-
-In dieser Zeit wurden insgesamt 355.313 Pakete erfasst. Alle Pakete wurden erfolgreich verarbeitet, und es gab keine vom Kernel verworfenen Pakete, was auf eine saubere Erfassung und stabile Netzwerkbedingungen hinweist. Bei der detaillierten Analyse der erfassten Daten zeigte sich, dass alle Pakete HTTP-Anfragen über Port 80 betrafen. Insgesamt wurden 355.313 HTTP-Anfragen registriert. Auffällig war, dass es während der gesamten Laufzeit keine MariaDB- oder Redis-Operationen gab. Dies deutet darauf hin, dass diese Dienste während der Analysezeit entweder nicht aktiv genutzt wurden oder dass der entsprechende Traffic außerhalb der erfassten Ports stattfand.
-
-Die HTTP-Statuscode-Analyse zeigte, dass von den 118.366 erfolgreich abgeschlossenen HTTP-Anfragen fast alle den Statuscode 200 (OK) erhielten. Lediglich eine einzige Anfrage erhielt den Statuscode 400 (Bad Request), was möglicherweise auf einen fehlerhaften Request oder eine falsche URL hindeutet. Bei der Fehleranalyse in den Logs wurden insgesamt 2 Fehler und 1 Timeout festgestellt. Obwohl diese Zahlen im Vergleich zur Gesamtzahl der Anfragen minimal erscheinen, deuten sie darauf hin, dass gelegentliche Verzögerungen oder kleinere Probleme auftreten können. Diese könnten auf temporäre Netzwerkprobleme, einen kurzen Engpass bei der Serverlast oder einen fehlerhaften Client-Request zurückzuführen sein.
-
+Wir haben einen erweiterten Netzwerk- und Performance-Test mit dem Skript tcpdump-analyse.sh durchgeführt. Dabei haben wir spezielle Parameter verwendet, um gezielt den Datenverkehr über bestimmte Ports wie HTTP, MariaDB und Redis zu erfassen. Während der Testlaufzeit wurden alle erfassten Pakete erfolgreich gezählt und analysiert. Die Auswertung zeigte, dass vor allem HTTP-Anfragen verarbeitet wurden, während keine MariaDB- oder Redis-Anfragen erkannt wurden. Der Test hat uns wertvolle Einblicke in den Datenverkehr unserer Infrastruktur gegeben und mögliche Fehlerquellen sichtbar gemacht.
 
 
 
 \subsection{k6 Lasttest – Performance-Analyse von HAProxy und Apache}
-Um die Performance und Stabilität unserer HAProxy- und Apache-Serverinstanzen zu testen, haben wir einen umfassenden Lasttest mit k6 durchgeführt. Das Hauptziel war es, die Antwortzeiten und die Erfolgsquote der Anfragen zu analysieren sowie potenzielle Engpässe zu identifizieren.
+Wir haben kürzlich Lasttests mit k6 durchgeführt, um die Performance und Stabilität unserer HAProxy- und Apache-Server zu überprüfen. Die Ergebnisse sind größtenteils positiv und zeigen, dass unser System auch unter hoher Last zuverlässig arbeitet.
 
-Insgesamt wurden im Testlauf 889.788 HTTP-Anfragen durchgeführt, die sich auf die Dienste HAProxy, Apache1 und Apache2 verteilten. Alle drei Systeme arbeiteten zuverlässig, da 99\% der Anfragen erfolgreich bearbeitet wurden. Die Erfolgsquote war damit nahezu fehlerfrei.
+Fast alle Anfragen wurden erfolgreich verarbeitet, und die meisten Antwortzeiten lagen innerhalb der akzeptablen Grenze. Es gab zwar einige wenige langsame Anfragen, die die Zielzeit überschritten, aber das betraf weniger als 1\% aller Anfragen. Die durchschnittliche Antwortzeit war sehr niedrig, und der Großteil der Anfragen wurde extrem schnell bearbeitet. Der Datendurchsatz blieb stabil, was die Effizienz unseres Systems unterstreicht.
 
-Die Analyse der Antwortzeiten zeigte, dass die Mehrheit der Anfragen innerhalb der akzeptablen Grenze von 500 ms blieb. Allerdings gab es einige langsame Anfragen: Bei HAProxy wurden 72 Anfragen, bei Apache1 92 Anfragen und bei Apache2 96 Anfragen registriert, die die Zielzeit von 500 ms überschritten. Dies entspricht jedoch weniger als 1\% der Gesamtanfragen, was auf ein insgesamt stabiles und performantes System hinweist.
+Trotz der guten Ergebnisse gibt es noch ein paar Punkte, die wir optimieren können. Zum Beispiel könnten wir die Timeout-Einstellungen bei HAProxy, MariaDB oder Redis anpassen, um sporadische Verzögerungen zu reduzieren. Außerdem wäre es sinnvoll, in zukünftigen Tests den Traffic von MariaDB und Redis gezielter zu simulieren und die Testdauer zu verlängern, um seltene Fehler besser zu erkennen.
 
-Die durchschnittliche Antwortzeit betrug 10,43 ms, wobei die langsamsten Anfragen bis zu 2,99 Sekunden benötigten. Die 90\% der schnellsten Anfragen lagen unter 21,87 ms, während 95\% der Anfragen unter 28,68 ms abgeschlossen wurden. Dies zeigt, dass die überwiegende Mehrheit der Anfragen schnell verarbeitet wurde und nur vereinzelt längere Wartezeiten auftraten.
+Insgesamt sind wir mit den Ergebnissen sehr zufrieden. Unser System hat die hohe Belastung gut gemeistert, und wir haben wertvolle Erkenntnisse gewonnen, um die Infrastruktur weiter zu verbessern. Damit sind wir gut auf zukünftige Lastspitzen vorbereitet.
 
-Insgesamt wurden während des Tests 1,7 GB Daten empfangen und 68 MB Daten gesendet, was einem durchschnittlichen Datendurchsatz von 11 MB/s beim Empfang und 437 kB/s beim Senden entspricht. Die hohe Anzahl an erfolgreichen Anfragen und der stabile Datendurchsatz sprechen dafür, dass unser System auch bei hoher Last effizient arbeitet.
+\begin{code}{k6\_allgemein.sh}{k6}
+        \begin{minted}{latex}
+export let options = {
+    stages: [
+        { duration: "50s", target: 100 },
+        { duration: "1m", target: 100 },
+        { duration: "30s", target: 0 },
+    ],
+};
 
-Die durchgeführten Tests zeigen, dass unsere Infrastruktur insgesamt stabil und leistungsfähig ist. Die hohe Anzahl an erfolgreich verarbeiteten Anfragen und der geringe Anteil an Fehlern sprechen für eine gut konfigurierte Umgebung. Die wenigen Fehler und Timeouts deuten darauf hin, dass unter sehr hoher Last gelegentlich kleine Verzögerungen auftreten können. Hier könnten Optimierungen an den Timeouts in HAProxy, MariaDB oder Redis vorgenommen werden, um das System noch robuster zu machen.
+export default function () {
+    let responses = [];
 
-Zusätzlich könnte es sinnvoll sein, in zukünftigen Tests den Traffic von MariaDB und Redis gezielt zu simulieren, um deren Verhalten unter Last genauer zu untersuchen. Auch eine längere Testdauer könnte helfen, sporadisch auftretende Fehler besser zu identifizieren.
+    let res1 = http.get("http://haproxy:80/");
+    responses.push({ name: "HAProxy", response: res1 });
+    check(res1, {
+        "HAProxy Status 200": (r) => r.status === 200,
+        "HAProxy Antwortzeit < 500ms": (r) => r.timings.duration < 500,
+    });
 
-Insgesamt sind wir mit den Ergebnissen sehr zufrieden, da unser System die umfangreiche Belastung gut bewältigt hat und zuverlässig auf alle Anfragen reagierte. Die Tests haben uns wertvolle Einblicke geliefert, und wir sind zuversichtlich, dass wir unsere Infrastruktur weiter optimieren können, um zukünftige Lastspitzen noch besser zu bewältigen.
-
+    let res2 = http.get("http://apache1:80/");
+    responses.push({ name: "Apache", response: res2 });
+    check(res2, {
+        "Apache Status 200": (r) => r.status === 200,
+        "Apache Antwortzeit < 500ms": (r) => r.timings.duration < 500,
+    });
+        \end{minted}
+\end{code}
 
 \subsubsection{k6 Login-Lasttest}
-Um die Stabilität und Performance des Login-Prozesses zu überprüfen, haben wir einen umfangreichen Lasttest mit k6 durchgeführt. Ziel war es, sicherzustellen, dass Benutzer sich erfolgreich anmelden können und dass das Session-Cookie korrekt gesetzt wird. Der Test lief über einen Zeitraum von 2 Minuten mit maximal 100 parallelen virtuellen Nutzern (VUs).
+Vor den Änderungen haben wir einen umfangreichen Lasttest mit k6 durchgeführt, um die Stabilität und Performance des Login-Prozesses zu analysieren. Der Test zeigte, dass der Login-Prozess stabil und zuverlässig funktionierte. Besonders positiv war, dass bei allen Login-Versuchen das Session-Cookie korrekt gesetzt wurde, was die fehlerfreie Funktion der Authentifizierung und der Session-Verwaltung bestätigte. Zudem wurde die ToDo-Seite nach dem Login problemlos geladen, was die Stabilität des gesamten Systems unterstrich. Insgesamt funktionierte der Login-Prozess einwandfrei, jedoch zeigten sich gelegentlich längere Wartezeiten, was auf mögliche Optimierungspotenziale hindeutete.
+Nach den Änderungen, bei denen die CPU-Leistung der Container auf 1 begrenzt (außer MariaDB auf 2) und ein zusätzlicher Apache-Server hinzugefügt wurde, wurde ein erneuter Lasttest durchgeführt. Auch in diesem Test zeigte sich, dass der Login-Prozess stabil und zuverlässig arbeitete. Die Anmeldung verlief in allen Fällen erfolgreich und es traten keine Fehler auf. Zudem konnten wir feststellen, dass die durchschnittliche Antwortzeit nach den Änderungen verbessert wurde und auch die maximalen Wartezeiten kürzer ausfielen. Die Performance des Systems war insgesamt effizienter, und die zusätzlichen Maßnahmen haben dazu beigetragen, die Systemressourcen besser zu nutzen.
 
-Während des Tests wurden insgesamt 7.506 HTTP-Anfragen gestellt, wobei 100\% der Anfragen erfolgreich waren. Es gab keine technischen Fehler oder Abbrüche, was zeigt, dass der Login-Prozess stabil und zuverlässig funktioniert. Bei allen 3.753 Login-Versuchen wurde der Login erfolgreich abgeschlossen, und das Session-Cookie wurde korrekt gesetzt. Dies bestätigt, dass die Authentifizierung sauber umgesetzt ist und einwandfrei funktioniert. Zudem konnte nach dem Login die ToDo-Seite ohne Probleme geladen werden, was die korrekte Funktionsweise der Session-Verwaltung unterstreicht.
-
-Die detaillierte Analyse der Performance-Daten zeigt, dass insgesamt 29 MB an Daten empfangen und 1,6 MB an Daten gesendet wurden. Der durchschnittliche Datendurchsatz lag bei 216 kB/s beim Empfang und 12 kB/s beim Senden. Die durchschnittliche Antwortzeit betrug 443,65 ms, was für eine größere Anzahl von gleichzeitigen Nutzern noch akzeptabel ist. Allerdings gab es einige längere Wartezeiten, wobei die maximale Antwortzeit bei 4,47 Sekunden lag. Die Statistik zeigt, dass 90\% der Anfragen schneller als 1,02 Sekunden und 95\% der Anfragen schneller als 1,24 Sekunden bearbeitet wurden.
-Der Test zeigt, dass der Login-Prozess zuverlässig funktioniert und es keine technischen Fehler oder abgebrochenen Anfragen gab. Dies ist ein wichtiger Erfolg, da die Kernfunktionen des Systems stabil und fehlerfrei arbeiten. Allerdings deuten die längeren Antwortzeiten darauf hin, dass unter hoher Last gelegentlich Verzögerungen auftreten können. Hier besteht noch Optimierungspotenzial, um die Performance weiter zu verbessern.
-
-Mögliche Maßnahmen zur Verbesserung könnten die Optimierung der Datenbankabfragen sein, wodurch die Antwortzeiten reduziert werden könnten. Durch effizientere Abfragen ließe sich die Belastung auf die Datenbank verringern, was zu schnelleren Antwortzeiten führen würde. Eine weitere Möglichkeit ist das Caching von Inhalten. Häufig abgerufene Daten könnten zwischengespeichert werden, um die Last auf dem Server zu verringern und die Zugriffszeiten zu verkürzen. Zusätzlich könnte die Skalierung der Serverressourcen helfen, Engpässe zu vermeiden. Eine bessere Lastverteilung oder zusätzliche Ressourcen könnten die Leistung des Systems unter hoher Belastung verbessern.
-
-Insgesamt zeigt der Test, dass der Login-Prozess stabil arbeitet und alle Authentifizierungen korrekt ablaufen. Die grundlegenden Funktionen, wie das Laden der ToDo-Seite nach dem Login, funktionieren zuverlässig. Trotz der leicht erhöhten Wartezeiten in einigen Fällen können wir den aktuellen Stand als erfolgreich betrachten. Um die Leistung weiter zu verbessern, sollten wir gezielte Optimierungen an den Antwortzeiten und der Skalierbarkeit des Systems vornehmen.
-
+\begin{code}{k6-login.sh}{k6-login}
+        \begin{minted}{latex}
+         export let options = {
+    stages: [
+        { duration: '30s', target: 5 },   // 5 gleichzeitige Benutzer
+        { duration: '30s', target: 10 },  // 10 gleichzeitige Benutzer
+        { duration: '30s', target: 15 },  // 15 gleichzeitige Benutzer
+        { duration: '30s', target: 20 },  // 20 gleichzeitige Benutzer
+    ],
+};
+export default function () {
+    let url = "http://haproxy:80/cgi-bin/vns/todo/login.sh";
+    let payload = "username=admin&password=admin";
+    let params = {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',  }
+    };
+    let res = http.post(url, payload, params);
+    check(res, {
+        'Login erfolgreich': (r) => r.status === 200 || r.status === 303,
+    });
+  sleep(1);  } 
+         \end{minted}
+\end{code}
 
 \subsubsection{k6 Add-ToDo-Liste}
-Um die Stabilität und Zuverlässigkeit unserer ToDo-Listen-Funktion unter Belastung zu testen, haben wir einen umfassenden Lasttest mit dem Tool k6 durchgeführt. Ziel war es, herauszufinden, wie die Anwendung bei steigender Nutzerzahl reagiert und ob es zu Verzögerungen oder Fehlern kommt. Der Test lief insgesamt 1 Minute und 27 Sekunden und war in drei Abschnitte unterteilt: Zuerst simulierten wir 20 gleichzeitige Nutzer für 20 Sekunden, um eine moderate Last zu simulieren. Danach erhöhten wir die Anzahl der Nutzer auf 50 für 40 Sekunden, um das System unter höherer Belastung zu testen. Schließlich reduzierten wir die Anzahl der virtuellen Nutzer wieder auf 0, um zu prüfen, wie das System mit abnehmender Last umgeht.
 
-Während des Tests wurden insgesamt 2.007 vollständige Abläufe durchgeführt, bei denen 6.021 HTTP-Anfragen an das System gesendet wurden. Besonders positiv ist, dass 100\% der Aufgaben erfolgreich hinzugefügt wurden und die Anzeige der ToDo-Liste einwandfrei funktioniert hat. Dies zeigt, dass unsere Anwendung stabil und zuverlässig arbeitet.
+\begin{code}{k6-addtodo.sh}{k6-addtodo}
+        \begin{minted}{latex}
+export let options = {
+    stages: [
+        { duration: "20s", target: 20 },  // 20 gleichzeitige Nutzer
+        { duration: "40s", target: 50 },  // Skalierung auf 50 Nutzer
+        { duration: "20s", target: 0 },   // Abbau der Last
+    ],
+};
 
-In Bezug auf die übertragenen Daten wurden insgesamt 4,5 MB empfangen und 1,1 MB gesendet. Dies entspricht einem Datendurchsatz von ca. 51 kB/s beim Empfang und 12 kB/s beim Senden.
+export default function () {
+    let createTodoPayload = "task=K6 Test Task&details=Dies ist eine Testaufgabe mit K6.";
+    let headers = { "Content-Type": "application/x-www-form-urlencoded" };
 
-Die gemessenen Antwortzeiten verdeutlichen, dass unser System auch unter Belastung effizient arbeitet. Die durchschnittliche Antwortzeit betrug lediglich 17,57 ms, was für eine Webanwendung sehr schnell ist. Die kürzeste Antwortzeit lag bei beeindruckenden 357 µs (Mikrosekunden), und selbst die langsamsten Anfragen wurden noch innerhalb von 159 ms verarbeitet, was ebenfalls ein guter Wert ist. Die Statistik zeigt außerdem, dass 90\% der Anfragen schneller als 48,3 ms und 95\% der Anfragen schneller als 55,04 ms abgeschlossen wurden.
+    let createRes = http.post("http://haproxy:80/cgi-bin/vns/todo/addTodo.sh", createTodoPayload, { headers, redirects: 0 });
 
-Besonders erfreulich ist, dass es während des gesamten Tests keine Fehler gab. Alle Anfragen wurden erfolgreich bearbeitet, und es traten keine technischen Probleme auf. Dies spricht dafür, dass unser System robust und zuverlässig arbeitet und auch bei hoher Belastung keine Ausfälle zeigt. Die Skalierung der Nutzerzahlen verlief ebenfalls reibungslos, was zeigt, dass unser System flexibel auf unterschiedliche Lasten reagieren kann.
+    check(createRes, {
+        "Aufgabe erfolgreich hinzugefügt": (r) => r.status === 303,
+    });
 
-Was bedeutet das für uns?
+    let getTodosRes = http.get("http://haproxy:80/cgi-bin/vns/todo/table3.sh");
+    check(getTodosRes, {
+        "ToDo-Liste geladen": (r) => r.status === 200,
+    });
 
-Die Tests zeigen, dass die ToDo-Listen-Funktion derzeit sehr stabil und leistungsfähig ist. Die Anwendung verarbeitet Anfragen zuverlässig und schnell, selbst wenn viele Nutzer gleichzeitig aktiv sind. Dass 100 \% der Aufgaben erfolgreich hinzugefügt wurden und es keine Fehler gab, zeigt, dass das System technisch sauber arbeitet.
+    sleep(1);
+}
+        \end{minted}
+\end{code}
 
-Trotz der sehr positiven Ergebnisse gibt es kleinere Optimierungsmöglichkeiten. Die maximale Antwortzeit von 159 ms könnte durch weitere Verbesserungen reduziert werden. Mögliche Maßnahmen hierfür sind die Optimierung der Datenbankabfragen, um effizientere Abfragen zu ermöglichen, das gezielte Caching häufig abgerufener Daten, um die Last auf dem Server zu verringern, und eine verbesserte Netzwerk-Konfiguration, um Engpässe zu vermeiden.
+Vor den Änderungen haben wir unsere ToDo-Listen-Funktionalität einem umfangreichen Lasttest mit k6 unterzogen, um ihre Stabilität und Zuverlässigkeit zu überprüfen. Der Test wurde in drei Phasen durchgeführt, in denen zunächst eine moderate Last simuliert, dann die Anzahl der gleichzeitigen Nutzer erhöht und schließlich die Last wieder reduziert wurde. Während des gesamten Tests zeigte sich, dass das System stabil und zuverlässig arbeitete. Alle Aufgaben wurden erfolgreich erstellt und die ToDo-Liste konnte ohne Fehler abgerufen werden. Dies bestätigte, dass die Anwendung auch bei steigender Belastung stabil bleibt. Obwohl die durchschnittlichen Antwortzeiten insgesamt zufriedenstellend waren, kam es in einigen Fällen zu längeren Wartezeiten, was auf Optimierungspotenzial hinwies.
 
-Fazit
+Nach den Änderungen, bei denen die CPU-Leistung der Container auf 1 begrenzt (außer MariaDB auf 2) und ein zusätzlicher Apache-Server hinzugefügt wurde, haben wir den Test erneut durchgeführt. Auch in diesem Test zeigte sich, dass die ToDo-Listen-Funktion stabil und zuverlässig blieb. Die Aufgaben wurden erfolgreich erstellt und die ToDo-Liste konnte ebenfalls problemlos geladen werden. Besonders positiv war, dass trotz der Anpassungen das System weiterhin stabil arbeitete und keine Fehler auftraten. Die durchschnittliche Reaktionszeit blieb akzeptabel, und selbst unter maximaler Last war das System in der Lage, alle Anfragen erfolgreich zu verarbeiten.
 
-Insgesamt zeigt der Test, dass unsere ToDo-Listen-Funktion stabil und zuverlässig arbeitet. Die Anwendung bewältigt auch unter hoher Last eine große Anzahl von Anfragen ohne Fehler. Mit einigen gezielten Optimierungen könnten wir die Performance weiter verbessern und die Antwortzeiten noch weiter reduzieren. Die Ergebnisse bestätigen, dass unser System technisch gut aufgestellt ist und eine solide Grundlage für zukünftige Erweiterungen bietet.
-
+Der Vergleich der beiden Tests zeigt, dass die vorgenommenen Änderungen die Stabilität des Systems nicht negativ beeinflusst haben. Die zusätzliche Apache-Instanz trug dazu bei, die Last besser zu verteilen, und die Begrenzung der CPU-Leistung hatte keine negativen Auswirkungen auf die Zuverlässigkeit der Anwendung. Insgesamt konnten wir feststellen, dass unser System auch nach den Anpassungen stabil und effizient arbeitet.
 
 \subsection{Diagramm – Gnuplot: CPU- und RAM-Nutzungsanalyse}
 Im Rahmen unseres Performance-Monitoring-Tests haben wir ein Skript (monitor.sh) verwendet, das kontinuierlich CPU- und RAM-Nutzungsdaten von mehreren Docker-Containern (Apache1, Apache2, Work, HAProxy, Redis und MariaDB) erfasst hat. Die Daten wurden in Intervallen von 1 Sekunde über einen längeren Zeitraum gesammelt und in einer CSV-Datei gespeichert, um sie anschließend zu analysieren und zu visualisieren. 
