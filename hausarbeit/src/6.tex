@@ -18,7 +18,7 @@ Da es keine vorgefertigte Vorlage für einen Apache-Container gab, mussten wir i
 
 In der start.sh mussten wir lediglich den Namen und den Port anpassen und für eine vereinfachung haben wir uns dazu entschieden eine for-Schleife zu implementieren. Da wir drei identische Apache-Container erstellen wollten, haben wir das Skript so modifiziert, dass es drei Container erzeugt, anstatt nur einen. Wir haben die Container apache1, apache2 und apache3 genannt und ihnen die Ports 8081, 8082 und 8083 auf dem Host-System zugewiesen.
 
-\begin{code}{start.sh}{apache start}
+\begin{code}{Apache start.sh}{apache start}
         \begin{minted}{latex}
 #!/bin/bash
 
@@ -50,7 +50,7 @@ Der Schalter --cpus=1 beschränkt die CPU-Leistung des Containers auf maximal 10
 In der Dockerfile haben wir ebenfalls Anpassungen vorgenommen, um die gewünschten Funktionen der Anwendung umzusetzen. Dazu gehörte unter anderem die Installation von apache-spezifischen Programmen wie apache2, libapache2-mod-fcgid und apache2-utils, die für den Betrieb unserer CGI-Skripte und die Webanwendung notwendig sind. Als Basis-Image nutzten wir deshalb ubuntu, um maximale Flexibilität bei der Installation der benötigten Pakete zu haben
 
 Darüber hinaus mussten wir auch Abhängigkeiten (Dependencies) berücksichtigen, die durch die anderen Docker-Container (z. B. MariaDB und Redis) erforderlich sind. Ein Beispiel hierfür ist die Installation von uuid-runtime, das für die Generierung von eindeutigen IDs (UUIDs) benötigt wird, die in unserer Anwendung für die Session-Verwaltung oder andere Funktionen genutzt werden könnten.
-\begin{code}{Dockerfile}{apache docker}
+\begin{code}{Apache Dockerfile}{apache docker}
         \begin{minted}{latex}
 FROM ubuntu
 RUN apt-get -y update && apt-get -y upgrade
@@ -78,7 +78,7 @@ Abschließend wurde die myinit.sh in das Image integriert und als Hauptprozess d
 
 Die myinit.sh ist ein wichtiger Bestandteil unseres Docker-Setups und dient als Init-Skript für den Apache-Webserver. Dieses Skript verwaltet den Start und Stopp des Servers und protokolliert wichtige Ereignisse.
 
-\begin{code}{myinit.sh}{apache Initialisierung}
+\begin{code}{Apache myinit.sh}{apache Initialisierung}
         \begin{minted}{latex}
 #!/bin/bash
 log=/docker.log
@@ -121,7 +121,7 @@ Durch die Integration der myinit.sh in unsere Docker-Infrastruktur wird sicherge
 \subsection{HAProxy}
 Der HAProxy-Container bildet das Herzstück der Lastverteilung und sorgt dafür, dass die Anfragen der Nutzer zentral gebündelt und intelligent an die beiden Apache-Container weitergeleitet werden. Da HAProxy selbst als eigenständiger Dienst läuft, mussten wir ein spezielles Docker-Image erstellen, das genau auf diese Anforderungen zugeschnitten ist.  
 
-\begin{code}{Dockerfile}{haproxy dockerfile}
+\begin{code}{HAProxy Dockerfile}{haproxy dockerfile}
         \begin{minted}{latex}
 FROM ubuntu
 RUN apt-get -y update && apt-get -y upgrade
@@ -145,7 +145,7 @@ Graceful Shutdown: Wird der Container per docker stop beendet, fängt das Skript
 
 Dienstüberwachung: Über service haproxy status wird der Status des HAProxy-Dienstes in die Log-Datei geschrieben, was später bei der Fehlersuche hilfreich sein kann.  
 
-\begin{code}{myinit.sh}{haproxy Initialisierung}
+\begin{code}{HAProxy myinit.sh}{haproxy Initialisierung}
         \begin{minted}{latex}
 
 #!/bin/bash
@@ -180,7 +180,7 @@ Die eigentliche Lastverteilung wird durch die haproxy.cfg-Konfiguration gesteuer
 
 Frontend: Hier wird der öffentliche Port (:80) gebunden, über den die Anwendung erreichbar ist. Eine ACL-Regel (acl url\_direct path\_beg /direct) leitet Anfragen mit dem Pfad /direct an ein separates Backend weiter, das direkt eine Antwort zurückgibt – nützlich für Schnelltests der HAProxy-Infrastruktur.  
 
-\begin{code}{Frontend}{haproxy.cfg}
+\begin{code}{HAProxy Frontend}{haproxy.cfg}
         \begin{minted}{latex}
 
 frontend http-in
@@ -194,7 +194,7 @@ frontend http-in
 
 Backend: Die eigentliche Lastverteilung erfolgt über das app-backend, das die beiden Apache-Container (apache1:80, apache2:80 und apache3:80) einbindet. Mittels cookie SERVERID wird eine Sticky Session implementiert, die sicherstellt, dass Nutzer während ihrer Session immer denselben Apache-Container nutzen. Die Strategie roundrobin verteilt neue Sessions gleichmäßig auf alle Server.  
 
-\begin{code}{Backend}{haproxy.cfg}
+\begin{code}{HAProxy Backend}{haproxy.cfg}
         \begin{minted}{latex}
           backend direct-backend
   http-request return status 200 content-type "text/plain" string "Moin from haproxy\n"
@@ -210,7 +210,7 @@ backend app-backend
 
 Des Weiteren wurde in der \texttt{start.sh} der Container so konfiguriert, dass er über den \textbf{Port 8000} auf dem Host erreichbar ist und gleichzeitig auf den \textbf{Port 80} im Container gemappt wird. Diese Port-Weiterleitung ermöglicht es, dass der HAProxy-Container als zentraler Load-Balancer fungiert und Anfragen an die beiden Apache-Container weiterleitet. Dadurch können alle Apache-Container über den Port 8000 erreicht werden, während HAProxy die Lastverteilung und das Routing übernimmt. Dadurch wird sichergestellt, dass die Last gleichmäßig auf die Backend-Server verteilt wird und die Anwendung auch bei hoher Auslastung stabil bleibt. Auch hier beschränkt der Schalter --cpus=1 die CPU-Leistung des Containers auf 100\%. 
 
-\begin{code}{start.sh}{haproxy start}
+\begin{code}{HAProxy start.sh}{haproxy start}
         \begin{minted}{latex}
   #!/bin/bash
 
@@ -243,8 +243,7 @@ Die MariaDB-Datenbank dient als zentrale Speicherlösung für die ToDo-Listen-Da
 \subsubsection{Datenbank-Erstellung und Benutzerverwaltung}
 Beim Aufbauen der Umgebung wird zunächst sichergestellt, dass die Datenbank \texttt{todo\_app} existiert. Falls sie nicht vorhanden ist, wird sie mit folgendem Befehl erstellt:
 
-\begin{code}
-  {Erstellen der Datenbank}{todo\_app}
+\begin{code}{Erstellen der Datenbank}{todo\_app}
         \begin{minted}{latex}
 CREATE DATABASE IF NOT EXISTS todo_app;
 \end{minted}
@@ -314,7 +313,7 @@ INSERT INTO users (name, password) VALUES ('admin', 'admin');
 Dieser Benutzer kann sich in der Webanwendung anmelden und Aufgaben verwalten.
 
 \subsection{Redis}
-Die Redis-Integration in der ToDo-Listen-Anwendung wird zur Verwaltung von Nutzersitzungen eingesetzt. Anstatt Sessions in MariaDB zu speichern, wurde Redis als schnelle und effiziente In-Memory-Datenbank verwendet, um Login-Sitzungen zu verwalten. Dies verbessert die Performance und Skalierbarkeit der Anwendung erheblich, da Redis Zugriffe wesentlich schneller verarbeitet als jedes Mal die Datensätze aus der Datenbank abzurufen um zu überprüfen ob die aktuelle Sitzung noch läuft. Beim Login eines Nutzers wird zunächst überprüft, ob die eingegebenen Zugangsdaten in der MariaDB-Datenbank vorhanden sind. Falls der Benutzername und das Passwort korrekt sind, wird eine eindeutige Session-ID generiert, die anschließend mit einer definierten Ablaufzeit in Redis gespeichert wird. Zur Verwaltung von Benutzersitzungen wird Redis verwendet. Dabei wird eine eindeutige Session-ID generiert und in Redis gespeichert. Der folgende Befehl zeigt, wie die Session mit einer TTL (Time-To-Live) von 3600 Sekunden gespeichert wird:
+Die Redis-Integration in der ToDo-Listen-Anwendung wird einerseits zur Verwaltung von Nutzersitzungen eingesetzt und andererseits als Cache. Anstatt Sessions in MariaDB zu speichern, wurde Redis als schnelle und effiziente In-Memory-Datenbank verwendet, um Login-Sitzungen zu verwalten. Dies verbessert die Performance und Skalierbarkeit der Anwendung erheblich, da Redis Zugriffe wesentlich schneller verarbeitet als jedes Mal die Datensätze aus der Datenbank abzurufen um zu überprüfen ob die aktuelle Sitzung noch läuft. Beim Login eines Nutzers wird zunächst überprüft, ob die eingegebenen Zugangsdaten in der MariaDB-Datenbank vorhanden sind. Falls der Benutzername und das Passwort korrekt sind, wird eine eindeutige Session-ID generiert, die anschließend mit einer definierten Ablaufzeit in Redis gespeichert wird. Zur Verwaltung von Benutzersitzungen wird Redis verwendet. Dabei wird eine eindeutige Session-ID generiert und in Redis gespeichert. Der folgende Befehl zeigt, wie die Session mit einer TTL (Time-To-Live) von 3600 Sekunden gespeichert wird:
 
 \begin{code}{Session erstellen}{uuidgen}
         \begin{minted}{latex}
