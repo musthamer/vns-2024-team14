@@ -1,0 +1,26 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+export let options = \PYG{n+nb}{\PYGZob{}}
+    stages: [
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZdq{}50s\PYGZdq{}, target: 100 \PYG{n+nb}{\PYGZcb{}},
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZdq{}1m\PYGZdq{}, target: 100 \PYG{n+nb}{\PYGZcb{}},
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZdq{}30s\PYGZdq{}, target: 0 \PYG{n+nb}{\PYGZcb{}},
+    ],
+\PYG{n+nb}{\PYGZcb{}};
+
+export default function () \PYG{n+nb}{\PYGZob{}}
+    let responses = [];
+
+    let res1 = http.get(\PYGZdq{}http://haproxy:80/\PYGZdq{});
+    responses.push(\PYG{n+nb}{\PYGZob{}} name: \PYGZdq{}HAProxy\PYGZdq{}, response: res1 \PYG{n+nb}{\PYGZcb{}});
+    check(res1, \PYG{n+nb}{\PYGZob{}}
+        \PYGZdq{}HAProxy Status 200\PYGZdq{}: (r) =\PYGZgt{} r.status === 200,
+        \PYGZdq{}HAProxy Antwortzeit \PYGZlt{} 500ms\PYGZdq{}: (r) =\PYGZgt{} r.timings.duration \PYGZlt{} 500,
+    \PYG{n+nb}{\PYGZcb{}});
+
+    let res2 = http.get(\PYGZdq{}http://apache1:80/\PYGZdq{});
+    responses.push(\PYG{n+nb}{\PYGZob{}} name: \PYGZdq{}Apache\PYGZdq{}, response: res2 \PYG{n+nb}{\PYGZcb{}});
+    check(res2, \PYG{n+nb}{\PYGZob{}}
+        \PYGZdq{}Apache Status 200\PYGZdq{}: (r) =\PYGZgt{} r.status === 200,
+        \PYGZdq{}Apache Antwortzeit \PYGZlt{} 500ms\PYGZdq{}: (r) =\PYGZgt{} r.timings.duration \PYGZlt{} 500,
+    \PYG{n+nb}{\PYGZcb{}});
+\end{MintedVerbatim}

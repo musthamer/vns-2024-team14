@@ -1,0 +1,28 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYGZsh{}!/bin/bash
+log=/docker.log
+echo starte \PYGZgt{}\PYGZgt{} \PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{log}
+
+\PYG{n+nb}{trap onexit SIGTERM}
+
+\PYG{n+nb}{function onexit }\PYG{n+nb}{\PYGZob{}}
+\PYG{n+nb}{  \PYGZsh{}shutdown ...}
+\PYG{n+nb}{  echo shutting down \PYGZgt{}\PYGZgt{} }\PYG{l+s}{\PYGZdl{}}log
+
+  read pid \PYGZlt{} /run/apache2/apache2.pid
+  apachectl stop
+  while test \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{pid\PYGZdq{} }\PYG{o}{!}\PYG{o}{=}\PYG{n+nb}{ \PYGZdq{}\PYGZdq{} }\PYG{n+nb}{\PYGZam{}}\PYG{n+nb}{\PYGZam{}}\PYG{n+nb}{ ps }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{p }\PYG{l+s}{\PYGZdl{}}pid \PYGZgt{}/dev/null; do
+    echo wait for shutdown of pid \PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{pid \PYGZgt{}\PYGZgt{} }\PYG{l+s}{\PYGZdl{}}log
+    sleep 0.01
+  done
+
+  exit
+\PYG{n+nb}{\PYGZcb{}}
+\PYGZsh{} start services
+apachectl start
+
+while true; do
+        echo \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{o}{(}\PYG{n+nb}{date }\PYG{o}{+}\PYG{c}{\PYGZpc{}FT\PYGZpc{}T) ping\PYGZdq{} \PYGZgt{}\PYGZgt{} \PYGZdl{}log}
+\PYG{n+nb}{  read }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{t }\PYG{l+m}{1}\PYG{n+nb}{ \PYGZlt{}}\PYG{o}{/}\PYG{n+nb}{dev}\PYG{o}{/}\PYG{n+nb}{fd}\PYG{o}{/}\PYG{l+m}{1}
+\PYG{n+nb}{done}
+\end{MintedVerbatim}

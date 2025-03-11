@@ -1,0 +1,5 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+CREATE USER IF NOT EXISTS \PYGZsq{}dbuser\PYGZsq{}@\PYGZsq{}\PYG{c}{\PYGZpc{}\PYGZsq{} IDENTIFIED BY \PYGZsq{}12345\PYGZsq{};}
+GRANT ALL PRIVILEGES ON todoa\PYG{n+nb}{\PYGZus{}}pp.* TO \PYGZsq{}dbuser\PYGZsq{}@\PYGZsq{}\PYG{c}{\PYGZpc{}\PYGZsq{};}
+FLUSH PRIVILEGES;
+\end{MintedVerbatim}

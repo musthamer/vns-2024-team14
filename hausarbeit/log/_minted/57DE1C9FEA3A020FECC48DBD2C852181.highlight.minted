@@ -1,0 +1,6 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+for i in \PYG{n+nb}{\PYGZob{}}1..10\PYG{n+nb}{\PYGZcb{}}; do
+    curl \PYGZhy{}s \PYGZhy{}i \PYGZhy{}c cookies.txt \PYGZhy{}d \PYGZdq{}username=admin\PYG{n+nb}{\PYGZam{}}password=admin\PYGZdq{} \PYG{k}{\PYGZbs{}}
+    \PYGZdq{}http://localhost:8000/cgi\PYGZhy{}bin/vns/todo/login.sh\PYGZdq{} | grep \PYGZsq{}SERVERID\PYGZsq{}
+
+\end{MintedVerbatim}

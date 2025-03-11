@@ -1,0 +1,8 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYGZsh{}Beispiel\PYGZhy{}Code\PYGZhy{}1:
+sudo tcpdump \PYGZhy{}i eth0 port 80 or port 3306 or port 6379 \PYGZhy{}w \PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{LOG}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{DIR}\PYG{o}{/}\PYG{n+nb}{network.pcap }\PYG{n+nb}{\PYGZam{}}
+
+\PYG{n+nb}{\PYGZsh{}Beispiel}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{Code}\PYG{o}{\PYGZhy{}}\PYG{l+m}{2}
+\PYG{n+nb}{tcpdump }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{r }\PYG{l+s}{\PYGZdl{}}LOG\PYG{n+nb}{\PYGZus{}}DIR/network.pcap \PYGZhy{}nn port ...
+
+\end{MintedVerbatim}

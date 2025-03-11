@@ -1,0 +1,6 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+docker exec \PYGZhy{}i work sysbench \PYGZhy{}\PYGZhy{}db\PYGZhy{}driver=mysql \PYG{k}{\PYGZbs{}}
+    \PYGZhy{}\PYGZhy{}mysql\PYGZhy{}host=mariadb \PYGZhy{}\PYGZhy{}mysql\PYGZhy{}user=dbuser \PYGZhy{}\PYGZhy{}mysql\PYGZhy{}password=12345 \PYG{k}{\PYGZbs{}}
+    \PYGZhy{}\PYGZhy{}mysql\PYGZhy{}db=todo\PYG{n+nb}{\PYGZus{}}app \PYGZhy{}\PYGZhy{}tables=20 oltp\PYG{n+nb}{\PYGZus{}}read\PYG{n+nb}{\PYGZus{}}write cleanup  | prepare |
+oltp\PYG{n+nb}{\PYGZus{}}read\PYG{n+nb}{\PYGZus{}}only run
+\end{MintedVerbatim}

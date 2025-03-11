@@ -1,0 +1,3 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+INSERT INTO users (name, password) VALUES (\PYGZsq{}admin\PYGZsq{}, \PYGZsq{}admin\PYGZsq{});
+\end{MintedVerbatim}

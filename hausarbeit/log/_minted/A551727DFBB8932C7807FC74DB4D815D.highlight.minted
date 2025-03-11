@@ -1,0 +1,27 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+export let options = \PYG{n+nb}{\PYGZob{}}
+    stages: [
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZdq{}20s\PYGZdq{}, target: 20 \PYG{n+nb}{\PYGZcb{}},  // 20 gleichzeitige Nutzer
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZdq{}40s\PYGZdq{}, target: 50 \PYG{n+nb}{\PYGZcb{}},  // Skalierung auf 50 Nutzer
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZdq{}20s\PYGZdq{}, target: 0 \PYG{n+nb}{\PYGZcb{}},   // Abbau der Last
+    ],
+\PYG{n+nb}{\PYGZcb{}};
+
+export default function () \PYG{n+nb}{\PYGZob{}}
+    let createTodoPayload = \PYGZdq{}task=K6 Test Task\PYG{n+nb}{\PYGZam{}}details=Dies ist eine Testaufgabe mit K6.\PYGZdq{};
+    let headers = \PYG{n+nb}{\PYGZob{}} \PYGZdq{}Content\PYGZhy{}Type\PYGZdq{}: \PYGZdq{}application/x\PYGZhy{}www\PYGZhy{}form\PYGZhy{}urlencoded\PYGZdq{} \PYG{n+nb}{\PYGZcb{}};
+
+    let createRes = http.post(\PYGZdq{}http://haproxy:80/cgi\PYGZhy{}bin/vns/todo/addTodo.sh\PYGZdq{}, createTodoPayload, \PYG{n+nb}{\PYGZob{}} headers, redirects: 0 \PYG{n+nb}{\PYGZcb{}});
+
+    check(createRes, \PYG{n+nb}{\PYGZob{}}
+        \PYGZdq{}Aufgabe erfolgreich hinzugefügt\PYGZdq{}: (r) =\PYGZgt{} r.status === 303,
+    \PYG{n+nb}{\PYGZcb{}});
+
+    let getTodosRes = http.get(\PYGZdq{}http://haproxy:80/cgi\PYGZhy{}bin/vns/todo/table3.sh\PYGZdq{});
+    check(getTodosRes, \PYG{n+nb}{\PYGZob{}}
+        \PYGZdq{}ToDo\PYGZhy{}Liste geladen\PYGZdq{}: (r) =\PYGZgt{} r.status === 200,
+    \PYG{n+nb}{\PYGZcb{}});
+
+    sleep(1);
+\PYG{n+nb}{\PYGZcb{}}
+\end{MintedVerbatim}

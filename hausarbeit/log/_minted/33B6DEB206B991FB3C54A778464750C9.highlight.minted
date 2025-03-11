@@ -1,0 +1,22 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+         export let options = \PYG{n+nb}{\PYGZob{}}
+    stages: [
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZsq{}30s\PYGZsq{}, target: 5 \PYG{n+nb}{\PYGZcb{}},   // 5 gleichzeitige Benutzer
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZsq{}30s\PYGZsq{}, target: 10 \PYG{n+nb}{\PYGZcb{}},  // 10 gleichzeitige Benutzer
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZsq{}30s\PYGZsq{}, target: 15 \PYG{n+nb}{\PYGZcb{}},  // 15 gleichzeitige Benutzer
+        \PYG{n+nb}{\PYGZob{}} duration: \PYGZsq{}30s\PYGZsq{}, target: 20 \PYG{n+nb}{\PYGZcb{}},  // 20 gleichzeitige Benutzer
+    ],
+\PYG{n+nb}{\PYGZcb{}};
+export default function () \PYG{n+nb}{\PYGZob{}}
+    let url = \PYGZdq{}http://haproxy:80/cgi\PYGZhy{}bin/vns/todo/login.sh\PYGZdq{};
+    let payload = \PYGZdq{}username=admin\PYG{n+nb}{\PYGZam{}}password=admin\PYGZdq{};
+    let params = \PYG{n+nb}{\PYGZob{}}
+        headers: \PYG{n+nb}{\PYGZob{}}
+            \PYGZsq{}Content\PYGZhy{}Type\PYGZsq{}: \PYGZsq{}application/x\PYGZhy{}www\PYGZhy{}form\PYGZhy{}urlencoded\PYGZsq{},  \PYG{n+nb}{\PYGZcb{}}
+    \PYG{n+nb}{\PYGZcb{}};
+    let res = http.post(url, payload, params);
+    check(res, \PYG{n+nb}{\PYGZob{}}
+        \PYGZsq{}Login erfolgreich\PYGZsq{}: (r) =\PYGZgt{} r.status === 200 || r.status === 303,
+    \PYG{n+nb}{\PYGZcb{}});
+  sleep(1);  \PYG{n+nb}{\PYGZcb{}}
+\end{MintedVerbatim}

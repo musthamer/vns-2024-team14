@@ -1,0 +1,4 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+echo \PYGZdq{}\PYGZlt{}html\PYGZgt{}
+\PYGZlt{}head\PYGZgt{}\PYGZlt{}title\PYGZgt{}Login Failed\PYGZlt{}/title\PYGZgt{}\PYGZlt{}/head\PYGZgt{} \PYGZlt{}body\PYGZgt{} \PYGZlt{}h1\PYGZgt{}Login fehlgeschlagen\PYGZlt{}/h1\PYGZgt{} \PYGZlt{}a href=\PYGZsq{}/index.html\PYGZsq{}\PYGZgt{}Erneut versuchen\PYGZlt{}/a\PYGZgt{} \PYGZlt{}/body\PYGZgt{} \PYGZlt{}/html\PYGZgt{}\PYGZdq{}
+\end{MintedVerbatim}

@@ -1,0 +1,3 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+docker exec \PYGZhy{}ti redis redis\PYGZhy{}benchmark \PYGZhy{}p 6379 \PYGZhy{}a foobared \PYGZhy{}t set,get \PYGZhy{}n \PYG{k}{\PYGZbs{}\PYGZdl{}}anzahl\PYG{k}{\PYGZbs{}\PYGZus{}db}
+\end{MintedVerbatim}
