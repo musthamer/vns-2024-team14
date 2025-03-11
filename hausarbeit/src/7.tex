@@ -3,6 +3,8 @@ In modernen vernetzten Systemen ist die Leistungsfähigkeit und Stabilität der 
 
 In unserem Projekt haben wir umfangreiche Lasttests durchgeführt, um die Leistungsfähigkeit unserer Infrastruktur zu überprüfen. Dabei haben wir verschiedene Komponenten wie HAProxy, MariaDB und Redis unter die Lupe genommen. Mithilfe von Tools wie wrk, sysbench, k6, tcpdump, Curl und Redis-Benchmark haben wir gezielt hohe Last erzeugt und die Reaktion des Systems analysiert. Die Ergebnisse dieser Tests liefern wertvolle Einblicke in das Verhalten unserer Anwendung unter realistischen Bedingungen und zeigen, wie gut das System mit einer großen Anzahl gleichzeitiger Anfragen umgehen kann.
 
+Während unserer Tests haben wir die Befehle docker stats und docker ps verwendet, um die Container besser zu überwachen. Mit docker stats konnten wir in Echtzeit sehen, wie viel CPU und Arbeitsspeicher die einzelnen Container nutzen, was uns geholfen hat, Probleme wie Überlastungen schnell zu erkennen. Der Befehl docker ps zeigte uns zudem eine Übersicht über alle laufenden Container und deren Status, was besonders nützlich war, um den Überblick zu behalten und Fehler im System schneller zu finden.
+
 
 \begin{figure}[ht!]
         \centering
