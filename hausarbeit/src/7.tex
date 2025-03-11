@@ -209,42 +209,5 @@ Nach den Änderungen, bei denen die CPU-Leistung der Container auf 1 begrenzt (a
 
 Der Vergleich der beiden Tests zeigt, dass die vorgenommenen Änderungen die Stabilität des Systems nicht negativ beeinflusst haben. Die zusätzliche Apache-Instanz trug dazu bei, die Last besser zu verteilen, und die Begrenzung der CPU-Leistung hatte keine negativen Auswirkungen auf die Zuverlässigkeit der Anwendung. Insgesamt konnten wir feststellen, dass unser System auch nach den Anpassungen stabil und effizient arbeitet.
 
-\subsection{Diagramm – Gnuplot: CPU- und RAM-Nutzungsanalyse}
-Im Rahmen unseres Performance-Monitoring-Tests haben wir ein Skript (monitor.sh) verwendet, das kontinuierlich CPU- und RAM-Nutzungsdaten von mehreren Docker-Containern (Apache1, Apache2, Work, HAProxy, Redis und MariaDB) erfasst hat. Die Daten wurden in Intervallen von 1 Sekunde über einen längeren Zeitraum gesammelt und in einer CSV-Datei gespeichert, um sie anschließend zu analysieren und zu visualisieren. 
-\begin{figure}[ht!]
-        \centering
-        \includegraphics[width=0.65\textwidth]{src/abbildungen/gnu.jpg}
-        \caption{Gnuplot}
-\end{figure}
-\FloatBarrier
-Testaufbau 
-
-Das Skript monitor.sh nutzte den Befehl docker stats, um kontinuierlich Daten zu sammeln. Die erfassten Daten umfassten die CPU-Auslastung (\%) und den RAM-Verbrauch (MiB) für die Container Apache1, Apache2, Work, HAProxy, Redis und MariaDB. Die Daten wurden in Intervallen von 1 Sekunde erfasst, um detaillierte Schwankungen und Lastspitzen zu erkennen. Die gesammelten Daten wurden in einer CSV-Datei gespeichert und anschließend mithilfe von Gnuplot visualisiert. Das Diagramm zeigt die CPU-Auslastung der verschiedenen Docker-Container zwischen 19:00 Uhr und 21:00 Uhr und gibt uns einen guten Überblick darüber, wie das System unter Belastung reagiert hat. 
-
-Allgemeines CPU-Verhalten 
-
-Die meisten Container liefen stabil, mit gelegentlichen Spitzen, die bei hoher Last zu erwarten sind. Die CPU-Nutzung blieb meist unter 40\%, was auf eine effiziente Ressourcennutzung hindeutet. Allerdings gab es einige Ausreißer, insbesondere bei den Containern Work, HAProxy und MariaDB. 
-
-Auffällige Spitzen in der CPU-Nutzung 
-
-Die Container Work (grüne Linie) und HAProxy (rote Linie) zeigten teilweise Spitzen von über 100\%. Dies deutet darauf hin, dass diese Container bei starker Belastung, z. B. durch viele gleichzeitige Anfragen oder aufwendige Berechnungen, stark beansprucht wurden. Die Spitzen bei Work korrelieren mit unserem wrk-Test, der gezielt solche Stresssituationen simulierte. HAProxy hatte ebenfalls hohe Lastspitzen, was darauf hindeutet, dass das Load-Balancing zeitweise stark gefordert war. 
-
-Stabile Container 
-
-Die Container Apache1 und Apache2 zeigten ein entspanntes Verhalten mit nur gelegentlichen, kleineren Ausreißern. Dies zeigt, dass die Webserver stabil liefen und ihre Aufgaben gut verteilt waren. Redis blieb durchgehend ruhig, was darauf hindeutet, dass der In-Memory-Cache effizient arbeitete. MariaDB hatte meist niedrige Werte, zeigte aber gelegentlich Spitzen bis zu 60\%. Diese Spitzen könnten auf größere Datenbankabfragen oder komplexe Operationen zurückzuführen sein. 
-
-Schwankungen und Beruhigung 
-
-Gegen Ende des Tests normalisierten sich die CPU-Werte wieder. Dies zeigt, dass sich das System nach der hohen Belastung gut erholte und wieder stabil lief. 
-
-Was läuft gut und was könnte besser werden? 
-
-Das System zeigte insgesamt ein stabiles Verhalten. Die CPU-Auslastung blieb meist im grünen Bereich, was auf eine effiziente Ressourcennutzung hindeutet. Die CPU-Spitzen bei Work und HAProxy traten vor allem während gezielter Belastungstests auf, was die Belastbarkeit des Systems unterstreicht. 
-
-Dennoch gibt es Optimierungspotenzial. Die starken CPU-Spitzen, insbesondere bei Work, könnten durch effizienteren Code, besseres Thread-Management oder eine gezieltere Verteilung der Ressourcen verringert werden. Bei HAProxy könnten feinere Einstellungen beim Load-Balancing und klügere Timeout-Regeln die Belastung auf den Container reduzieren. Für MariaDB könnten Maßnahmen wie bessere Indizes, Query-Caching oder parallele Abfragen helfen, Lastspitzen zu vermeiden. 
-
-Fazit 
-
-Die Analyse der CPU- und RAM-Nutzung zeigt, dass unser System insgesamt stabil und effizient arbeitet. Die meisten Container bewältigten die Belastung gut, und die CPU-Spitzen traten vor allem während gezielter Stresssituationen auf. Dennoch gibt es Optimierungspotenzial, insbesondere bei der Reduzierung von Lastspitzen und der Feinjustierung der Ressourcenverteilung. Mit gezielten Anpassungen können wir die Performance weiter verbessern und das System noch robuster machen. 
 
  
