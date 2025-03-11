@@ -27,6 +27,11 @@ Zusätzlich zum Load Balancing haben wir unsere Infrastruktur erweitert und insg
 \subsubsection{Ergebnis der Optimierung}
 Mit diesen Maßnahmen der CPU-Begrenzung, dem Einsatz von Redis zur Caching-Optimierung, dem Load Balancing mit Round Robin und der Skalierung auf drei Apache-Container konnten wir die Performance unserer Webanwendung erheblich verbessern. Die Anwendung reagiert nun schneller, bleibt stabiler und ist besser gegen Lastspitzen gewappnet. Diese Kombination aus Maßnahmen hat unsere Infrastruktur robuster und skalierbarer gemacht und ermöglicht eine effizientere Nutzung der Anwendung.
 
+\subsubsection{Automatische Skalierungs der Apache-Container}
+
+Eine mögliche Optimierung des Systems wäre ein automatisches System zu erstellen, welches neue Apache-Server hinzufügt, wenn die CPU-Auslastung zu hoch wird. Dieses System würde ständig die CPU-Last der Apache-Server mit einem Watcher-Skript überwachen. Sobald einer der Server eine CPU-Auslastung von bspw. 80\% erreicht, würde das System automatisch einen neuen Apache-Container starten. Dieser neue Server würde dann direkt in HAProxy eingebunden werden, damit der Datenverkehr gleichmäßig auf alle Apache-Server verteilt wird. Dadurch sinkt die Auslastung jedes einzelnen Apache-Servers, und das System bleibt weiterhin stabil. So könnte das System auch bei vielen Nutzern flüssig arbeiten und Wartezeiten drastisch verkürzen. Mit dieser Lösung würde sich das System automatisch an die aktuelle Belastung anpassen und für eine bessere Leistung sorgen.
+
+
 \subsection{MariaDB Stresstest}
 \begin{code}{mariadb\_sysbench.sh}{mariadb}
         \begin{minted}{latex}
