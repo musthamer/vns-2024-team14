@@ -39,8 +39,8 @@
 \contentsline {subsection}{\numberline {8.2}Mert}{45}{subsection.82}%
 \contentsline {subsection}{\numberline {8.3}Mohammed}{46}{subsection.83}%
 \contentsline {subsection}{\numberline {8.4}Mustafa}{48}{subsection.84}%
-\contentsline {section}{Literaturverzeichnis}{50}{section*.85}%
-\contentsline {section}{Abbildungsverzeichnis}{50}{section*.86}%
+\contentsline {section}{Literaturverzeichnis}{51}{section*.86}%
+\contentsline {section}{Abbildungsverzeichnis}{51}{section*.87}%
 \contentsline {section}{Listingverzeichnis}{52}{section*.88}%
 \contentsline {section}{Selbstständigkeitserklärung}{53}{section*.89}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
