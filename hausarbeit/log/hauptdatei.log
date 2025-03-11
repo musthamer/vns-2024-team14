@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.2.14)  11 MAR 2025 01:34
+This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.2.14)  11 MAR 2025 01:36
  system commands enabled.
 **hauptdatei.tex
 (./hauptdatei.tex
@@ -2079,7 +2079,7 @@ t line 1.
 [6]) (./src/4.tex
 
 [7]
-<src/abbildungen/osi.png, id=137, 249.93375pt x 305.64188pt>
+<src/abbildungen/osi.png, id=139, 249.93375pt x 305.64188pt>
 File: src/abbildungen/osi.png Graphic file (type png)
 <use src/abbildungen/osi.png>
 Package luatex.def Info: src/abbildungen/osi.png  used on input line 14.
@@ -2087,7 +2087,7 @@ Package luatex.def Info: src/abbildungen/osi.png  used on input line 14.
 
 
 [8]
-<src/abbildungen/tcp.png, id=142, 396.48125pt x 287.57437pt>
+<src/abbildungen/tcp.png, id=144, 396.48125pt x 287.57437pt>
 File: src/abbildungen/tcp.png Graphic file (type png)
 <use src/abbildungen/tcp.png>
 Package luatex.def Info: src/abbildungen/tcp.png  used on input line 20.
@@ -2097,7 +2097,7 @@ Package luatex.def Info: src/abbildungen/tcp.png  used on input line 20.
 [9<./src/abbildungen/osi.png>]
 
 [10<./src/abbildungen/tcp.png>]) (./src/5.tex
-<src/abbildungen/uml.png, id=155, 720.44156pt x 478.78876pt>
+<src/abbildungen/uml.png, id=157, 720.44156pt x 478.78876pt>
 File: src/abbildungen/uml.png Graphic file (type png)
 <use src/abbildungen/uml.png>
 Package luatex.def Info: src/abbildungen/uml.png  used on input line 7.
@@ -2105,7 +2105,7 @@ Package luatex.def Info: src/abbildungen/uml.png  used on input line 7.
 
 
 [11]
-<src/abbildungen/skizze.png, id=161, 762.34813pt x 571.13374pt>
+<src/abbildungen/skizze.png, id=163, 762.34813pt x 571.13374pt>
 File: src/abbildungen/skizze.png Graphic file (type png)
 <use src/abbildungen/skizze.png>
 Package luatex.def Info: src/abbildungen/skizze.png  used on input line 21.
@@ -2140,10 +2140,10 @@ Package microtype Info: Loading generic protrusion settings for font family
 \pydata@fh@_72CDA6978600F97B9A22D1FB2EBB1A01.data.minted=\write8
 
 \openout8 = _72CDA6978600F97B9A22D1FB2EBB1A01.data.minted
-runsystem(latexminted config  --timestamp 20250311013413 72CDA6978600F97B9A22D1F
+runsystem(latexminted config  --timestamp 20250311013606 72CDA6978600F97B9A22D1F
 B2EBB1A01)...executed.
  (./log/_72CDA6978600F97B9A22D1FB2EBB1A01.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20250311013413 72CDA6978600F97B9A
+runsystem(latexminted cleanconfig  --timestamp 20250311013606 72CDA6978600F97B9A
 22D1FB2EBB1A01)...executed.
 
 (./log/_minted/default.style.minted)
@@ -2204,7 +2204,7 @@ lable
 
 [31] (./log/_minted/447EACFCEB2A0EB7A9C8EE42A047514E.highlight.minted))
 (./src/7.tex
-<src/abbildungen/gnu.jpg, id=282, 903.375pt x 451.6875pt>
+<src/abbildungen/gnu.jpg, id=284, 903.375pt x 451.6875pt>
 File: src/abbildungen/gnu.jpg Graphic file (type jpg)
 <use src/abbildungen/gnu.jpg>
 Package luatex.def Info: src/abbildungen/gnu.jpg  used on input line 11.
@@ -2269,7 +2269,7 @@ Package tocbasic Info: character protrusion at lof deactivated on input line 34
 
 \openout9 = hauptdatei.lof
 
-Overfull \hbox (31.77252pt too wide) in paragraph at lines 355--356
+Overfull \hbox (31.77252pt too wide) in paragraph at lines 356--357
 [][][]$\TU/lmtt/m/n/12 https://grafana.com/blog/2020/03/03/open-source-load-test
 ing-tool-review/$[][] 
  []
@@ -2277,15 +2277,17 @@ ing-tool-review/$[][]
 
 
 [49]
+
+[50]
 Package tocbasic Info: character protrusion at lol deactivated on input line 38
-4.
+5.
  (./log/hauptdatei.lol)
 \tf@lol=\write10
 
 \openout10 = hauptdatei.lol
 
 
-[50] (./src/basic_structure/erklaerung.tex
+[51] (./src/basic_structure/erklaerung.tex
 > Step: init table outer spec.
 > Step: parse table options.
 > Step: split table.
@@ -2295,13 +2297,13 @@ Package tocbasic Info: character protrusion at lol deactivated on input line 38
 > Step: calculate cell and line sizes.
 > Step: build the whole table.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 12--429
+Underfull \hbox (badness 10000) in paragraph at lines 12--430
 
  []
 
 
 
-[51] (./log/hauptdatei.aux
+[52] (./log/hauptdatei.aux
 ! Missing \endcsname inserted.
 <to be read again> 
 \protect 
@@ -2340,14 +2342,14 @@ Package logreq Info: Writing requests to 'hauptdatei.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 73519 strings out of 475518
+ 73522 strings out of 475518
  125009,3417909 words of node,token memory allocated
- 1623 words of node memory still in use:
-   7 hlist, 1 vlist, 1 rule, 2 local_par, 118 glue, 3 kern, 2 penalty, 1 margin_
-kern, 8 glyph, 64 attribute, 72 glue_spec, 33 attribute_list, 1 write nodes
-   avail lists: 1:5,2:3402,3:698,4:558,5:1052,6:231,7:9451,8:73,9:2061,10:88,11:
+ 1643 words of node memory still in use:
+   7 hlist, 1 vlist, 1 rule, 2 local_par, 120 glue, 3 kern, 2 penalty, 1 margin_
+kern, 8 glyph, 66 attribute, 72 glue_spec, 34 attribute_list, 1 write nodes
+   avail lists: 1:5,2:3399,3:680,4:558,5:1052,6:231,7:9449,8:73,9:2061,10:88,11:
 1143,12:1
- 94865 multiletter control sequences out of 65536+600000
+ 94866 multiletter control sequences out of 65536+600000
  90 fonts using 11379599 bytes
  108i,20n,101p,10904b,2891s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/opentype/public/lm/lmmono10-italic.otf>{/usr/share/texmf
@@ -2361,10 +2363,10 @@ etermes-bold.otf></usr/share/texmf/fonts/opentype/public/tex-gyre/texgyreadvento
 r-regular.otf></usr/share/texmf/fonts/opentype/public/tex-gyre/texgyreadventor-b
 old.otf></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/font
 s/type1/public/lm/lmsy6.pfb>
-Output written on hauptdatei.pdf (51 pages, 918542 bytes).
+Output written on hauptdatei.pdf (52 pages, 920300 bytes).
 
-PDF statistics: 640 PDF objects out of 1000 (max. 8388607)
- 349 compressed objects within 4 object streams
- 141 named destinations out of 1000 (max. 131072)
- 383 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 650 PDF objects out of 1000 (max. 8388607)
+ 355 compressed objects within 4 object streams
+ 143 named destinations out of 1000 (max. 131072)
+ 391 words of extra memory for PDF output out of 10000 (max. 100000000)
 
