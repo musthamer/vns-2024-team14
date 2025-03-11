@@ -313,7 +313,31 @@ INSERT INTO users (name, password) VALUES ('admin', 'admin');
 Dieser Benutzer kann sich in der Webanwendung anmelden und Aufgaben verwalten.
 
 \subsection{Redis}
-Die Redis-Integration in der ToDo-Listen-Anwendung wird einerseits zur Verwaltung von Nutzersitzungen eingesetzt und andererseits als Cache. Anstatt Sessions in MariaDB zu speichern, wurde Redis als schnelle und effiziente In-Memory-Datenbank verwendet, um Login-Sitzungen zu verwalten. Dies verbessert die Performance und Skalierbarkeit der Anwendung erheblich, da Redis Zugriffe wesentlich schneller verarbeitet als jedes Mal die Datensätze aus der Datenbank abzurufen um zu überprüfen ob die aktuelle Sitzung noch läuft. Beim Login eines Nutzers wird zunächst überprüft, ob die eingegebenen Zugangsdaten in der MariaDB-Datenbank vorhanden sind. Falls der Benutzername und das Passwort korrekt sind, wird eine eindeutige Session-ID generiert, die anschließend mit einer definierten Ablaufzeit in Redis gespeichert wird. Zur Verwaltung von Benutzersitzungen wird Redis verwendet. Dabei wird eine eindeutige Session-ID generiert und in Redis gespeichert. Der folgende Befehl zeigt, wie die Session mit einer TTL (Time-To-Live) von 3600 Sekunden gespeichert wird:
+Die Redis-Integration in der ToDo-Listen-Anwendung wird zur Verwaltung von Nutzersitzungen eingesetzt und als Cache implementiert. Damit ist Redis eine Wichtige Komponente in unserem Netzwerk, da sie gleich mehrere fundamentale Aufgaben übernimmt, die unsere Anwendung insgesamt effizienter arbeiten lässt und stabilisiert.
+
+\subsubsection{Redis als Cache}
+In der Webanwendung wurde Redis als Cache implementiert, um die Performance zu optimieren und die Zugriffszeiten auf die Daten aus der MariaDB-Datenbank zu verkürzen. Dabei verfolgt die Implementierung eine effektive Strategie zur Zwischenspeicherung von häufig abgerufenen Daten. Wenn eine Anfrage gestellt wird, erfolgt zunächst eine Überprüfung, ob die benötigten Daten bereits im Redis-Cache vorhanden sind. Ist dies der Fall, werden die Daten direkt aus dem Cache bezogen, wodurch der Zugriff sehr schnell erfolgt. Falls die Daten im Cache nicht vorhanden sind, erfolgt ein regulärer Zugriff auf die MariaDB-Datenbank, um die angeforderten Informationen abzurufen. Die erhaltenen Daten werden anschließend mit einer definierten Gültigkeitsdauer im Redis-Cache gespeichert, sodass nachfolgende Anfragen schneller beantwortet werden können.
+
+\begin{code}{Cache-Code}{Redis-Cache}
+        \begin{minted}{latex}
+REDIS_KEY="todos_cache"
+todos=$(redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" get "$REDIS_KEY")
+
+if [ -z "$todos" ]; then
+  # Daten aus MariaDB holen, wenn kein Cache existiert
+  todos=$(mariadb --defaults-file=my.cnf -e "SELECT id, task, details, created_at FROM todos;" -B)
+
+  redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" setex "$REDIS_KEY" 300 "$todos" >/dev/null
+fi
+        \end{minted}
+\end{code}
+
+Ein Beispiel für diese Caching-Logik zeigt sich in der folgenden Implementierung: Zunächst wird ein Schlüssel (REDIS\_KEY) definiert, der die gecachten ToDo-Daten repräsentiert. Mit dem Befehl redis-cli get "$REDIS\_KEY" wird versucht, die Daten direkt aus dem Cache abzurufen. Falls dieser leer ist, erfolgt der Zugriff auf die MariaDB-Datenbank mittels mariadb --defaults-file=my.cnf, um die aktuellen Daten zu laden. Die abgerufenen Daten werden dann mit redis-cli setex für 5 Minuten (300 Sekunden) im Redis-Cache gespeichert. Dies gewährleistet, dass nachfolgende Anfragen innerhalb dieser Zeit direkt aus dem Cache bedient werden und die Datenbank entlastet wird.
+
+Der Einsatz von Redis als Cache bietet mehrere Vorteile. Zum einen reduziert diese Methode die Last auf der MariaDB-Datenbank, da wiederholte Abfragen vermieden werden. Zum anderen verbessert sich die Gesamtleistung der Webanwendung durch schnellere Antwortzeiten erheblich. Dies ist insbesondere bei stark frequentierten Systemen von Bedeutung, da Redis durch seine In-Memory-Struktur extrem kurze Zugriffszeiten ermöglicht. Durch diese Implementierung wird eine effiziente und skalierbare Architektur geschaffen, die auch bei hohen Anfragenlasten stabile und schnelle Antwortzeiten gewährleistet.
+
+\subsubsection{Redis als Sessionverwaltung}
+Anstatt Sessions in MariaDB zu speichern, wurde Redis als schnelle und effiziente In-Memory-Datenbank verwendet, um Login-Sitzungen zu verwalten. Dies verbessert die Performance und Skalierbarkeit der Anwendung erheblich, da Redis Zugriffe wesentlich schneller verarbeitet als jedes Mal die Datensätze aus der Datenbank abzurufen um zu überprüfen ob die aktuelle Sitzung noch läuft. Beim Login eines Nutzers wird zunächst überprüft, ob die eingegebenen Zugangsdaten in der MariaDB-Datenbank vorhanden sind. Falls der Benutzername und das Passwort korrekt sind, wird eine eindeutige Session-ID generiert, die anschließend mit einer definierten Ablaufzeit in Redis gespeichert wird. Dabei wird eine eindeutige Session-ID generiert und in Redis gespeichert. Der folgende Befehl zeigt, wie die Session mit einer TTL (Time-To-Live) von 3600 Sekunden gespeichert wird:
 
 \begin{code}{Session erstellen}{uuidgen}
         \begin{minted}{latex}
@@ -410,6 +434,7 @@ fi
 Falls die Session gültig ist und der Benutzer erfolgreich aus Redis abgerufen wurde, wird der Zugriff auf die geschützte ToDo-Seite gewährt. Dadurch bleibt der Nutzer eingeloggt, solange die Session in Redis existiert.
 
 Durch dieses Verfahren wird sichergestellt, dass nur angemeldete Nutzer Zugriff auf die Anwendung haben. Gleichzeitig bleibt die Sitzung speicherschonend, da Redis die Sessions im Arbeitsspeicher hält und automatisch verwaltet. Sollte der Nutzer inaktiv sein, wird die Session nach Ablauf der definierten Zeit automatisch aus Redis entfernt.
+
 
 \subsubsection{Logout-Prozess}
 
