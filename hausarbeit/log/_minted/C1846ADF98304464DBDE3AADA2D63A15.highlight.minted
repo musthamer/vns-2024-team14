@@ -1,7 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-session\PYG{n+nb}{\PYGZus{}}id=\PYGZdq{}\PYGZdq{}
-if [ \PYGZhy{}n \PYGZdq{}HTTP\PYG{n+nb}{\PYGZus{}}COOKIE\PYGZdq{}]; then
-          sessionid=\PYG{l+s}{\PYGZdl{}}\PYG{o}{(}\PYG{n+nb}{echo \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}HTTP\PYG{n+nb}{\PYGZus{}}COOKIE\PYGZdq{} | sed \PYGZhy{}n
-          \PYGZsq{}s/.*session\PYG{n+nb}{\PYGZus{}}id=\PYG{l+s}{\PYGZbs{}(}\PYG{o}{[}\PYG{n+nb}{\PYGZca{}}\PYG{n+nb}{;}\PYG{o}{]}\PYG{o}{*}\PYG{l+s}{\PYGZbs{})}.*/\PYG{k}{\PYGZbs{}1}/p\PYGZsq{})
-fi
-\end{MintedVerbatim}

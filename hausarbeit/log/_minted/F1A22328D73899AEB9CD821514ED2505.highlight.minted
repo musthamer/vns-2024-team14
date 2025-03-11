@@ -1,6 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-echo \PYGZdq{}Content\PYGZhy{}type: text/html\PYGZdq{}
-echo \PYGZdq{}\PYGZdq{}
-echo \PYGZdq{}\PYGZlt{}html\PYGZgt{}\PYGZlt{}body\PYGZgt{}\PYGZlt{}h1\PYGZgt{}Fehler beim Speichern der Session in Redis\PYGZlt{}/h1\PYGZgt{}\PYGZlt{}/body\PYGZgt{}\PYGZlt{}/html\PYGZgt{}\PYGZdq{}
-exit 1
-\end{MintedVerbatim}

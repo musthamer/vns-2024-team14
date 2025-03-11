@@ -1,5 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-echo \PYGZdq{}Status: 303 See Other\PYGZdq{}
-echo \PYGZdq{}Location: /index.html\PYGZdq{}
-echo \PYGZdq{}\PYGZdq{}
-\end{MintedVerbatim}

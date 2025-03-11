@@ -1,3 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-SESSION\PYG{n+nb}{\PYGZus{}}ID=(uuidgen)redisresult=(uuidgen)redisresult=(redis\PYGZhy{}cli \PYGZhy{}h \PYGZdq{}REDISHOST\PYGZdq{}−p\PYGZdq{}REDISHOST\PYGZdq{}−p\PYGZdq{}REDIS\PYG{n+nb}{\PYGZus{}}PORT\PYGZdq{} \PYGZhy{}a \PYGZdq{}REDISPASSWORD\PYGZdq{} SETEX\PYGZdq{}session:REDISPASSWORD\PYGZdq{} SETEX\PYGZdq{}session:SESSION\PYG{n+nb}{\PYGZus{}}ID\PYGZdq{} 3600 \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{USERNAME\PYGZdq{}}\PYG{o}{)}
-\end{MintedVerbatim}

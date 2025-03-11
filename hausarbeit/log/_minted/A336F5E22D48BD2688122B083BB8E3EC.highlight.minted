@@ -1,4 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-echo \PYGZdq{}Content\PYGZhy{}type: text/html\PYGZdq{}
-echo \PYGZdq{}Set\PYGZhy{}Cookie: session\PYG{n+nb}{\PYGZus{}}id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/\PYGZdq{}
-\end{MintedVerbatim}

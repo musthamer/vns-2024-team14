@@ -1,4 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-if [ \PYGZhy{}n \PYGZdq{}SESSIONID\PYGZdq{}];thenredis−cli−h\PYGZdq{}SESSIONID\PYGZdq{}];thenredis−cli−h\PYGZdq{}REDIS\PYG{n+nb}{\PYGZus{}}HOST\PYGZdq{} \PYGZhy{}p \PYGZdq{}REDISPORT\PYGZdq{}−a\PYGZdq{}REDISPORT\PYGZdq{}−a\PYGZdq{}REDIS\PYG{n+nb}{\PYGZus{}}PASSWORD\PYGZdq{} DEL \PYGZdq{}session:\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{SESSION}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{ID\PYGZdq{} \PYGZgt{}}\PYG{o}{/}\PYG{n+nb}{dev}\PYG{o}{/}\PYG{n+nb}{null}
-\PYG{n+nb}{fi}
-\end{MintedVerbatim}

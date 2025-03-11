@@ -1,9 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-if [ \PYGZhy{}z \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{session}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{id\PYGZdq{} }\PYG{o}{]}\PYG{n+nb}{; then}
-\PYG{n+nb}{echo \PYGZdq{}Status: }\PYG{l+m}{303}\PYG{n+nb}{ See Other\PYGZdq{}}
-\PYG{n+nb}{echo \PYGZdq{}Location: }\PYG{o}{/}\PYG{n+nb}{index.html\PYGZdq{}}
-\PYG{n+nb}{echo \PYGZdq{}Content}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{type: text}\PYG{o}{/}\PYG{n+nb}{html\PYGZdq{}}
-\PYG{n+nb}{echo \PYGZdq{}\PYGZdq{}}
-\PYG{n+nb}{exit }\PYG{l+m}{0}
-\PYG{n+nb}{fi}
-\end{MintedVerbatim}

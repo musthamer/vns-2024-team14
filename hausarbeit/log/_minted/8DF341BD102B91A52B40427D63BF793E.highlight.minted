@@ -1,5 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-echo \PYGZdq{}Set\PYGZhy{}Cookie: session\PYG{n+nb}{\PYGZus{}}id=\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{SESSION}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{ID; Path}\PYG{o}{=}\PYG{o}{/}\PYG{n+nb}{; HttpOnly; SameSite}\PYG{o}{=}\PYG{n+nb}{Lax\PYGZdq{}}
-\PYG{n+nb}{echo \PYGZdq{}Status: }\PYG{l+m}{303}\PYG{n+nb}{ See Other\PYGZdq{}}
-\PYG{n+nb}{echo \PYGZdq{}Location: }\PYG{o}{/}\PYG{n+nb}{cgi}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{bin}\PYG{o}{/}\PYG{n+nb}{vns}\PYG{o}{/}\PYG{n+nb}{todo}\PYG{o}{/}\PYG{n+nb}{table}\PYG{l+m}{3}\PYG{n+nb}{.sh\PYGZdq{}}
-\end{MintedVerbatim}

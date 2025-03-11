@@ -1,3 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-CREATE DATABASE IF NOT EXISTS todo\PYG{n+nb}{\PYGZus{}}app;
-\end{MintedVerbatim}

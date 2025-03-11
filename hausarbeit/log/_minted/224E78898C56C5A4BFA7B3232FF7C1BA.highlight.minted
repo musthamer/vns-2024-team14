@@ -1,9 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-
-frontend http\PYGZhy{}in
-  bind :80
-  acl url\PYG{n+nb}{\PYGZus{}}direct path\PYG{n+nb}{\PYGZus{}}beg /direct
-  use\PYG{n+nb}{\PYGZus{}}backend direct\PYGZhy{}backend if url\PYG{n+nb}{\PYGZus{}}direct
-  default\PYG{n+nb}{\PYGZus{}}backend app\PYGZhy{}backend
-
-\end{MintedVerbatim}
