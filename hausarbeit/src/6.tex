@@ -461,7 +461,7 @@ Durch dieses Verfahren wird sichergestellt, dass nur angemeldete Nutzer Zugriff 
 
 In dem Skript \texttt{logout.sh} wird zunächst die Session-ID des Benutzers aus dem HTTP-Cookie extrahiert. Dies wird durch den Zugriff auf den Header des HTTP-Requests erreicht, in dem das Cookie gespeichert ist:
 
-\begin{code}{session-ID extraktion}{session}
+\begin{code}{Session-ID extrahieren}{session}
         \begin{minted}{latex}
 SESSION_ID=(echo"(echo"HTTP_COOKIE" | grep -o 'session_id=[^;]*' | cut -d'=' -f2)
   \end{minted}
