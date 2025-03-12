@@ -332,7 +332,28 @@ fi
         \end{minted}
 \end{code}
 
-Ein Beispiel für diese Caching-Logik zeigt sich in der folgenden Implementierung: Zunächst wird ein Schlüssel (REDIS\_KEY) definiert, der die gecachten ToDo-Daten repräsentiert. Mit dem Befehl redis-cli get "$REDIS\_KEY" wird versucht, die Daten direkt aus dem Cache abzurufen. Falls dieser leer ist, erfolgt der Zugriff auf die MariaDB-Datenbank mittels mariadb --defaults-file=my.cnf, um die aktuellen Daten zu laden. Die abgerufenen Daten werden dann mit redis-cli setex für 5 Minuten (300 Sekunden) im Redis-Cache gespeichert. Dies gewährleistet, dass nachfolgende Anfragen innerhalb dieser Zeit direkt aus dem Cache bedient werden und die Datenbank entlastet wird.
+Ein Beispiel für diese Caching-Logik zeigt sich in der folgenden Implementierung: 
+Zunächst wird ein Schlüssel (\texttt{REDIS\_KEY}) definiert, der die gecachten ToDo-Daten repräsentiert. 
+Mit dem Befehl 
+
+\begin{verbatim}
+redis-cli get "$REDIS_KEY"
+\end{verbatim}
+
+wird versucht, die Daten direkt aus dem Cache abzurufen. Falls dieser leer ist, erfolgt der Zugriff auf die MariaDB-Datenbank mittels
+
+\begin{verbatim}
+mariadb --defaults-file=my.cnf
+\end{verbatim}
+
+um die aktuellen Daten zu laden. Die abgerufenen Daten werden dann mit 
+
+\begin{verbatim}
+redis-cli setex "$REDIS_KEY" 300 "Daten"
+\end{verbatim}
+
+für 5 Minuten (300 Sekunden) im Redis-Cache gespeichert. Dies gewährleistet, dass nachfolgende Anfragen innerhalb dieser Zeit direkt aus dem Cache bedient werden und die Datenbank entlastet wird.
+
 
 Der Einsatz von Redis als Cache bietet mehrere Vorteile. Zum einen reduziert diese Methode die Last auf der MariaDB-Datenbank, da wiederholte Abfragen vermieden werden. Zum anderen verbessert sich die Gesamtleistung der Webanwendung durch schnellere Antwortzeiten erheblich. Dies ist insbesondere bei stark frequentierten Systemen von Bedeutung, da Redis durch seine In-Memory-Struktur extrem kurze Zugriffszeiten ermöglicht. Durch diese Implementierung wird eine effiziente und skalierbare Architektur geschaffen, die auch bei hohen Anfragenlasten stabile und schnelle Antwortzeiten gewährleistet.
 
