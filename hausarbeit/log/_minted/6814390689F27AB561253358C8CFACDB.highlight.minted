@@ -1,0 +1,11 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+REDIS\PYG{n+nb}{\PYGZus{}}KEY=\PYGZdq{}todos\PYG{n+nb}{\PYGZus{}}cache\PYGZdq{}
+todos=\PYG{l+s}{\PYGZdl{}}\PYG{o}{(}\PYG{n+nb}{redis}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{cli }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{h \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}REDIS\PYG{n+nb}{\PYGZus{}}HOST\PYGZdq{} \PYGZhy{}p \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{REDIS}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{PORT\PYGZdq{} }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{a \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}REDIS\PYG{n+nb}{\PYGZus{}}PASSWORD\PYGZdq{} get \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{REDIS}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{KEY\PYGZdq{}}\PYG{o}{)}
+
+\PYG{n+nb}{if }\PYG{o}{[}\PYG{n+nb}{ }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{z \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}todos\PYGZdq{} ]; then
+  \PYGZsh{} Daten aus MariaDB holen, wenn kein Cache existiert
+  todos=\PYG{l+s}{\PYGZdl{}}\PYG{o}{(}\PYG{n+nb}{mariadb }\PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{defaults}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{file}\PYG{o}{=}\PYG{n+nb}{my.cnf }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{e \PYGZdq{}SELECT id, task, details, created}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{at FROM todos;\PYGZdq{} }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{B}\PYG{o}{)}
+
+\PYG{n+nb}{  redis}\PYG{o}{\PYGZhy{}}\PYG{n+nb}{cli }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{h \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}REDIS\PYG{n+nb}{\PYGZus{}}HOST\PYGZdq{} \PYGZhy{}p \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{REDIS}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{PORT\PYGZdq{} }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{a \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}REDIS\PYG{n+nb}{\PYGZus{}}PASSWORD\PYGZdq{} setex \PYGZdq{}\PYG{l+s}{\PYGZdl{}}\PYG{n+nb}{REDIS}\PYG{n+nb}{\PYGZus{}}\PYG{n+nb}{KEY\PYGZdq{} }\PYG{l+m}{300}\PYG{n+nb}{ \PYGZdq{}}\PYG{l+s}{\PYGZdl{}}todos\PYGZdq{} \PYGZgt{}/dev/null
+fi
+\end{MintedVerbatim}

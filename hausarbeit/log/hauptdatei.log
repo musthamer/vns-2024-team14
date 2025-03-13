@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.2.14)  11 MAR 2025 01:51
+This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.3.11)  13 MAR 2025 17:10
  system commands enabled.
 **hauptdatei.tex
 (./hauptdatei.tex
@@ -505,91 +505,91 @@ Package babel Info: Non-standard hyphenation setup on input line 118.
 \l@nohyphenation=\language3
 \l@vietnamese=\language4
 \l@hebrew=\language5
-\l@ngerman-x-2024-02-28=\language6
-\l@liturgicallatin=\language7
-\l@croatian=\language8
-\l@lithuanian=\language9
-\l@bengali=\language10
-\l@ethiopic=\language11
-\l@portuguese=\language12
-\l@russian=\language13
-\l@estonian=\language14
-\l@thai=\language15
-\l@panjabi=\language16
-\l@occitan=\language17
-\l@latin=\language18
-\l@serbian=\language19
-\l@friulan=\language20
-\l@german-x-2024-02-28=\language21
-\l@coptic=\language22
-\l@bokmal=\language23
-\l@ukrainian=\language24
-\l@ngerman=\language25
-\l@catalan=\language26
-\l@arabic=\language27
-\l@danish=\language28
-\l@schoolfinnish=\language29
-\l@albanian=\language30
-\l@ancientgreek=\language31
-\l@sanskrit=\language32
-\l@welsh=\language33
-\l@swedish=\language34
-\l@ibycus=\language35
-\l@greek=\language36
-\l@gujarati=\language37
-\l@turkmen=\language38
-\l@ukenglish=\language39
-\l@turkish=\language40
-\l@nynorsk=\language41
-\l@esperanto=\language42
-\l@kannada=\language43
-\l@telugu=\language44
+\l@friulan=\language6
+\l@armenian=\language7
+\l@hungarian=\language8
+\l@liturgicallatin=\language9
+\l@georgian=\language10
+\l@ancientgreek=\language11
+\l@czech=\language12
+\l@croatian=\language13
+\l@dutch=\language14
+\l@oriya=\language15
+\l@schoolfinnish=\language16
+\l@italian=\language17
+\l@assamese=\language18
+\l@russian=\language19
+\l@nynorsk=\language20
+\l@arabic=\language21
+\l@lithuanian=\language22
+\l@portuguese=\language23
+\l@danish=\language24
+\l@gujarati=\language25
+\l@telugu=\language26
+\l@bokmal=\language27
+\l@pali=\language28
+\l@romansh=\language29
+\l@romanian=\language30
+\l@churchslavonic=\language31
+\l@catalan=\language32
+\l@french=\language33
+\l@piedmontese=\language34
+\l@basque=\language35
+\l@interlingua=\language36
+\l@indonesian=\language37
+\l@swissgerman=\language38
+\l@irish=\language39
+\l@finnish=\language40
+\l@ukenglish=\language41
+\l@kurmanji=\language42
+\l@turkmen=\language43
+\l@monogreek=\language44
 \l@galician=\language45
-\l@malayalam=\language46
-\l@tamil=\language47
-\l@mongolian=\language48
-\l@usenglishmax=\language49
-\l@french=\language50
-\l@romanian=\language51
-\l@monogreek=\language52
-\l@hindi=\language53
-\l@interlingua=\language54
-\l@hungarian=\language55
-\l@indonesian=\language56
-\l@marathi=\language57
-\l@uppersorbian=\language58
-\l@pinyin=\language59
-\l@armenian=\language60
-\l@polish=\language61
-\l@oriya=\language62
-\l@basque=\language63
-\l@swissgerman=\language64
-\l@farsi=\language65
-\l@romansh=\language66
-\l@piedmontese=\language67
-\l@belarusian=\language68
-\l@finnish=\language69
-\l@slovak=\language70
-\l@mongolianlmc=\language71
-\l@pali=\language72
-\l@dutch=\language73
-\l@serbianc=\language74
-\l@bulgarian=\language75
+\l@macedonian=\language46
+\l@panjabi=\language47
+\l@german-x-2024-02-28=\language48
+\l@welsh=\language49
+\l@classiclatin=\language50
+\l@latin=\language51
+\l@mongolianlmc=\language52
+\l@albanian=\language53
+\l@belarusian=\language54
+\l@polish=\language55
+\l@kannada=\language56
+\l@tamil=\language57
+\l@usenglishmax=\language58
+\l@icelandic=\language59
+\l@ukrainian=\language60
+\l@esperanto=\language61
+\l@estonian=\language62
+\l@swedish=\language63
+\l@malayalam=\language64
+\l@greek=\language65
+\l@sanskrit=\language66
+\l@afrikaans=\language67
+\l@ngerman=\language68
+\l@ngerman-x-2024-02-28=\language69
+\l@pinyin=\language70
+\l@occitan=\language71
+\l@uppersorbian=\language72
+\l@marathi=\language73
+\l@spanish=\language74
+\l@farsi=\language75
 \l@slovenian=\language76
-\l@irish=\language77
-\l@georgian=\language78
-\l@kurmanji=\language79
-\l@macedonian=\language80
-\l@afrikaans=\language81
-\l@icelandic=\language82
-\l@classiclatin=\language83
-\l@churchslavonic=\language84
-\l@german=\language85
-\l@czech=\language86
-\l@italian=\language87
-\l@assamese=\language88
-\l@latvian=\language89
-\l@spanish=\language90
+\l@hindi=\language77
+\l@bengali=\language78
+\l@slovak=\language79
+\l@latvian=\language80
+\l@thai=\language81
+\l@coptic=\language82
+\l@serbian=\language83
+\l@german=\language84
+\l@ethiopic=\language85
+\l@ibycus=\language86
+\l@bulgarian=\language87
+\l@turkish=\language88
+\l@serbianc=\language89
+\l@mongolian=\language90
 \babelcatcodetablenum=\catcodetable14
 \bbl@pattcodes=\catcodetable15
 )
@@ -2079,7 +2079,7 @@ t line 1.
 [6]) (./src/4.tex
 
 [7]
-<src/abbildungen/osi.png, id=139, 249.93375pt x 305.64188pt>
+<src/abbildungen/osi.png, id=157, 249.93375pt x 305.64188pt>
 File: src/abbildungen/osi.png Graphic file (type png)
 <use src/abbildungen/osi.png>
 Package luatex.def Info: src/abbildungen/osi.png  used on input line 14.
@@ -2087,7 +2087,7 @@ Package luatex.def Info: src/abbildungen/osi.png  used on input line 14.
 
 
 [8]
-<src/abbildungen/tcp.png, id=144, 396.48125pt x 287.57437pt>
+<src/abbildungen/tcp.png, id=162, 396.48125pt x 287.57437pt>
 File: src/abbildungen/tcp.png Graphic file (type png)
 <use src/abbildungen/tcp.png>
 Package luatex.def Info: src/abbildungen/tcp.png  used on input line 20.
@@ -2097,7 +2097,7 @@ Package luatex.def Info: src/abbildungen/tcp.png  used on input line 20.
 [9<./src/abbildungen/osi.png>]
 
 [10<./src/abbildungen/tcp.png>]) (./src/5.tex
-<src/abbildungen/uml.png, id=157, 720.44156pt x 478.78876pt>
+<src/abbildungen/uml.png, id=176, 720.44156pt x 478.78876pt>
 File: src/abbildungen/uml.png Graphic file (type png)
 <use src/abbildungen/uml.png>
 Package luatex.def Info: src/abbildungen/uml.png  used on input line 7.
@@ -2105,7 +2105,7 @@ Package luatex.def Info: src/abbildungen/uml.png  used on input line 7.
 
 
 [11]
-<src/abbildungen/skizze.png, id=163, 762.34813pt x 571.13374pt>
+<src/abbildungen/skizze.png, id=182, 762.34813pt x 571.13374pt>
 File: src/abbildungen/skizze.png Graphic file (type png)
 <use src/abbildungen/skizze.png>
 Package luatex.def Info: src/abbildungen/skizze.png  used on input line 21.
@@ -2140,10 +2140,10 @@ Package microtype Info: Loading generic protrusion settings for font family
 \pydata@fh@_72CDA6978600F97B9A22D1FB2EBB1A01.data.minted=\write8
 
 \openout8 = _72CDA6978600F97B9A22D1FB2EBB1A01.data.minted
-runsystem(latexminted config  --timestamp 20250311015146 72CDA6978600F97B9A22D1F
+runsystem(latexminted config  --timestamp 20250313171041 72CDA6978600F97B9A22D1F
 B2EBB1A01)...executed.
  (./log/_72CDA6978600F97B9A22D1FB2EBB1A01.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20250311015146 72CDA6978600F97B9A
+runsystem(latexminted cleanconfig  --timestamp 20250313171041 72CDA6978600F97B9A
 22D1FB2EBB1A01)...executed.
 
 (./log/_minted/default.style.minted)
@@ -2187,86 +2187,98 @@ lable
 [26]) (./log/_minted/4E0C638719F874084EBD6C8D38F8E7CB.highlight.minted)
 (./log/_minted/8ECF24C9778D7AEEB82C79C885F42931.highlight.minted
 
-[27]) (./log/_minted/E0A321B8C81B0EB29CEB93C0F6CCCB04.highlight.minted)
-(./log/_minted/8DF341BD102B91A52B40427D63BF793E.highlight.minted)
+[27]) (./log/_minted/6814390689F27AB561253358C8CFACDB.highlight.minted)
 
-[28] (./log/_minted/F1A22328D73899AEB9CD821514ED2505.highlight.minted)
-(./log/_minted/AA81FEE50A5FEB47878482AC62363A90.highlight.minted)
-(./log/_minted/C1846ADF98304464DBDE3AADA2D63A15.highlight.minted)
+[28] (./log/_minted/E0A321B8C81B0EB29CEB93C0F6CCCB04.highlight.minted
 
-[29] (./log/_minted/BE332E8271F4E6216775738629880434.highlight.minted)
+[29]) (./log/_minted/8DF341BD102B91A52B40427D63BF793E.highlight.minted)
+(./log/_minted/F1A22328D73899AEB9CD821514ED2505.highlight.minted)
+(./log/_minted/AA81FEE50A5FEB47878482AC62363A90.highlight.minted
+
+[30]) (./log/_minted/C1846ADF98304464DBDE3AADA2D63A15.highlight.minted)
+(./log/_minted/BE332E8271F4E6216775738629880434.highlight.minted)
 (./log/_minted/925E53CDCB7ABB08A3D26ECEE7ADDF31.highlight.minted)
-(./log/_minted/F7C4BFB46F7E65DFCEE19D6ACC9DA713.highlight.minted)
 
-[30] (./log/_minted/5F44EC44FF47747A8DB5F7CCEE3E371A.highlight.minted)
-(./log/_minted/CC460A34B7C9CBF8726287E37B2D037B.highlight.minted)
-(./log/_minted/A336F5E22D48BD2688122B083BB8E3EC.highlight.minted)
+[31] (./log/_minted/F7C4BFB46F7E65DFCEE19D6ACC9DA713.highlight.minted)
+(./log/_minted/5F44EC44FF47747A8DB5F7CCEE3E371A.highlight.minted)
+(./log/_minted/CC460A34B7C9CBF8726287E37B2D037B.highlight.minted
 
-[31] (./log/_minted/447EACFCEB2A0EB7A9C8EE42A047514E.highlight.minted))
-(./src/7.tex
-<src/abbildungen/gnu.jpg, id=284, 903.375pt x 451.6875pt>
+[32]) (./log/_minted/A336F5E22D48BD2688122B083BB8E3EC.highlight.minted)
+(./log/_minted/447EACFCEB2A0EB7A9C8EE42A047514E.highlight.minted)) (./src/7.tex
+
+
+[33]
+<src/abbildungen/gnu.jpg, id=313, 903.375pt x 451.6875pt>
 File: src/abbildungen/gnu.jpg Graphic file (type jpg)
 <use src/abbildungen/gnu.jpg>
 Package luatex.def Info: src/abbildungen/gnu.jpg  used on input line 11.
 (luatex.def)             Requested size: 291.28238pt x 145.64569pt.
 
 
-[32] (./log/_minted/C9CD009321BFE887C5D2B033EF749659.highlight.minted
+[34<./src/abbildungen/gnu.jpg>]
 
-[33<./src/abbildungen/gnu.jpg>])
+[35] (./log/_minted/C9CD009321BFE887C5D2B033EF749659.highlight.minted)
 
-[34] (./log/_minted/241DF5919D4D13C63F8260A107D8E19F.highlight.minted)
-(./log/_minted/57DE1C9FEA3A020FECC48DBD2C852181.highlight.minted
+[36] (./log/_minted/241DF5919D4D13C63F8260A107D8E19F.highlight.minted
 
-[35]) (./log/_minted/86FCD1F37C349E6FE5E666A28D430CD6.highlight.minted)
-(./log/_minted/619BC6ECFAA2B33095F947F5E5775E0A.highlight.minted
+[37]) (./log/_minted/57DE1C9FEA3A020FECC48DBD2C852181.highlight.minted)
+(./log/_minted/86FCD1F37C349E6FE5E666A28D430CD6.highlight.minted
 
-[36])
+[38]) (./log/_minted/619BC6ECFAA2B33095F947F5E5775E0A.highlight.minted)
 
-[37] (./log/_minted/9C37E09F2C1FDC42C2D759730A978F13.highlight.minted)
-Overfull \hbox (8.8035pt too wide) in paragraph at lines 99--102
+[39] (./log/_minted/9C37E09F2C1FDC42C2D759730A978F13.highlight.minted
+
+[40])
+Overfull \hbox (8.8035pt too wide) in paragraph at lines 115--118
 []\TU/TeXGyreTermes(0)/m/n/12 Vor den vor-ge-nom-me-nen Än-de-run-gen ha-ben wi
 r ei-nen um-fang-rei-chen Netzwerk- und Performance-
  []
 
 
 
-[38]
-Overfull \hbox (1.8355pt too wide) in paragraph at lines 105--106
+[41]
+Overfull \hbox (1.8355pt too wide) in paragraph at lines 121--122
 \TU/TeXGyreTermes(0)/m/n/12 Wir ha-ben ei-nen er-wei-ter-ten Netzwerk- und Perfo
 rmance-Test mit dem Skript tcpdump-analyse.sh
  []
 
+(./log/_minted/A76A2F6633822509DA193FDF60143679.highlight.minted
 
+[42]) (./log/_minted/33B6DEB206B991FB3C54A778464750C9.highlight.minted
 
-[39] (./log/_minted/A76A2F6633822509DA193FDF60143679.highlight.minted)
+[43]) (./log/_minted/A551727DFBB8932C7807FC74DB4D815D.highlight.minted
 
-[40] (./log/_minted/33B6DEB206B991FB3C54A778464750C9.highlight.minted)
-(./log/_minted/A551727DFBB8932C7807FC74DB4D815D.highlight.minted
-
-[41])
-
-[42]) (./src/8.tex
-
-[43]
-
-[44]
+[44])) (./src/8.tex
 
 [45]
 
 [46]
 
 [47]
-Overfull \hbox (31.77252pt too wide) in paragraph at lines 55--56
+
+[48]
+
+[49]
+
+[50]
+
+[51]
+Overfull \hbox (36.1045pt too wide) in paragraph at lines 56--57
+[][][]$\TU/lmtt/m/n/12 https://www.shiksha.com/online-courses/articles/osi-vs-tc
+p-ip-model-whats-
+ []
+
+
+Overfull \hbox (31.77252pt too wide) in paragraph at lines 61--62
 [][][]$\TU/lmtt/m/n/12 https://grafana.com/blog/2020/03/03/open-source-load-test
 ing-tool-review/$[][] 
  []
 
 
 
-[48])
+[52])
 
-[49]
+[53]
 
 LaTeX Warning: Empty bibliography on input line 343.
 
@@ -2278,7 +2290,7 @@ Package tocbasic Info: character protrusion at lof deactivated on input line 34
 \openout9 = hauptdatei.lof
 
 
-[50]
+[54]
 Package tocbasic Info: character protrusion at lol deactivated on input line 36
 2.
  (./log/hauptdatei.lol)
@@ -2287,7 +2299,7 @@ Package tocbasic Info: character protrusion at lol deactivated on input line 36
 \openout10 = hauptdatei.lol
 
 
-[51] (./src/basic_structure/erklaerung.tex
+[55] (./src/basic_structure/erklaerung.tex
 > Step: init table outer spec.
 > Step: parse table options.
 > Step: split table.
@@ -2303,7 +2315,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 12--407
 
 
 
-[52] (./log/hauptdatei.aux
+[56] (./log/hauptdatei.aux
 ! Missing \endcsname inserted.
 <to be read again> 
 \protect 
@@ -2342,14 +2354,15 @@ Package logreq Info: Writing requests to 'hauptdatei.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 73522 strings out of 475518
- 125009,3417909 words of node,token memory allocated
- 1643 words of node memory still in use:
-   7 hlist, 1 vlist, 1 rule, 2 local_par, 120 glue, 3 kern, 2 penalty, 1 margin_
-kern, 8 glyph, 66 attribute, 72 glue_spec, 34 attribute_list, 1 write nodes
-   avail lists: 1:5,2:3399,3:553,4:558,5:1052,6:231,7:9449,8:73,9:2061,10:88,11:
+ 73558 strings out of 475518
+ 156269,3417909 words of node,token memory allocated
+ 1849 words of node memory still in use:
+   7 hlist, 1 vlist, 1 rule, 2 local_par, 140 glue, 3 kern, 2 penalty, 1 margin_
+kern, 8 glyph, 86 attribute, 72 glue_spec, 44 attribute_list, 1 write, 1 pdf_act
+ion nodes
+   avail lists: 1:4,2:4620,3:658,4:615,5:1107,6:230,7:9418,8:89,9:2614,10:98,11:
 1143,12:1
- 94866 multiletter control sequences out of 65536+600000
+ 94882 multiletter control sequences out of 65536+600000
  90 fonts using 11379599 bytes
  108i,20n,101p,10904b,2891s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/opentype/public/lm/lmmono10-italic.otf>{/usr/share/texmf
@@ -2363,10 +2376,10 @@ etermes-bold.otf></usr/share/texmf/fonts/opentype/public/tex-gyre/texgyreadvento
 r-regular.otf></usr/share/texmf/fonts/opentype/public/tex-gyre/texgyreadventor-b
 old.otf></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/font
 s/type1/public/lm/lmsy6.pfb>
-Output written on hauptdatei.pdf (52 pages, 920202 bytes).
+Output written on hauptdatei.pdf (56 pages, 937757 bytes).
 
-PDF statistics: 651 PDF objects out of 1000 (max. 8388607)
- 356 compressed objects within 4 object streams
- 143 named destinations out of 1000 (max. 131072)
- 391 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 718 PDF objects out of 1000 (max. 8388607)
+ 392 compressed objects within 4 object streams
+ 157 named destinations out of 1000 (max. 131072)
+ 463 words of extra memory for PDF output out of 10000 (max. 100000000)
 
