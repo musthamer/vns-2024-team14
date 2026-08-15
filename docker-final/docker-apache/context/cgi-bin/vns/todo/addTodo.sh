@@ -2,16 +2,44 @@
 REDIS_HOST="redis"
 REDIS_PORT="6379"
 REDIS_PASSWORD="foobared"
+
+session_id=$(echo "$HTTP_COOKIE" | sed -n 's/.*session_id=\([^;]*\).*/\1/p')
+session_user=""
+if [ -n "$session_id" ]; then
+  session_user=$(redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" -a "$REDIS_PASSWORD" GET "session:$session_id" 2>/dev/null)
+fi
+if [ -z "$session_user" ]; then
+  echo "Status: 303 See Other"
+  echo "Location: /index.html"
+  echo "Content-type: text/html"
+  echo ""
+  exit 0
+fi
+
 # POST-Daten lesen
-read -r POST_DATA
+POST_DATA="$(cat)"
+
+extract_param() {
+  local key="$1"
+  echo "$POST_DATA" | tr '&' '\n' | awk -F'=' -v k="$key" '$1 == k {sub($1"=", ""); print; exit}'
+}
+
+url_decode() {
+  local raw="$1"
+  raw="${raw//+/ }"
+  printf '%b' "${raw//%/\\x}"
+}
+
+sql_escape() {
+  echo "$1" | sed "s/'/''/g"
+}
 
 # Parameter extrahieren
-TASK=$(echo "$POST_DATA" | sed -n 's/.*task=\([^&]*\).*/\1/p')
-DETAILS=$(echo "$POST_DATA" | sed -n 's/.*details=\([^&]*\).*/\1/p')
+TASK="$(url_decode "$(extract_param task)")"
+DETAILS="$(url_decode "$(extract_param details)")"
 
-# URL-dekodieren mit sed
-TASK=$(echo -e "$(echo "$TASK" | sed 's/+/ /g; s/%/\\x/g')")
-DETAILS=$(echo -e "$(echo "$DETAILS" | sed 's/+/ /g; s/%/\\x/g')")
+TASK_ESCAPED="$(sql_escape "$TASK")"
+DETAILS_ESCAPED="$(sql_escape "$DETAILS")"
 
 # Überprüfen, ob alle Parameter vorhanden sind
 if [ -z "$TASK" ] || [ -z "$DETAILS" ]; then
@@ -22,7 +50,7 @@ if [ -z "$TASK" ] || [ -z "$DETAILS" ]; then
 fi
 
 # Aufgabe in die todos-Tabelle einfügen
-mariadb --defaults-file=my.cnf -e "INSERT INTO todos (task, details) VALUES ('$TASK', '$DETAILS');"
+mariadb --defaults-file=my.cnf -e "INSERT INTO todos (task, details) VALUES ('$TASK_ESCAPED', '$DETAILS_ESCAPED');"
 
 # Überprüfen, ob das Einfügen erfolgreich war
 if [ $? -eq 0 ]; then

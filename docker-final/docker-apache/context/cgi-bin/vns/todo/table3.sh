@@ -3,6 +3,16 @@ REDIS_HOST="redis"
 REDIS_PORT="6379"
 REDIS_PASSWORD="foobared"
 
+html_escape() {
+  local text="$1"
+  text="${text//&/&amp;}"
+  text="${text//</&lt;}"
+  text="${text//>/&gt;}"
+  text="${text//\"/&quot;}"
+  text="${text//\'/&#39;}"
+  printf '%s' "$text"
+}
+
 # Session-Überprüfung
 session_id=""
 if [ -n "$HTTP_COOKIE" ]; then
@@ -109,14 +119,22 @@ echo "$todos" | while read -r line; do
         details=$(echo "$line" | cut -d$'\t' -f3)
         created_at=$(echo "$line" | cut -d$'\t' -f4)
 
+        if ! [[ "$id" =~ ^[0-9]+$ ]]; then
+          continue
+        fi
+
+        task_escaped="$(html_escape "$task")"
+        details_escaped="$(html_escape "$details")"
+        created_at_escaped="$(html_escape "$created_at")"
+
         # Generiere die HTML-Zeile
         echo "<tr onclick=\"toggleTodo(this)\">"
         echo "<td>$id</td>"
-        echo "<td>$task</td>"
-        echo "<td>$created_at</td>"
+        echo "<td>$task_escaped</td>"
+        echo "<td>$created_at_escaped</td>"
         echo "<td><button onclick=\"editTodo($id); event.stopPropagation();\">Bearbeiten</button> <button onclick=\"deleteTodo($id); event.stopPropagation();\">Löschen</button></td>"
         echo "</tr>"
-        echo "<tr class=\"todo-row\"><td colspan=\"4\" class=\"todo-body\">$details</td></tr>"
+        echo "<tr class=\"todo-row\"><td colspan=\"4\" class=\"todo-body\">$details_escaped</td></tr>"
     fi
 done
 

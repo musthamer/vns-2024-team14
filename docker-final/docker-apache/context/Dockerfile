@@ -7,6 +7,7 @@ COPY html/ /var/www/html/
 COPY myinit.sh /usr/bin/myinit.sh
 RUN chmod +x /usr/bin/myinit.sh
 RUN chmod +x /usr/lib/cgi-bin/vns/todo/*
+RUN chown root:www-data /usr/lib/cgi-bin/vns/todo/my.cnf && chmod 640 /usr/lib/cgi-bin/vns/todo/my.cnf
 RUN a2enmod cgi
 
 CMD ["/usr/bin/myinit.sh"]
